@@ -1,0 +1,37 @@
+{
+  "extends": ["tslint:latest", "tslint-immutable", "tslint-config-prettier"],
+  "jsRules": {},
+  "rules": {
+    ///////////////////////////////////////////////////////////////////////////
+    // Built in rules
+
+    "no-console": false, // Its ok for this project for now,
+    "prefer-const": true,
+    "interface-name": false,
+
+    ///////////////////////////////////////////////////////////////////////////
+    // tslint-immutable
+
+    // Recommended built-in rules
+    "no-var-keyword": true,
+    "no-parameter-reassignment": true,
+    // "typedef": [true, "call-signature"],
+
+    // Immutability rules
+    "readonly-keyword": [true, "ignore-class"],
+    "readonly-array": true,
+    // "no-let": true,
+    // "no-object-mutation": true,
+    "no-delete": true,
+    "no-method-signature": true,
+
+    // Functional style rules
+    // "no-this": true,
+    // "no-class": true,
+    // "no-mixed-interface": true,
+    // "no-expression-statement": true,
+    // "no-if-statement": true
+    "object-literal-sort-keys": false
+  },
+  "rulesDirectory": []
+}

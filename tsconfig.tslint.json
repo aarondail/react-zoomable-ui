@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  // Make sure we include the tests for linting
+  "include": ["custom-types", "src", "tests"]
+}
