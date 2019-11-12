@@ -3,6 +3,7 @@
     "target": "es6",
     "lib": ["dom"],
     "module": "commonjs",
+    "jsx": "react",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
