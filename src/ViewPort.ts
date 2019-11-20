@@ -23,10 +23,7 @@ export class ViewPort implements ViewPortInterface {
   // tslint:disable-next-line:readonly-array
   private updateListeners: Array<() => void>;
 
-  constructor(
-    private readonly zoomFactorMin?: number,
-    private readonly zoomFactorMax?: number,
-  ) {
+  constructor(private readonly zoomFactorMin?: number, private readonly zoomFactorMax?: number) {
     this.updateListeners = [];
     this.viewLeft = 0;
     this.viewTop = 0;
@@ -51,11 +48,7 @@ export class ViewPort implements ViewPortInterface {
     let zoomFactor = this.zoomFactor;
     zoomFactor -= e.dz / 100;
     // Don't let the zoomFactor get to 0 otherwise it gets stuck ;)
-    zoomFactor = clamp(
-      zoomFactor,
-      this.zoomFactorMin || 0.01,
-      this.zoomFactorMax || 10,
-    );
+    zoomFactor = clamp(zoomFactor, this.zoomFactorMin || 0.01, this.zoomFactorMax || 10);
 
     let viewCenterX: VirtualSpaceUnit;
     let viewCenterY: VirtualSpaceUnit;
@@ -101,11 +94,7 @@ export class ViewPort implements ViewPortInterface {
     this.updateListeners = [];
   }
 
-  public update(
-    newViewCenterX: VirtualSpaceUnit,
-    newViewCenterY: VirtualSpaceUnit,
-    newZoomFactor: ZoomFactor,
-  ): void {
+  public update(newViewCenterX: VirtualSpaceUnit, newViewCenterY: VirtualSpaceUnit, newZoomFactor: ZoomFactor): void {
     this.viewLeft = newViewCenterX;
     this.viewTop = newViewCenterY;
     this.zoomFactor = newZoomFactor;
@@ -117,10 +106,7 @@ export class ViewPort implements ViewPortInterface {
     }
   }
 
-  public updateScreenDimensions(
-    width: ScreenPixelUnit,
-    height: ScreenPixelUnit,
-  ): void {
+  public updateScreenDimensions(width: ScreenPixelUnit, height: ScreenPixelUnit): void {
     this.screenWidth = width;
     this.screenHeight = height;
 

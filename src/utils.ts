@@ -1,15 +1,9 @@
 // export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-// export const genRandomId = (additionalPrefix?: string) =>
-//   (additionalPrefix ? additionalPrefix + '_' : '') +
-//   Math.random()
-//     .toString(36)
-//     .slice(2) +
-//   '_' +
-//   new Date()
-//     .getTime()
-//     .toString(36)
-//     .slice(2);
+export const generateRandomId = () =>
+  Math.random()
+    .toString(36)
+    .slice(2);
 
 // export function logElapsedMs<X>(callback: () => X, context: string): X {
 //   const start = new Date();
@@ -89,17 +83,8 @@ export function clamp(v: number, min: number, max: number): number {
   return v;
 }
 
-export function rectContainsPoint(
-  clientRect: ClientRect,
-  x: number,
-  y: number,
-) {
-  return (
-    clientRect.left < x &&
-    clientRect.right > x &&
-    clientRect.top < y &&
-    clientRect.bottom > y
-  );
+export function rectContainsPoint(clientRect: ClientRect, x: number, y: number) {
+  return clientRect.left < x && clientRect.right > x && clientRect.top < y && clientRect.bottom > y;
 }
 
 // export function sleep(ms: number): Promise<{}> {
