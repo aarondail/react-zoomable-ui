@@ -37,13 +37,6 @@ export class ViewPort implements ViewPortInterface {
   }
 
   public processPanZoomEvent = (e: PanZoomEvent) => {
-    // During the very initial startup sometimes we get a pan/zoom that has 0
-    // for these. Ignore it in this case. Probably a better plan would be to try
-    // and init pan zoom at some pointer point.
-    if (e.x === 0 && e.y === 0) {
-      return;
-    }
-
     // Zoom
     let zoomFactor = this.zoomFactor;
     zoomFactor -= e.dz / 100;

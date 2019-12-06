@@ -84,45 +84,16 @@ div.${this.specificClassName} img {
 
   private addEventHandlers() {
     if (this.containerDivRef) {
-      // Not sure what the deal is but for Safari both desktop and mobile I have
-      // to preventDefault() these gesture events. Note that for desktop Safari
-      // the pan-zoom library (really the touch-pinch library) doesn't handle
-      // pinching and zooming (it does seem to for mobile safari though). It
-      // does seem to work on mobile Safari though (if we suppress these events).
-      if (navigator.vendor.match(/Apple/)) {
-        this.containerDivRef.addEventListener('gesturestart', this.handleGestureStartForSafari);
-        this.containerDivRef.addEventListener('gesturechange', this.handleGestureChangeForSafari);
-        this.containerDivRef.addEventListener('gestureend', this.handleGestureEndForSafari);
-      }
-
       this.containerDivRef.addEventListener('mousedown', this.handleMouseDown);
-      this.containerDivRef.addEventListener('mousemove', this.handleMouseMove);
-      // Doing this on window to catch it if it goes outside the window
-      window.addEventListener('mouseup', this.handleMouseUp);
-
-      this.containerDivRef.addEventListener('touchstart', this.handleTouchStart);
-      this.containerDivRef.addEventListener('touchend', this.handleTouchEnd);
+      // this.containerDivRef.addEventListener('mousemove', this.handleMouseMove);
+      // // Doing this on window to catch it if it goes outside the window
+      // window.addEventListener('mouseup', this.handleMouseUp);
 
       this.viewPort.addEventListener('updated', this.handleViewPortUpdated);
 
       window.addEventListener('resize', this.handleWindowResize);
     }
   }
-
-  private handleGestureChangeForSafari = (e: Event) => {
-    // See comment in `addEventHandlers` for why we do this...
-    e.preventDefault();
-  };
-
-  private handleGestureEndForSafari = (e: Event) => {
-    // See comment in `addEventHandlers` for why we do this...
-    e.preventDefault();
-  };
-
-  private handleGestureStartForSafari = (e: Event) => {
-    // See comment in `addEventHandlers` for why we do this...
-    e.preventDefault();
-  };
 
   private handleMouseDown = (e: MouseEvent) => {
     const elementTagName = e.target && (e.target as any).tagName;
@@ -135,20 +106,6 @@ div.${this.specificClassName} img {
       // impetus library used by pan-zoom fires any events for the pan.
       this.panZoomControl!.blockPan();
     }
-  };
-
-  // tslint:disable-next-line: no-empty
-  private handleMouseMove = (e: MouseEvent) => {};
-
-  // tslint:disable-next-line: no-empty
-  private handleMouseUp = (e: MouseEvent) => {};
-
-  private handleTouchStart = (e: TouchEvent) => {
-    // throw new Error('not implemented');
-  };
-
-  private handleTouchEnd = (e: TouchEvent) => {
-    // throw new Error('not implemented');
   };
 
   private handleViewPortUpdated = () => {
@@ -168,25 +125,10 @@ div.${this.specificClassName} img {
     if (this.containerDivRef && this.panZoomControl) {
       this.panZoomControl.destroy();
 
-      if (navigator.vendor.match(/Apple/)) {
-        this.containerDivRef.removeEventListener('gesturestart', this.handleGestureStartForSafari);
-        this.containerDivRef.removeEventListener('gesturechange', this.handleGestureChangeForSafari);
-        this.containerDivRef.removeEventListener('gestureend', this.handleGestureEndForSafari);
-      }
-
       this.containerDivRef.removeEventListener('mousedown', this.handleMouseDown);
-      // this.divRef.removeEventListener('click', this.handleClick);
-      window.removeEventListener('mouseup', this.handleMouseUp);
-      this.containerDivRef.removeEventListener('touchstart', this.handleTouchStart);
-      this.containerDivRef.removeEventListener('touchend', this.handleTouchEnd);
 
       this.viewPort.removeEventListener('updated', this.handleViewPortUpdated);
       window.removeEventListener('resize', this.handleWindowResize);
-
-      // if (this.currentInteractionHandler) {
-      //   this.currentInteractionHandler.clearTimeouts();
-      // }
-      // this.currentInteractionHandler = undefined;
     }
   };
 
