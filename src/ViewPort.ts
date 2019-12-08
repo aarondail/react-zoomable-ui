@@ -37,11 +37,28 @@ export class ViewPort implements ViewPortInterface {
   }
 
   public processPanZoomEvent = (e: PanZoomEvent) => {
-    // Zoom
     let zoomFactor = this.zoomFactor;
-    zoomFactor -= e.dz / 100;
-    // Don't let the zoomFactor get to 0 otherwise it gets stuck ;)
-    zoomFactor = clamp(zoomFactor, this.zoomFactorMin || 0.01, this.zoomFactorMax || 10);
+    if (e.dz !== 0) {
+      if (e.type === 'mouse') {
+        zoomFactor = (this.screenHeight * this.zoomFactor) / (this.screenHeight + e.dz * 2);
+      } else if (e.type === 'touch') {
+        // This logic is the same as the touch one above (which handles mouse
+        // wheels) but I wanted to keep it separate in case we want to tweak it.
+        //
+        // The thing is, this logic seems fine for the mouse wheel but for touch
+        // and pinch gestures I know the logic is not perfect here. It does a
+        // decent job of keeping the areas that the user touched underneath
+        // their fingers as they pinch or spread. 2 is just a magic number,
+        // don't think much about it. A better way to do this might be to get
+        // the finger positions (and track the old ones) and use that to make
+        // sure the coordinates under both fingers (in the virtual space) stayed
+        // the same... but at the same time that would have to factor in stuff
+        // like using 2 fingers to drag so I am not sure that is easy... or
+        // possible.
+        zoomFactor = (this.screenHeight * this.zoomFactor) / (this.screenHeight + e.dz * 2);
+      }
+      zoomFactor = clamp(zoomFactor, this.zoomFactorMin || 0.01, this.zoomFactorMax || 10);
+    }
 
     let viewCenterX: VirtualSpaceUnit;
     let viewCenterY: VirtualSpaceUnit;
