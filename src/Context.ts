@@ -3,10 +3,12 @@ import * as React from 'react';
 import { ViewPort } from './ViewPort';
 import { ViewPortInterface } from './ViewPortInterface';
 
-export interface ZoomableContextType {
+export interface ContextType {
+  readonly rootDivUniqueClassName: string;
   readonly viewPort: ViewPortInterface;
 }
 
-export const ZoomableContext = React.createContext<ZoomableContextType>({
+export const Context = React.createContext<ContextType>({
+  rootDivUniqueClassName: '',
   viewPort: new ViewPort(undefined, undefined),
 });

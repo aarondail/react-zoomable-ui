@@ -2,33 +2,24 @@
 import { PanZoomEvent } from 'pan-zoom';
 
 import { clamp } from './utils';
-import { ViewPortInterface } from './ViewPortInterface';
-
-// 0,0 as top left of browser window to screenWidth, screenHeight as button right.
-export type ScreenPixelUnit = number;
-// 0,0 as the top left of the virtual space we want to render stuff in, increasing to the bottom right.
-export type VirtualSpaceUnit = number;
-// 2 means 2x zoomed in, 0.5 means 2x zoomed out.
-export type ZoomFactor = number;
+import { ScreenPixelUnit, ViewPortInterface, VirtualSpaceUnit, ZoomFactor } from './ViewPortInterface';
 
 export class ViewPort implements ViewPortInterface {
-  public viewLeft: VirtualSpaceUnit;
-  public viewTop: VirtualSpaceUnit;
-  // public viewCenterX: WorkSpaceVirtualSpaceUnits;
-  // public viewCenterY: WorkSpaceVirtualSpaceUnits;
-  public screenWidth: ScreenPixelUnit;
-  public screenHeight: ScreenPixelUnit;
-  public zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to imgaes, and 0.5 is zoomed out.
+  public virtualSpaceLeft: VirtualSpaceUnit;
+  public virtualSpaceTop: VirtualSpaceUnit;
+  public containerWidth: ScreenPixelUnit;
+  public containerHeight: ScreenPixelUnit;
+  public zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
 
   // tslint:disable-next-line:readonly-array
   private updateListeners: Array<() => void>;
 
   constructor(private readonly zoomFactorMin?: number, private readonly zoomFactorMax?: number) {
     this.updateListeners = [];
-    this.viewLeft = 0;
-    this.viewTop = 0;
-    this.screenWidth = 0;
-    this.screenHeight = 0;
+    this.virtualSpaceLeft = 0;
+    this.virtualSpaceTop = 0;
+    this.containerWidth = 0;
+    this.containerHeight = 0;
     this.zoomFactor = 1;
   }
 
@@ -40,7 +31,7 @@ export class ViewPort implements ViewPortInterface {
     let zoomFactor = this.zoomFactor;
     if (e.dz !== 0) {
       if (e.type === 'mouse') {
-        zoomFactor = (this.screenHeight * this.zoomFactor) / (this.screenHeight + e.dz * 2);
+        zoomFactor = (this.containerHeight * this.zoomFactor) / (this.containerHeight + e.dz * 2);
       } else if (e.type === 'touch') {
         // This logic is the same as the touch one above (which handles mouse
         // wheels) but I wanted to keep it separate in case we want to tweak it.
@@ -55,37 +46,37 @@ export class ViewPort implements ViewPortInterface {
         // the same... but at the same time that would have to factor in stuff
         // like using 2 fingers to drag so I am not sure that is easy... or
         // possible.
-        zoomFactor = (this.screenHeight * this.zoomFactor) / (this.screenHeight + e.dz * 2);
+        zoomFactor = (this.containerHeight * this.zoomFactor) / (this.containerHeight + e.dz * 2);
       }
       zoomFactor = clamp(zoomFactor, this.zoomFactorMin || 0.01, this.zoomFactorMax || 10);
     }
 
-    let viewCenterX: VirtualSpaceUnit;
-    let viewCenterY: VirtualSpaceUnit;
+    let virtualSpaceCenterX: VirtualSpaceUnit;
+    let virtualSpaceCenterY: VirtualSpaceUnit;
 
     // Basic pan handling
-    viewCenterX = this.viewLeft + (-1 * e.dx) / zoomFactor;
-    viewCenterY = this.viewTop + (-1 * e.dy) / zoomFactor;
+    virtualSpaceCenterX = this.virtualSpaceLeft + (-1 * e.dx) / zoomFactor;
+    virtualSpaceCenterY = this.virtualSpaceTop + (-1 * e.dy) / zoomFactor;
 
     // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
-    const oldViewWidth = this.screenWidth / this.zoomFactor;
-    const oldViewHeight = this.screenHeight / this.zoomFactor;
-    const newViewWidth = this.screenWidth / zoomFactor;
-    const newViewHeight = this.screenHeight / zoomFactor;
+    const oldVirtualSpaceVisibleSpaceWidth = this.containerWidth / this.zoomFactor;
+    const oldVirtualSpaceVisibleSpaceHeight = this.containerHeight / this.zoomFactor;
+    const newVirtualSpaceVisibleWidth = this.containerWidth / zoomFactor;
+    const newVirtualSpaceVisibleHeight = this.containerHeight / zoomFactor;
 
-    const viewPortWidthDelta = newViewWidth - oldViewWidth;
-    const viewPortHeightDelta = newViewHeight - oldViewHeight;
+    const virtualSpaceVisibleWidthDelta = newVirtualSpaceVisibleWidth - oldVirtualSpaceVisibleSpaceWidth;
+    const virtualSpaceVisibleHeightDelta = newVirtualSpaceVisibleHeight - oldVirtualSpaceVisibleSpaceHeight;
 
     // The reason we use x and y here is to zoom in or out towards where the
     // pointer is positioned
-    const xFocusPercent = e.x / this.screenWidth;
-    const yFocusPercent = e.y / this.screenHeight;
+    const xFocusPercent = e.x / this.containerWidth;
+    const yFocusPercent = e.y / this.containerHeight;
 
-    viewCenterX = viewCenterX - viewPortWidthDelta * xFocusPercent;
-    viewCenterY = viewCenterY - viewPortHeightDelta * yFocusPercent;
+    virtualSpaceCenterX = virtualSpaceCenterX - virtualSpaceVisibleWidthDelta * xFocusPercent;
+    virtualSpaceCenterY = virtualSpaceCenterY - virtualSpaceVisibleHeightDelta * yFocusPercent;
 
     // And finally we are done
-    this.update(viewCenterX, viewCenterY, zoomFactor);
+    this.update(virtualSpaceCenterX, virtualSpaceCenterY, zoomFactor);
   };
 
   public removeEventListener(event: 'updated', listener: () => void): void {
@@ -96,17 +87,17 @@ export class ViewPort implements ViewPortInterface {
   }
 
   public reset(): void {
-    this.viewLeft = 0;
-    this.viewTop = 0;
-    this.screenWidth = 0;
-    this.screenHeight = 0;
+    this.virtualSpaceLeft = 0;
+    this.virtualSpaceTop = 0;
+    this.containerWidth = 0;
+    this.containerHeight = 0;
     this.zoomFactor = 1;
     this.updateListeners = [];
   }
 
   public update(newViewCenterX: VirtualSpaceUnit, newViewCenterY: VirtualSpaceUnit, newZoomFactor: ZoomFactor): void {
-    this.viewLeft = newViewCenterX;
-    this.viewTop = newViewCenterY;
+    this.virtualSpaceLeft = newViewCenterX;
+    this.virtualSpaceTop = newViewCenterY;
     this.zoomFactor = newZoomFactor;
 
     if (this.updateListeners) {
@@ -116,9 +107,9 @@ export class ViewPort implements ViewPortInterface {
     }
   }
 
-  public updateScreenDimensions(width: ScreenPixelUnit, height: ScreenPixelUnit): void {
-    this.screenWidth = width;
-    this.screenHeight = height;
+  public updateContainerDimensions(width: ScreenPixelUnit, height: ScreenPixelUnit): void {
+    this.containerWidth = width;
+    this.containerHeight = height;
 
     if (this.updateListeners) {
       for (const listener of this.updateListeners) {
