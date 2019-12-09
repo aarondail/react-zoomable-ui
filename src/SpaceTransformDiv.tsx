@@ -16,12 +16,12 @@ export class SpaceTransformDiv extends React.PureComponent<{}, SpaceTransformDiv
     super(props);
     this.state = { transformStyle: this.createTransformStyle(context.viewPort) };
     this.constantStyles = `
-    div.${context.rootDivUniqueClassName} > div.react-zoomable-ui-space {
-      margin: 0; padding: 0; height: 100%; width: 100%;
-      position: absolute;
-      top: 0; left: 0;
-      transform-origin: 0% 0%;
-    }
+div.${context.rootDivUniqueClassName} > div.react-zoomable-ui-space {
+  margin: 0; padding: 0; height: 100%; width: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  transform-origin: 0% 0%;
+}
     `;
     context.viewPort.addEventListener('updated', this.handleViewPortUpdated);
   }

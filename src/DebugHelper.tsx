@@ -8,6 +8,33 @@ interface DebugHelperComponentProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 class DebugHelperComponent extends React.PureComponent<DebugHelperComponentProps> {
+  private readonly constantStyles = `
+div.react-zoomable-ui-debug-helper {
+  background-color: darkgreen;
+  color: white;
+}
+div.react-zoomable-ui-debug-helper > div.react-zoomable-ui-debug-helper-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  font-family: monospace;
+}
+div.react-zoomable-ui-debug-helper > div.react-zoomable-ui-debug-helper-cell > div.react-zoomable-ui-debug-helper-cell-label {
+  font-size: x-small;
+  width: 15em;
+  text-align: right;
+  padding-right: 1em;
+  align-self: flex-end;
+  padding-bottom: 1px;
+}
+div.react-zoomable-ui-debug-helper > div.react-zoomable-ui-debug-helper-cell > div.react-zoomable-ui-debug-helper-cell-value {
+  font-size: medium;
+  font-weight: bold;
+  width: 12em;
+  text-align: left;
+}
+`;
+
   public componentDidMount(): void {
     this.props.viewPort.addEventListener('updated', this.handleViewPortUpdated);
   }
@@ -21,11 +48,16 @@ class DebugHelperComponent extends React.PureComponent<DebugHelperComponentProps
     const { viewPort, ...otherProps } = this.props;
     return (
       <div className="react-zoomable-ui-debug-helper" {...otherProps}>
-        {this.renderCell('VIRT LEFT', this.props.viewPort.virtualSpaceLeft.toFixed(3))}
-        {this.renderCell('VIRT TOP', this.props.viewPort.virtualSpaceTop.toFixed(3))}
+        <style>{this.constantStyles} </style>
+        {this.renderCell(
+          'VIRT SPACE - LEFT, TOP',
+          `${this.props.viewPort.virtualSpaceLeft.toFixed(3)}, ${this.props.viewPort.virtualSpaceTop.toFixed(3)}`,
+        )}
         {this.renderCell('ZOOM FACTOR', this.props.viewPort.zoomFactor.toFixed(3))}
-        {this.renderCell('CONT WIDTH', this.props.viewPort.containerWidth)}
-        {this.renderCell('CONT HEIGHT', this.props.viewPort.containerHeight)}
+        {this.renderCell(
+          'CONTAINER SIZE',
+          `${this.props.viewPort.containerWidth}, ${this.props.viewPort.containerHeight}`,
+        )}
       </div>
     );
   }
