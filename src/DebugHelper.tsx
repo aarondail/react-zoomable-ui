@@ -51,7 +51,15 @@ div.react-zoomable-ui-debug-helper > div.react-zoomable-ui-debug-helper-cell > d
         <style>{this.constantStyles} </style>
         {this.renderCell(
           'VIRT SPACE - LEFT, TOP',
-          `${this.props.viewPort.virtualSpaceLeft.toFixed(3)}, ${this.props.viewPort.virtualSpaceTop.toFixed(3)}`,
+          `${this.props.viewPort.left.toFixed(3)}, ${this.props.viewPort.top.toFixed(3)}`,
+        )}
+        {this.renderCell(
+          'VIRT SPACE - CENTER',
+          `${this.props.viewPort.centerX.toFixed(3)}, ${this.props.viewPort.centerY.toFixed(3)}`,
+        )}
+        {this.renderCell(
+          'VIRT SPACE - SIZE',
+          `${this.props.viewPort.width.toFixed(3)}, ${this.props.viewPort.height.toFixed(3)}`,
         )}
         {this.renderCell('ZOOM FACTOR', this.props.viewPort.zoomFactor.toFixed(3))}
         {this.renderCell(

@@ -42,8 +42,7 @@ div.${context.rootDivUniqueClassName} > div.react-zoomable-ui-space {
   }
 
   private createTransformStyle = (viewPort: ViewPortInterface) => ({
-    transform: `scale(${viewPort.zoomFactor}) translate(${-1 * viewPort.virtualSpaceLeft}px,${-1 *
-      viewPort.virtualSpaceTop}px)`,
+    transform: `scale(${viewPort.zoomFactor}) translate(${-1 * viewPort.left}px,${-1 * viewPort.top}px)`,
   });
 
   private handleViewPortUpdated = () => {
