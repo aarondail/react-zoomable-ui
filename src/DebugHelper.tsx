@@ -84,6 +84,4 @@ div.react-zoomable-ui-debug-helper > div.react-zoomable-ui-debug-helper-cell > d
   };
 }
 
-export const DebugHelper: React.ComponentType<Omit<DebugHelperComponentProps, 'viewPort'>> = withViewPort(
-  DebugHelperComponent,
-);
+export const DebugHelper = withViewPort(DebugHelperComponent);
