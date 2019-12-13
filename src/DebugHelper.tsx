@@ -44,7 +44,6 @@ div.react-zoomable-ui-debug-helper > div.react-zoomable-ui-debug-helper-cell > d
   }
 
   public render() {
-    console.log('render-kid');
     const { viewPort, ...otherProps } = this.props;
     return (
       <div className="react-zoomable-ui-debug-helper" {...otherProps}>

@@ -1,9 +1,16 @@
 // export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
+let idSuffix = 0;
+/**
+ * This id should be safe to use as a class name. So don't use any special
+ * characters that CSS might get confused by.
+ */
 export const generateRandomId = () =>
   Math.random()
     .toString(36)
-    .slice(2);
+    .slice(2) +
+  '_' +
+  ++idSuffix;
 
 // export function logElapsedMs<X>(callback: () => X, context: string): X {
 //   const start = new Date();
@@ -85,6 +92,14 @@ export function clamp(v: number, min: number, max: number): number {
 
 export function rectContainsPoint(clientRect: ClientRect, x: number, y: number) {
   return clientRect.left < x && clientRect.right > x && clientRect.top < y && clientRect.bottom > y;
+}
+
+export function* walkElementHierarchyUp(leafElement: HTMLElement): Iterable<HTMLElement> {
+  let e: HTMLElement | null = leafElement;
+  while (e) {
+    yield e;
+    e = e.parentElement;
+  }
 }
 
 // export function sleep(ms: number): Promise<{}> {

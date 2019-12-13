@@ -3,7 +3,8 @@ import panzoom, { PanZoomControl } from 'pan-zoom';
 import * as React from 'react';
 
 import { Context, ContextType } from './Context';
-import { generateRandomId } from './utils';
+import { Interactable } from './Interactable';
+import { generateRandomId, walkElementHierarchyUp } from './utils';
 import { ViewPort } from './ViewPort';
 
 export interface ProviderProps {
@@ -16,6 +17,7 @@ export class Provider extends React.PureComponent<ProviderProps> {
   private contextValue: ContextType;
   private containerDivRef?: HTMLElement;
   private handlePollForElementResizing?: any;
+  private interactableRegistry: Map<string, Interactable>;
   private panZoomControl?: PanZoomControl;
   private viewPort: ViewPort;
 
@@ -48,7 +50,14 @@ div.${this.rootDivUniqueClassName} img {
     super(props);
     this.viewPort = new ViewPort(this.props.zoomFactorMin, this.props.zoomFactorMax);
 
-    this.contextValue = { rootDivUniqueClassName: this.rootDivUniqueClassName, viewPort: this.viewPort };
+    this.interactableRegistry = new Map();
+
+    this.contextValue = {
+      registerInteractable: i => this.interactableRegistry.set(i.id, i),
+      rootDivUniqueClassName: this.rootDivUniqueClassName,
+      unregisterInteractable: i => this.interactableRegistry.delete(i.id),
+      viewPort: this.viewPort,
+    };
 
     // This is optional because it is unnecessary if the only way the div's size
     // will change is with the window itself
@@ -96,8 +105,9 @@ div.${this.rootDivUniqueClassName} img {
   private addEventHandlers() {
     if (this.containerDivRef) {
       this.containerDivRef.addEventListener('mousedown', this.handleMouseDown);
-      // this.containerDivRef.addEventListener('mousemove', this.handleMouseMove);
-      // // Doing this on window to catch it if it goes outside the window
+
+      // Doing this on window to catch it if it goes outside the window
+      window.addEventListener('mouseup', this.handleMouseUp);
 
       // There is no good way to detect whether an individual element is
       // resized. We can only do that at the window level. There are some
@@ -109,7 +119,24 @@ div.${this.rootDivUniqueClassName} img {
     }
   }
 
+  private getInteractableIdMostApplicableToElement = (element: HTMLElement): string | undefined => {
+    for (const e of walkElementHierarchyUp(element)) {
+      if (e.classList.contains(this.rootDivUniqueClassName)) {
+        return undefined;
+      }
+      const a = e.getAttribute(Interactable.IdAttributeName);
+      if (a) {
+        return a;
+      }
+    }
+    return undefined;
+  };
+
   private handleMouseDown = (e: MouseEvent) => {
+    if (!e.target || !this.panZoomControl) {
+      return;
+    }
+
     const elementTagName = e.target && (e.target as any).tagName;
     if (elementTagName === 'a' || elementTagName === 'A') {
       // Prevent dragging on <a> tags since A. the browsers may interpret the
@@ -120,6 +147,30 @@ div.${this.rootDivUniqueClassName} img {
       // impetus library used by pan-zoom fires any events for the pan.
       this.panZoomControl!.blockPan();
     }
+
+    const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
+    const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
+
+    if (interactable && interactable.props.ignoreGestures) {
+      this.panZoomControl.blockPan();
+    }
+  };
+
+  // private handleMouseMove = (e: MouseEvent) => {
+  //   if (this.currentInteractionHandler) {
+  //     this.currentInteractionHandler.onPointerMove(e);
+  //   }
+  // };
+
+  private handleMouseUp = (e: MouseEvent) => {
+    // if (this.panZoomControl) {
+    //   this.panZoomControl.unblockPan();
+    // }
+    // if (this.currentInteractionHandler) {
+    //   this.currentInteractionHandler.onPointerUp(e);
+    //   this.currentInteractionHandler.clearTimeouts();
+    //   this.currentInteractionHandler = undefined;
+    // }
   };
 
   private removeEventHandlers = () => {
