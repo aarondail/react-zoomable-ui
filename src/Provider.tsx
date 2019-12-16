@@ -18,6 +18,7 @@ export class Provider extends React.PureComponent<ProviderProps> {
   private containerDivRef?: HTMLElement;
   private handlePollForElementResizing?: any;
   private interactableRegistry: Map<string, Interactable>;
+  private isCurrentPanGestureBlocked?: boolean;
   private panZoomControl?: PanZoomControl;
   private viewPort: ViewPort;
 
@@ -29,6 +30,7 @@ div.${this.rootDivUniqueClassName} {
   position: relative;
   ${/* Prevent the user from highlighting while dragging */ ''}
   -webkit-user-select: none;
+  user-select: none;
   ${/* Prevent the user from getting a text input box cursor when hovering over text that can be dragged */ ''}
   cursor: default;
 }
@@ -44,7 +46,14 @@ div.${this.rootDivUniqueClassName} img {
   -moz-user-drag: none;
   -ms-user-drag: none;
   user-drag: none;
-}`;
+}
+
+div.${this.rootDivUniqueClassName} div.${Interactable.IgnoreGesturesClassName} {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: auto;
+}
+`;
 
   public constructor(props: ProviderProps) {
     super(props);
@@ -105,6 +114,7 @@ div.${this.rootDivUniqueClassName} img {
   private addEventHandlers() {
     if (this.containerDivRef) {
       this.containerDivRef.addEventListener('mousedown', this.handleMouseDown);
+      this.containerDivRef.addEventListener('mousemove', this.handleMouseMove);
 
       // Doing this on window to catch it if it goes outside the window
       window.addEventListener('mouseup', this.handleMouseUp);
@@ -153,16 +163,20 @@ div.${this.rootDivUniqueClassName} img {
 
     if (interactable && interactable.props.ignoreGestures) {
       this.panZoomControl.blockPan();
+      this.isCurrentPanGestureBlocked = true;
     }
   };
 
-  // private handleMouseMove = (e: MouseEvent) => {
-  //   if (this.currentInteractionHandler) {
-  //     this.currentInteractionHandler.onPointerMove(e);
-  //   }
-  // };
+  private handleMouseMove = (e: MouseEvent) => {
+    if (this.isCurrentPanGestureBlocked) {
+      // Don't let impetus handle this mouse event because it will
+      // preventDefault() it which will prevent the user from selecting text.
+      e.stopImmediatePropagation();
+    }
+  };
 
   private handleMouseUp = (e: MouseEvent) => {
+    this.isCurrentPanGestureBlocked = false;
     // if (this.panZoomControl) {
     //   this.panZoomControl.unblockPan();
     // }
@@ -178,6 +192,7 @@ div.${this.rootDivUniqueClassName} img {
       this.panZoomControl.destroy();
 
       this.containerDivRef.removeEventListener('mousedown', this.handleMouseDown);
+      this.containerDivRef.removeEventListener('mousemove', this.handleMouseMove);
 
       window.removeEventListener('resize', this.updateContainerSize);
     }

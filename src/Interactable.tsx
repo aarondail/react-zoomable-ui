@@ -25,6 +25,7 @@ interface InteractableState {}
 export class Interactable extends React.PureComponent<InteractableProps, InteractableState> {
   public static contextType = Context;
   public static readonly IdAttributeName = 'x-react-zoomable-ui-interactable-id';
+  public static readonly IgnoreGesturesClassName = 'react-zoomable-ui-interactable-ignore-gestures';
   public readonly context!: ContextType;
   public readonly id = generateRandomId();
 
@@ -46,11 +47,28 @@ export class Interactable extends React.PureComponent<InteractableProps, Interac
   // }
 
   public render() {
-    const { ignoreGestures, ...divProps } = this.props;
+    const { ignoreGestures, className, ...divProps } = this.props;
     return (
-      <div {...divProps} x-react-zoomable-ui-interactable-id={this.id} ref={this.divRef}>
+      <div
+        {...divProps}
+        x-react-zoomable-ui-interactable-id={this.id}
+        className={this.determineClassName()}
+        ref={this.divRef}
+      >
         {this.props.children}
       </div>
     );
   }
+
+  private determineClassName = () => {
+    const { className, ignoreGestures } = this.props;
+    if (ignoreGestures) {
+      if (className) {
+        return `${className} ${Interactable.IgnoreGesturesClassName}`;
+      } else {
+        return Interactable.IgnoreGesturesClassName;
+      }
+    }
+    return className;
+  };
 }
