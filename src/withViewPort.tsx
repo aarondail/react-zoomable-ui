@@ -17,7 +17,6 @@ export function withViewPort<P extends { readonly viewPort: ViewPortInterface }>
       return (
         <Context.Consumer>
           {context => {
-            console.log(context);
             // tslint:disable-next-line: no-object-literal-type-assertion
             return React.createElement(WrappedClass, { ...p, viewPort: context.viewPort } as P);
           }}

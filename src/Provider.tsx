@@ -48,7 +48,7 @@ div.${this.rootDivUniqueClassName} img {
   user-drag: none;
 }
 
-div.${this.rootDivUniqueClassName} div.${Interactable.IgnoreGesturesClassName} {
+div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
   -webkit-user-select: text;
   user-select: text;
   cursor: auto;
@@ -115,7 +115,6 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnoreGesturesClassName} {
     if (this.containerDivRef) {
       this.containerDivRef.addEventListener('mousedown', this.handleMouseDown);
       this.containerDivRef.addEventListener('mousemove', this.handleMouseMove);
-
       // Doing this on window to catch it if it goes outside the window
       window.addEventListener('mouseup', this.handleMouseUp);
 
@@ -161,7 +160,7 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnoreGesturesClassName} {
     const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
-    if (interactable && interactable.props.ignoreGestures) {
+    if (interactable && interactable.props.ignorePan) {
       this.panZoomControl.blockPan();
       this.isCurrentPanGestureBlocked = true;
     }
@@ -193,7 +192,6 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnoreGesturesClassName} {
 
       this.containerDivRef.removeEventListener('mousedown', this.handleMouseDown);
       this.containerDivRef.removeEventListener('mousemove', this.handleMouseMove);
-
       window.removeEventListener('resize', this.updateContainerSize);
     }
   };
@@ -224,8 +222,11 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnoreGesturesClassName} {
     this.containerDivRef = ref;
     if (this.containerDivRef) {
       this.viewPort.update(0, 0, 1);
-      this.panZoomControl = panzoom(this.containerDivRef, this.viewPort.processPanZoomEvent);
+      // Because some of our event handlers use `stopImmediatePropagation` to
+      // prevent the event handlers from pan-zoom (and its dependencies) from
+      // processing events, we have to add our event listeners first.
       this.addEventHandlers();
+      this.panZoomControl = panzoom(this.containerDivRef, this.viewPort.processPanZoomEvent);
       // Make sure we set the screen dimensions on the element
       this.updateContainerSize();
     }

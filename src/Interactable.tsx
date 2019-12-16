@@ -4,7 +4,7 @@ import { Context, ContextType } from './Context';
 import { generateRandomId } from './utils';
 
 export interface InteractableProps extends Omit<React.HTMLProps<HTMLDivElement>, 'ref'> {
-  readonly ignoreGestures?: boolean;
+  readonly ignorePan?: boolean;
   // readonly canPressClick?: boolean;
   // readonly canLongPressClick?: boolean;
   // readonly canDrag?: boolean;
@@ -25,13 +25,13 @@ interface InteractableState {}
 export class Interactable extends React.PureComponent<InteractableProps, InteractableState> {
   public static contextType = Context;
   public static readonly IdAttributeName = 'x-react-zoomable-ui-interactable-id';
-  public static readonly IgnoreGesturesClassName = 'react-zoomable-ui-interactable-ignore-gestures';
+  public static readonly IgnorePanClassName = 'react-zoomable-ui-interactable-ignore-pan';
   public readonly context!: ContextType;
   public readonly id = generateRandomId();
 
   private divRef: React.RefObject<HTMLDivElement> = React.createRef();
 
-  public componentWillMount() {
+  public componentDidMount() {
     this.context.registerInteractable(this);
   }
 
@@ -47,7 +47,7 @@ export class Interactable extends React.PureComponent<InteractableProps, Interac
   // }
 
   public render() {
-    const { ignoreGestures, className, ...divProps } = this.props;
+    const { ignorePan, className, ...divProps } = this.props;
     return (
       <div
         {...divProps}
@@ -61,12 +61,12 @@ export class Interactable extends React.PureComponent<InteractableProps, Interac
   }
 
   private determineClassName = () => {
-    const { className, ignoreGestures } = this.props;
-    if (ignoreGestures) {
+    const { className, ignorePan } = this.props;
+    if (ignorePan) {
       if (className) {
-        return `${className} ${Interactable.IgnoreGesturesClassName}`;
+        return `${className} ${Interactable.IgnorePanClassName}`;
       } else {
-        return Interactable.IgnoreGesturesClassName;
+        return Interactable.IgnorePanClassName;
       }
     }
     return className;
