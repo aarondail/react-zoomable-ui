@@ -33,9 +33,17 @@ div.${this.rootDivUniqueClassName} {
   user-select: none;
   ${/* Prevent the user from getting a text input box cursor when hovering over text that can be dragged */ ''}
   cursor: default;
+  ${
+    /* Touch gestures on edge are not currently working totally correctly.
+  Turning this off means, I think, we have to support them, which we mostly
+  do ... or at least want to... but don't for things like pinch. Turning it
+  off for now, will wait on edge to move to Chrome and revisit. */ ''
+  }
+  -ms-touch-action: none;
 }
 
 div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
+  -ms-touch-action: default;
   -webkit-user-select: text;
   user-select: text;
   cursor: auto;
