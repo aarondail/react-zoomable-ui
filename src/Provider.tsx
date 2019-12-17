@@ -35,19 +35,6 @@ div.${this.rootDivUniqueClassName} {
   cursor: default;
 }
 
-${
-  /*
-  This is the only way AFAIK to suppress image dragging events on stuff
-  inside the zoomable area without forcing users of the library to do it
-  themselves (or add something like `draggable=false` to their `<img>`s)*/ ''
-}
-div.${this.rootDivUniqueClassName} img {
-  -webkit-user-drag: none;
-  -moz-user-drag: none;
-  -ms-user-drag: none;
-  user-drag: none;
-}
-
 div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
   -webkit-user-select: text;
   user-select: text;
@@ -113,6 +100,7 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
 
   private addEventHandlers() {
     if (this.containerDivRef) {
+      this.containerDivRef.addEventListener('dragstart', this.handleDragStart);
       this.containerDivRef.addEventListener('mousedown', this.handleMouseDown);
       this.containerDivRef.addEventListener('mousemove', this.handleMouseMove);
       // Doing this on window to catch it if it goes outside the window
@@ -141,6 +129,29 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
       }
     }
     return undefined;
+  };
+
+  private handleDragStart = (e: DragEvent) => {
+    // This is the only way I have found that actually suppresses the default
+    // handling of dragging on images, which interferes with our panning by
+    // having a "ghost image" follow the pointer, across all browsers.
+    // See this link for more info:
+    // https://stackoverflow.com/questions/3873595/how-to-disable-firefoxs-default-drag-and-drop-on-all-images-behavior-with-jquer
+    if (e.target) {
+      const tagName = (e.target as any).tagName;
+      if (tagName === 'img' || tagName === 'IMG') {
+        const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
+        const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
+
+        // Suppress the drag _unless_ it is within a no pan handling area, then
+        // let it happen.
+        if (interactable && interactable.props.ignorePan) {
+          // Intentionally do nothing
+        } else {
+          e.preventDefault();
+        }
+      }
+    }
   };
 
   private handleMouseDown = (e: MouseEvent) => {
@@ -202,6 +213,7 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
     if (this.containerDivRef && this.panZoomControl) {
       this.panZoomControl.destroy();
 
+      this.containerDivRef.removeEventListener('dragstart', this.handleDragStart);
       this.containerDivRef.removeEventListener('mousedown', this.handleMouseDown);
       this.containerDivRef.removeEventListener('mousemove', this.handleMouseMove);
       window.removeEventListener('resize', this.updateContainerSize);
