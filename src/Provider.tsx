@@ -191,7 +191,7 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
   private handleMouseUp = (e: MouseEvent) => {};
 
   private handleTouchStart = (e: TouchEvent) => {
-    if (this.panZoomControl && e.targetTouches.length === 1) {
+    if (this.panZoomControl && e.touches.length === 1) {
       const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
       const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
