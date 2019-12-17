@@ -117,6 +117,8 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
       this.containerDivRef.addEventListener('mousemove', this.handleMouseMove);
       // Doing this on window to catch it if it goes outside the window
       window.addEventListener('mouseup', this.handleMouseUp);
+      this.containerDivRef.addEventListener('touchstart', this.handleTouchStart);
+      this.containerDivRef.addEventListener('touchend', this.handleTouchEnd);
 
       // There is no good way to detect whether an individual element is
       // resized. We can only do that at the window level. There are some
@@ -154,35 +156,63 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
       //
       // For my own future reference: the mouse down event gets fired before the
       // impetus library used by pan-zoom fires any events for the pan.
-      this.panZoomControl!.blockPan();
+      this.panZoomControl!.pausePanning();
+      this.isCurrentPanGestureBlocked = true;
+      return;
     }
 
     const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
     if (interactable && interactable.props.ignorePan) {
-      this.panZoomControl.blockPan();
+      this.panZoomControl.pausePanning();
       this.isCurrentPanGestureBlocked = true;
+    } else if (this.isCurrentPanGestureBlocked) {
+      this.panZoomControl.resumePanning();
+      this.isCurrentPanGestureBlocked = false;
     }
   };
 
   private handleMouseMove = (e: MouseEvent) => {
-    if (this.isCurrentPanGestureBlocked) {
-      // Don't let impetus handle this mouse event because it will
-      // preventDefault() it which will prevent the user from selecting text.
-      e.stopImmediatePropagation();
-    }
+    // if (this.isCurrentPanGestureBlocked) {
+    //   // Don't let impetus handle this mouse event because it will
+    //   // preventDefault() it which will prevent the user from selecting text.
+    //   e.stopImmediatePropagation();
+    // }
   };
 
   private handleMouseUp = (e: MouseEvent) => {
-    this.isCurrentPanGestureBlocked = false;
-    // if (this.panZoomControl) {
-    //   this.panZoomControl.unblockPan();
+    // if (this.panZoomControl && this.isCurrentPanGestureBlocked) {
+    //   this.panZoomControl.resumePanning();
     // }
+    // this.isCurrentPanGestureBlocked = false;
     // if (this.currentInteractionHandler) {
     //   this.currentInteractionHandler.onPointerUp(e);
     //   this.currentInteractionHandler.clearTimeouts();
     //   this.currentInteractionHandler = undefined;
+    // }
+  };
+
+  private handleTouchStart = (e: TouchEvent) => {
+    if (this.panZoomControl && e.targetTouches.length === 1) {
+      const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
+      const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
+
+      if (interactable && interactable.props.ignorePan) {
+        this.panZoomControl.pausePanning();
+        this.isCurrentPanGestureBlocked = true;
+        e.preventDefault();
+      } else if (this.isCurrentPanGestureBlocked) {
+        this.isCurrentPanGestureBlocked = false;
+        this.panZoomControl.resumePanning();
+      }
+    }
+  };
+
+  private handleTouchEnd = (e: TouchEvent) => {
+    // if (this.panZoomControl && e.targetTouches.length === 1) {
+    //   this.isCurrentPanGestureBlocked = false;
+    //   this.panZoomControl.unblockPan();
     // }
   };
 
@@ -193,6 +223,8 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
       this.containerDivRef.removeEventListener('mousedown', this.handleMouseDown);
       this.containerDivRef.removeEventListener('mousemove', this.handleMouseMove);
       window.removeEventListener('resize', this.updateContainerSize);
+      this.containerDivRef.removeEventListener('touchstart', this.handleTouchStart);
+      this.containerDivRef.removeEventListener('touchend', this.handleTouchEnd);
     }
   };
 
