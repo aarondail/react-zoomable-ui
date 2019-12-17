@@ -173,25 +173,11 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
     }
   };
 
-  private handleMouseMove = (e: MouseEvent) => {
-    // if (this.isCurrentPanGestureBlocked) {
-    //   // Don't let impetus handle this mouse event because it will
-    //   // preventDefault() it which will prevent the user from selecting text.
-    //   e.stopImmediatePropagation();
-    // }
-  };
+  // tslint:disable-next-line: no-empty
+  private handleMouseMove = (e: MouseEvent) => {};
 
-  private handleMouseUp = (e: MouseEvent) => {
-    // if (this.panZoomControl && this.isCurrentPanGestureBlocked) {
-    //   this.panZoomControl.resumePanning();
-    // }
-    // this.isCurrentPanGestureBlocked = false;
-    // if (this.currentInteractionHandler) {
-    //   this.currentInteractionHandler.onPointerUp(e);
-    //   this.currentInteractionHandler.clearTimeouts();
-    //   this.currentInteractionHandler = undefined;
-    // }
-  };
+  // tslint:disable-next-line: no-empty
+  private handleMouseUp = (e: MouseEvent) => {};
 
   private handleTouchStart = (e: TouchEvent) => {
     if (this.panZoomControl && e.targetTouches.length === 1) {
@@ -209,12 +195,8 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
     }
   };
 
-  private handleTouchEnd = (e: TouchEvent) => {
-    // if (this.panZoomControl && e.targetTouches.length === 1) {
-    //   this.isCurrentPanGestureBlocked = false;
-    //   this.panZoomControl.unblockPan();
-    // }
-  };
+  // tslint:disable-next-line: no-empty
+  private handleTouchEnd = (e: TouchEvent) => {};
 
   private removeEventHandlers = () => {
     if (this.containerDivRef && this.panZoomControl) {
