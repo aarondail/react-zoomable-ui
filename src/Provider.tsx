@@ -3,11 +3,14 @@ import panzoom, { PanZoomControl } from 'pan-zoom';
 import * as React from 'react';
 
 import { Context, ContextType } from './Context';
-import { Interactable } from './Interactable';
-import { generateRandomId, walkElementHierarchyUp } from './utils';
+import { getInteractableIdMostApplicableToElement, InteractableComponent } from './Interactable';
+import { NoPanArea } from './NoPanArea';
+import { generateRandomId } from './utils';
 import { ViewPort } from './ViewPort';
 
 export interface ProviderProps {
+  readonly className?: string;
+  readonly style?: React.CSSProperties;
   readonly pollForElementResizing?: boolean;
   readonly zoomFactorMax?: number;
   readonly zoomFactorMin?: number;
@@ -17,7 +20,7 @@ export class Provider extends React.PureComponent<ProviderProps> {
   private contextValue: ContextType;
   private containerDivRef?: HTMLElement;
   private handlePollForElementResizing?: any;
-  private interactableRegistry: Map<string, Interactable>;
+  private interactableRegistry: Map<string, InteractableComponent>;
   private isCurrentPanGestureBlocked?: boolean;
   private panZoomControl?: PanZoomControl;
   private viewPort: ViewPort;
@@ -40,13 +43,6 @@ div.${this.rootDivUniqueClassName} {
   off for now, will wait on edge to move to Chrome and revisit. */ ''
   }
   -ms-touch-action: none;
-}
-
-div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
-  -ms-touch-action: default;
-  -webkit-user-select: text;
-  user-select: text;
-  cursor: auto;
 }
 `;
 
@@ -89,7 +85,9 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
     return (
       <div
         ref={this.setContainerDivRef}
-        className={`react-zoomable-ui ${this.rootDivUniqueClassName} react-zoomable-ui-container-div`}
+        className={`react-zoomable-ui ${this.rootDivUniqueClassName} react-zoomable-ui-container-div ${this.props
+          .className || ''}`}
+        style={this.props.style}
       >
         <style>{this.constantStyles}</style>
         <Context.Provider value={this.contextValue}>{this.props.children}</Context.Provider>
@@ -126,19 +124,6 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
     }
   }
 
-  private getInteractableIdMostApplicableToElement = (element: HTMLElement): string | undefined => {
-    for (const e of walkElementHierarchyUp(element)) {
-      if (e.classList.contains(this.rootDivUniqueClassName)) {
-        return undefined;
-      }
-      const a = e.getAttribute(Interactable.IdAttributeName);
-      if (a) {
-        return a;
-      }
-    }
-    return undefined;
-  };
-
   private handleDragStart = (e: DragEvent) => {
     // This is the only way I have found that actually suppresses the default
     // handling of dragging on images, which interferes with our panning by
@@ -148,12 +133,12 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
     if (e.target) {
       const tagName = (e.target as any).tagName;
       if (tagName === 'img' || tagName === 'IMG') {
-        const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
+        const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
         const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
         // Suppress the drag _unless_ it is within a no pan handling area, then
         // let it happen.
-        if (interactable && interactable.props.ignorePan) {
+        if (interactable && interactable instanceof NoPanArea) {
           // Intentionally do nothing
         } else {
           e.preventDefault();
@@ -180,10 +165,10 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
       return;
     }
 
-    const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
+    const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
-    if (interactable && interactable.props.ignorePan) {
+    if (interactable && interactable instanceof NoPanArea) {
       this.panZoomControl.pausePanning();
       this.isCurrentPanGestureBlocked = true;
     } else if (this.isCurrentPanGestureBlocked) {
@@ -200,10 +185,10 @@ div.${this.rootDivUniqueClassName} div.${Interactable.IgnorePanClassName} {
 
   private handleTouchStart = (e: TouchEvent) => {
     if (this.panZoomControl && e.touches.length === 1) {
-      const interactableId = this.getInteractableIdMostApplicableToElement(e.target as any);
+      const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
       const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
-      if (interactable && interactable.props.ignorePan) {
+      if (interactable && interactable instanceof NoPanArea) {
         this.panZoomControl.pausePanning();
         this.isCurrentPanGestureBlocked = true;
         e.preventDefault();

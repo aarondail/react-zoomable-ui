@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { Interactable } from './Interactable';
+import { InteractableComponent } from './Interactable';
 import { ViewPort } from './ViewPort';
 import { ViewPortInterface } from './ViewPortInterface';
 
 export interface ContextType {
-  readonly registerInteractable: (interactable: Interactable) => void;
+  readonly registerInteractable: (interactable: InteractableComponent) => void;
   readonly rootDivUniqueClassName: string;
-  readonly unregisterInteractable: (interactable: Interactable) => void;
+  readonly unregisterInteractable: (interactable: InteractableComponent) => void;
   readonly viewPort: ViewPortInterface;
 }
 
