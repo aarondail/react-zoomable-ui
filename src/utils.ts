@@ -105,3 +105,5 @@ export function* walkElementHierarchyUp(leafElement: HTMLElement): Iterable<HTML
 // export function sleep(ms: number): Promise<{}> {
 //   return new Promise(resolve => setTimeout(resolve, ms));
 // }
+
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] };

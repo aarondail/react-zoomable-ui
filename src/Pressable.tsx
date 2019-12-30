@@ -1,16 +1,15 @@
 import * as React from 'react';
 
-import { Context, ContextType } from './Context';
 import { InteractableIdAttributeName } from './Interactable';
+import { PressHandlingConfig } from './PressInterpreter';
+import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { generateRandomId } from './utils';
-import { VirtualSpacePixelUnit } from './ViewPortInterface';
+import { ClientPixelUnit } from './ViewPort';
 
-export interface PressableEvent {
-  readonly virtualSpaceX: VirtualSpacePixelUnit;
-  readonly virtualSpaceY: VirtualSpacePixelUnit;
-}
+const DEFAULT_POTENTIAL_TAP_BOUNDS: ClientPixelUnit = 4;
+const DEFAULT_LONG_TAP_THRESHOLD_MS: number = 500;
 
-export interface PressableProps extends Omit<React.HTMLProps<HTMLDivElement>, 'ref'> {
+export interface PressableProps {
   readonly className?: string;
   readonly pressClassName?: string;
   readonly longPressClassName?: string;
@@ -24,20 +23,25 @@ export interface PressableProps extends Omit<React.HTMLProps<HTMLDivElement>, 'r
 
   // readonly disabled?: boolean;
   // readonly capturePanOn?: undefined | 'press' | 'longPress';
-  readonly longPressThresholdMs?: number;
+  readonly longTapThresholdMs?: number;
 
-  readonly onPress?: (e: PressableEvent) => void;
-  readonly onLongPress?: (e: PressableEvent) => void;
+  readonly onTap?: () => void;
+  readonly onLongTap?: () => void;
   // readonly onCapturePanStart?: () => void;
   // readonly onCapturePanMove?: () => void;
   // readonly onCapturePanEnd?: () => void;
-  readonly onRightClick?: (e: PressableEvent) => void;
+  // readonly onPressContextMenu?: () => void;
 }
 
-export class Pressable extends React.PureComponent<PressableProps> {
-  public static contextType = Context;
-  public readonly context!: ContextType;
+interface PressableState {
+  readonly interactionState: undefined | 'PRESS' | 'LONG_PRESS'; // | 'CAPTURED';
+}
+
+export class Pressable extends React.PureComponent<PressableProps, PressableState> {
+  public static contextType = SpaceContext;
+  public readonly context!: SpaceContextType;
   public readonly id = generateRandomId();
+  public readonly state: PressableState = { interactionState: undefined };
 
   private divRef: React.RefObject<HTMLDivElement> = React.createRef();
 
@@ -49,12 +53,14 @@ export class Pressable extends React.PureComponent<PressableProps> {
     this.context.unregisterInteractable(this);
   }
 
-  // public getBoundingClientRect() {
-  //   if (this.divRef) {
-  //     return this.divRef.getBoundingClientRect();
-  //   }
-  //   return undefined;
-  // }
+  public getPressHandlingConfig(): PressHandlingConfig {
+    return {
+      potentialTapBounds: DEFAULT_POTENTIAL_TAP_BOUNDS,
+      onTap: this.props.onTap,
+      longTapThresholdMs: this.props.longTapThresholdMs ?? DEFAULT_LONG_TAP_THRESHOLD_MS,
+      onLongTap: this.props.onLongTap,
+    };
+  }
 
   public render() {
     const {
@@ -71,7 +77,9 @@ export class Pressable extends React.PureComponent<PressableProps> {
 
       // disabled,
       // capturePanOn,
-      longPressThresholdMs,
+      longTapThresholdMs,
+      onTap,
+      onLongTap,
       ...divProps
     } = this.props;
     return (

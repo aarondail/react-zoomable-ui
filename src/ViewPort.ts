@@ -1,30 +1,88 @@
 // tslint:disable-next-line: no-implicit-dependencies - Disable this until we get our changes merged into pan-zoom
-import { PanZoomEvent } from 'pan-zoom';
+import panzoom, { PanZoomControl, PanZoomEvent } from 'pan-zoom';
 
-import { clamp } from './utils';
-import { ScreenPixelUnit, ViewPortInterface, VirtualSpacePixelUnit, ZoomFactor } from './ViewPortInterface';
+import { clamp, Writeable } from './utils';
+
+// 0,0 as top left of browser window to screenWidth, screenHeight as button right.
+export type ClientPixelUnit = number;
+// 0,0 as the top left pixel of the virtual space we want to render stuff in, increasing to the bottom right.
+export type VirtualSpacePixelUnit = number;
+// 2 means 2x zoomed in, 0.5 means 2x zoomed out.
+export type ZoomFactor = number;
+
+export interface ViewPortOptions {
+  readonly zoomFactorMax?: ZoomFactor;
+  readonly zoomFactorMin?: ZoomFactor;
+
+  readonly onPressStart?: (
+    e: MouseEvent | TouchEvent,
+    x: VirtualSpacePixelUnit,
+    y: VirtualSpacePixelUnit,
+  ) => 'CAPTURE' | undefined;
+  readonly onPressMove?: (
+    e: MouseEvent | TouchEvent,
+    x: VirtualSpacePixelUnit,
+    y: VirtualSpacePixelUnit,
+  ) => 'RELEASE' | undefined;
+  readonly onPressEnd?: (e: MouseEvent | TouchEvent, x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit) => void;
+  // readonly onHover?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
+  // readonly onPressContextMenu?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
+}
 
 /**
- * The ViewPort implements ViewPortInterface, and has some extra methods with
- * (the very important) logic to handle PanZoomEvents and some other stuff.
+ * THe ViewPort represents a "view" into a virtual space, that is not
+ * tied to the available screen space or HTML elements. Because of this, it is
+ * infinite, but it also uses its own "units" (virtual space pixels).
+ *
+ * You can think of the view port as describing what rectangular portion of the
+ * virtual space (from top left to bottom right) should be visible inside the
+ * bounds of containing HTML element where the virtual space is being rendered.
  */
-export class ViewPort implements ViewPortInterface {
-  public left: VirtualSpacePixelUnit;
-  public top: VirtualSpacePixelUnit;
-  public centerX: VirtualSpacePixelUnit;
-  public centerY: VirtualSpacePixelUnit;
-  public width: VirtualSpacePixelUnit;
-  public height: VirtualSpacePixelUnit;
-  public zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
+export class ViewPort {
+  private static DivStyle = `
+    overflow: hidden;
+    margin: 0; padding: 0; height: 100%; width: 100%;
+    position: relative;
+    ${/* Prevent the user from highlighting while dragging */ ''}
+    -webkit-user-select: none;
+    user-select: none;
+    ${/* Prevent the user from getting a text input box cursor when hovering over text that can be dragged */ ''}
+    cursor: default;
+    ${
+      /* Touch gestures on edge are not currently working totally correctly.
+    Turning this off means, I think, we have to support them, which we mostly
+    do ... or at least want to... but don't for things like pinch. Turning it
+    off for now, will wait on edge to move to Chrome and revisit. */ ''
+    }
+    -ms-touch-action: none;
+  `;
 
-  public containerWidth: ScreenPixelUnit;
-  public containerHeight: ScreenPixelUnit;
+  // While these public properties APPEAR readonly they are in fact NOT. They
+  // are just readonly for consumer's of this class.
+  public readonly left: VirtualSpacePixelUnit;
+  public readonly top: VirtualSpacePixelUnit;
+  public readonly centerX: VirtualSpacePixelUnit;
+  public readonly centerY: VirtualSpacePixelUnit;
+  public readonly width: VirtualSpacePixelUnit;
+  public readonly height: VirtualSpacePixelUnit;
+  public readonly zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
 
+  public readonly containerWidth: ClientPixelUnit;
+  public readonly containerHeight: ClientPixelUnit;
+
+  private containerDiv: HTMLElement;
+  private isCurrentPressCaptured: boolean;
+  private panZoomControl: PanZoomControl;
+  private options?: ViewPortOptions;
   // tslint:disable-next-line:readonly-array
   private updateListeners: Array<() => void>;
 
-  constructor(private readonly zoomFactorMin?: number, private readonly zoomFactorMax?: number) {
+  constructor(containerDiv: HTMLDivElement, options?: ViewPortOptions) {
+    this.containerDiv = containerDiv;
+    this.options = options;
     this.updateListeners = [];
+
+    // Default values
     this.left = 0;
     this.top = 0;
     this.centerX = 0;
@@ -34,13 +92,202 @@ export class ViewPort implements ViewPortInterface {
     this.zoomFactor = 1;
     this.containerWidth = 0;
     this.containerHeight = 0;
+    this.isCurrentPressCaptured = false;
+
+    // Set the div's styles
+    this.containerDiv.style.cssText = ViewPort.DivStyle;
+
+    // Add event listeners
+    this.containerDiv.addEventListener('mousedown', this.handleMouseDown);
+    this.containerDiv.addEventListener('mousemove', this.handleMouseMove);
+    // Doing this on window to catch it if it goes outside the window
+    window.addEventListener('mouseup', this.handleMouseUp);
+    this.containerDiv.addEventListener('touchstart', this.handleTouchStart);
+    this.containerDiv.addEventListener('touchmove', this.handleTouchMove);
+    this.containerDiv.addEventListener('touchend', this.handleTouchEnd);
+    // There is no good way to detect whether an individual element is
+    // resized. We can only do that at the window level. There are some
+    // techniques for tracking element sizes, and we provide an OPTIONAL
+    // polling based technique. But since watching for window resizes WILL
+    // work for many use cases we do that here, and it shouldn't interfere
+    // with any more specific techniques.
+    window.addEventListener('resize', this.updateContainerSize);
+
+    // Set up the pan-zoom library
+    this.panZoomControl = panzoom(this.containerDiv, this.handlePanZoomEvent);
+    this.updateContainerSize();
   }
 
   public addEventListener(event: 'updated', listener: () => void): void {
     this.updateListeners.push(listener);
   }
 
-  public processPanZoomEvent = (e: PanZoomEvent) => {
+  public removeEventListener(event: 'updated', listener: () => void): void {
+    const index = this.updateListeners.indexOf(listener);
+    if (index >= 0) {
+      this.updateListeners.splice(index, 1);
+    }
+  }
+
+  public destroy(): void {
+    this.panZoomControl.destroy();
+
+    this.containerDiv.removeEventListener('mousedown', this.handleMouseDown);
+    this.containerDiv.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener('mouseup', this.handleMouseUp);
+    this.containerDiv.removeEventListener('touchstart', this.handleTouchStart);
+    this.containerDiv.removeEventListener('touchmove', this.handleTouchMove);
+    this.containerDiv.removeEventListener('touchend', this.handleTouchEnd);
+    window.removeEventListener('resize', this.updateContainerSize);
+  }
+
+  public update(centerX: VirtualSpacePixelUnit, centerY: VirtualSpacePixelUnit, newZoomFactor: ZoomFactor): void {
+    const writableThis = this as Writeable<ViewPort>;
+    writableThis.zoomFactor = newZoomFactor;
+    writableThis.width = this.containerWidth / this.zoomFactor;
+    writableThis.height = this.containerHeight / this.zoomFactor;
+    writableThis.centerX = centerX;
+    writableThis.centerY = centerY;
+    writableThis.left = centerX - this.width / 2;
+    writableThis.top = centerY - this.height / 2;
+
+    if (this.updateListeners) {
+      for (const listener of this.updateListeners) {
+        listener();
+      }
+    }
+  }
+
+  /**
+   * This should be used when the container div is resized.  By default resizes due
+   * to the window itself resizing will be automatically handled, but any other
+   * resizes won't be handled (since there isn't a good way to get notified when
+   * the div resizes.
+   */
+  public updateContainerSize = () => {
+    const { width, height } = this.containerDiv.getBoundingClientRect();
+    if (width === this.containerWidth && height === this.containerHeight) {
+      return;
+    }
+
+    const writableThis = this as Writeable<ViewPort>;
+    writableThis.containerWidth = width;
+    writableThis.containerHeight = height;
+    writableThis.width = this.containerWidth / this.zoomFactor;
+    writableThis.height = this.containerHeight / this.zoomFactor;
+    // Keep focus on the top left
+    writableThis.centerX = this.left + this.width / 2;
+    writableThis.centerY = this.top + this.width / 2;
+
+    if (this.updateListeners) {
+      for (const listener of this.updateListeners) {
+        listener();
+      }
+    }
+  };
+
+  private handleMouseDown = (e: MouseEvent) => {
+    if (!e.target) {
+      return;
+    }
+
+    let captured = false;
+    if (this.options?.onPressStart) {
+      const x = e.clientX * this.zoomFactor + this.left;
+      const y = e.clientY * this.zoomFactor + this.top;
+      if (this.options?.onPressStart(e, x, y) === 'CAPTURE') {
+        this.panZoomControl.pausePanning();
+        this.isCurrentPressCaptured = true;
+        captured = true;
+      }
+    }
+
+    // Just in case we have a lingering capture
+    if (!captured && this.isCurrentPressCaptured) {
+      this.panZoomControl.resumePanning();
+      this.isCurrentPressCaptured = false;
+    }
+  };
+
+  private handleMouseMove = (e: MouseEvent) => {
+    if (this.isCurrentPressCaptured && this.options?.onPressMove) {
+      const x = e.clientX * this.zoomFactor + this.left;
+      const y = e.clientY * this.zoomFactor + this.top;
+      if (this.options?.onPressMove(e, x, y) === 'RELEASE') {
+        this.panZoomControl.resumePanning();
+        this.isCurrentPressCaptured = false;
+      }
+    }
+  };
+
+  private handleMouseUp = (e: MouseEvent) => {
+    if (this.isCurrentPressCaptured && this.options?.onPressEnd) {
+      const x = e.clientX * this.zoomFactor + this.left;
+      const y = e.clientY * this.zoomFactor + this.top;
+      this.options?.onPressEnd(e, x, y);
+    }
+
+    if (this.isCurrentPressCaptured) {
+      this.panZoomControl.resumePanning();
+      this.isCurrentPressCaptured = false;
+    }
+  };
+
+  private handleTouchStart = (e: TouchEvent) => {
+    if (e.touches.length === 1) {
+      let captured = false;
+      if (this.options?.onPressStart) {
+        const x = e.touches[0].clientX * this.zoomFactor + this.left;
+        const y = e.touches[0].clientY * this.zoomFactor + this.top;
+        if (this.options?.onPressStart(e, x, y) === 'CAPTURE') {
+          e.preventDefault();
+          this.panZoomControl.pausePanning();
+          this.isCurrentPressCaptured = true;
+          captured = true;
+        }
+      }
+
+      // Just in case we have a lingering capture
+      if (!captured && this.isCurrentPressCaptured) {
+        this.panZoomControl.resumePanning();
+        this.isCurrentPressCaptured = false;
+      }
+    }
+  };
+
+  // tslint:disable-next-line: no-empty
+  private handleTouchMove = (e: TouchEvent) => {
+    if (e.touches.length === 1) {
+      if (this.isCurrentPressCaptured && this.options?.onPressMove) {
+        const x = e.touches[0].clientX * this.zoomFactor + this.left;
+        const y = e.touches[0].clientY * this.zoomFactor + this.top;
+        if (this.options?.onPressMove(e, x, y) === 'RELEASE') {
+          this.panZoomControl.resumePanning();
+          this.isCurrentPressCaptured = false;
+        }
+      }
+    }
+  };
+
+  // tslint:disable-next-line: no-empty
+  private handleTouchEnd = (e: TouchEvent) => {
+    if (e.touches.length === 1) {
+      if (this.isCurrentPressCaptured && this.options?.onPressEnd) {
+        const x = e.touches[0].clientX * this.zoomFactor + this.left;
+        const y = e.touches[0].clientY * this.zoomFactor + this.top;
+        this.options?.onPressEnd(e, x, y);
+      }
+
+      if (this.isCurrentPressCaptured) {
+        this.panZoomControl.resumePanning();
+        this.isCurrentPressCaptured = false;
+      }
+    }
+  };
+
+  private handlePanZoomEvent = (e: PanZoomEvent) => {
+    const writableThis = this as Writeable<ViewPort>;
+
     let zoomFactor = this.zoomFactor;
     if (e.dz !== 0) {
       if (e.type === 'mouse') {
@@ -61,7 +308,7 @@ export class ViewPort implements ViewPortInterface {
         // possible.
         zoomFactor = (this.containerHeight * this.zoomFactor) / (this.containerHeight + e.dz * 2);
       }
-      zoomFactor = clamp(zoomFactor, this.zoomFactorMin || 0.01, this.zoomFactorMax || 10);
+      zoomFactor = clamp(zoomFactor, this.options?.zoomFactorMin || 0.01, this.options?.zoomFactorMax || 10);
     }
 
     let virtualSpaceCenterX: VirtualSpacePixelUnit;
@@ -74,9 +321,9 @@ export class ViewPort implements ViewPortInterface {
     // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
     const oldVirtualSpaceVisibleSpaceWidth = this.containerWidth / this.zoomFactor;
     const oldVirtualSpaceVisibleSpaceHeight = this.containerHeight / this.zoomFactor;
-    this.width = this.containerWidth / zoomFactor;
-    this.height = this.containerHeight / zoomFactor;
-    this.zoomFactor = zoomFactor;
+    writableThis.width = this.containerWidth / zoomFactor;
+    writableThis.height = this.containerHeight / zoomFactor;
+    writableThis.zoomFactor = zoomFactor;
 
     const virtualSpaceVisibleWidthDelta = this.width - oldVirtualSpaceVisibleSpaceWidth;
     const virtualSpaceVisibleHeightDelta = this.height - oldVirtualSpaceVisibleSpaceHeight;
@@ -86,10 +333,10 @@ export class ViewPort implements ViewPortInterface {
     const xFocusPercent = e.x / this.containerWidth;
     const yFocusPercent = e.y / this.containerHeight;
 
-    this.left = virtualSpaceCenterX - virtualSpaceVisibleWidthDelta * xFocusPercent;
-    this.top = virtualSpaceCenterY - virtualSpaceVisibleHeightDelta * yFocusPercent;
-    this.centerX = virtualSpaceCenterX + this.width / 2;
-    this.centerY = virtualSpaceCenterY + this.height / 2;
+    writableThis.left = virtualSpaceCenterX - virtualSpaceVisibleWidthDelta * xFocusPercent;
+    writableThis.top = virtualSpaceCenterY - virtualSpaceVisibleHeightDelta * yFocusPercent;
+    writableThis.centerX = virtualSpaceCenterX + this.width / 2;
+    writableThis.centerY = virtualSpaceCenterY + this.height / 2;
 
     if (this.updateListeners) {
       for (const listener of this.updateListeners) {
@@ -97,56 +344,4 @@ export class ViewPort implements ViewPortInterface {
       }
     }
   };
-
-  public removeEventListener(event: 'updated', listener: () => void): void {
-    const index = this.updateListeners.indexOf(listener);
-    if (index >= 0) {
-      this.updateListeners.splice(index, 1);
-    }
-  }
-
-  public reset(): void {
-    this.left = 0;
-    this.top = 0;
-    this.centerX = 0;
-    this.centerY = 0;
-    this.width = 0;
-    this.height = 0;
-    this.containerWidth = 0;
-    this.containerHeight = 0;
-    this.zoomFactor = 1;
-    this.updateListeners = [];
-  }
-
-  public update(centerX: VirtualSpacePixelUnit, centerY: VirtualSpacePixelUnit, newZoomFactor: ZoomFactor): void {
-    this.zoomFactor = newZoomFactor;
-    this.width = this.containerWidth / this.zoomFactor;
-    this.height = this.containerHeight / this.zoomFactor;
-    this.centerX = centerX;
-    this.centerY = centerY;
-    this.left = centerX - this.width / 2;
-    this.top = centerY - this.height / 2;
-
-    if (this.updateListeners) {
-      for (const listener of this.updateListeners) {
-        listener();
-      }
-    }
-  }
-
-  public updateContainerDimensions(width: ScreenPixelUnit, height: ScreenPixelUnit): void {
-    this.containerWidth = width;
-    this.containerHeight = height;
-    this.width = this.containerWidth / this.zoomFactor;
-    this.height = this.containerHeight / this.zoomFactor;
-    // Keep focus on the top left
-    this.centerX = this.left + this.width / 2;
-    this.centerY = this.top + this.width / 2;
-
-    if (this.updateListeners) {
-      for (const listener of this.updateListeners) {
-        listener();
-      }
-    }
-  }
 }

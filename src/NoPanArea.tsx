@@ -1,21 +1,24 @@
 import * as React from 'react';
 
-import { Context, ContextType } from './Context';
 import { InteractableIdAttributeName } from './Interactable';
+import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { generateRandomId } from './utils';
 
-export type NoPanAreaProps = Omit<React.HTMLProps<HTMLDivElement>, 'ref'>;
+export interface NoPanAreaProps {
+  readonly className?: string;
+  readonly style?: React.CSSProperties;
+}
 
 export class NoPanArea extends React.PureComponent<NoPanAreaProps> {
-  public static contextType = Context;
-  public readonly context!: ContextType;
+  public static contextType = SpaceContext;
+  public readonly context!: SpaceContextType;
   public readonly id = generateRandomId();
 
   private readonly constantStyles: string;
   private divRef: React.RefObject<HTMLDivElement> = React.createRef();
   private readonly uniqueClassName = `react-zoomable-ui-no-pan-area-${this.id}`;
 
-  public constructor(props: NoPanAreaProps, context: ContextType) {
+  public constructor(props: NoPanAreaProps, context: SpaceContextType) {
     super(props);
     this.constantStyles = `
 div.${context.rootDivUniqueClassName} div.${this.uniqueClassName} {
@@ -36,14 +39,14 @@ div.${context.rootDivUniqueClassName} div.${this.uniqueClassName} {
   }
 
   public render() {
-    const { className, ...divProps } = this.props;
+    const { style } = this.props;
     return (
       <React.Fragment>
         <style>{this.constantStyles}</style>
         <div
-          {...divProps}
           {...{ [InteractableIdAttributeName]: this.id }}
           className={this.determineClassName()}
+          style={style}
           ref={this.divRef}
         >
           {this.props.children}

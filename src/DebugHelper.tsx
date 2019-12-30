@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { ViewPortInterface } from './ViewPortInterface';
+import { ViewPort } from './ViewPort';
 import { withViewPort } from './withViewPort';
 
 interface DebugHelperComponentProps extends React.HTMLProps<HTMLDivElement> {
-  readonly viewPort: ViewPortInterface;
+  readonly viewPort: ViewPort;
 }
 
 class DebugHelperComponent extends React.PureComponent<DebugHelperComponentProps> {
