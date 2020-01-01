@@ -10,27 +10,26 @@ export type VirtualSpacePixelUnit = number;
 // 2 means 2x zoomed in, 0.5 means 2x zoomed out.
 export type ZoomFactor = number;
 
+export interface PressEventCoordinates {
+  readonly clientX: ClientPixelUnit;
+  readonly clientY: ClientPixelUnit;
+  readonly x: VirtualSpacePixelUnit;
+  readonly y: VirtualSpacePixelUnit;
+}
+
 export interface ViewPortOptions {
   readonly zoomFactorMax?: ZoomFactor;
   readonly zoomFactorMin?: ZoomFactor;
 
-  readonly onPressStart?: (
-    e: MouseEvent | TouchEvent,
-    x: VirtualSpacePixelUnit,
-    y: VirtualSpacePixelUnit,
-  ) => 'CAPTURE' | undefined;
-  readonly onPressMove?: (
-    e: MouseEvent | TouchEvent,
-    x: VirtualSpacePixelUnit,
-    y: VirtualSpacePixelUnit,
-  ) => 'RELEASE' | undefined;
-  readonly onPressEnd?: (e: MouseEvent | TouchEvent, x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit) => void;
+  readonly onPressStart?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'CAPTURE' | undefined;
+  readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'RELEASE' | undefined;
+  readonly onPressEnd?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => void;
   // readonly onHover?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
   // readonly onPressContextMenu?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
 }
 
 /**
- * THe ViewPort represents a "view" into a virtual space, that is not
+ * The ViewPort represents a "view" into a virtual space, that is not
  * tied to the available screen space or HTML elements. Because of this, it is
  * infinite, but it also uses its own "units" (virtual space pixels).
  *
@@ -193,9 +192,11 @@ export class ViewPort {
 
     let captured = false;
     if (this.options?.onPressStart) {
-      const x = e.clientX * this.zoomFactor + this.left;
-      const y = e.clientY * this.zoomFactor + this.top;
-      if (this.options?.onPressStart(e, x, y) === 'CAPTURE') {
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      const x = clientX * this.zoomFactor + this.left;
+      const y = clientY * this.zoomFactor + this.top;
+      if (this.options?.onPressStart(e, { x, y, clientX, clientY }) === 'CAPTURE') {
         this.panZoomControl.pausePanning();
         this.isCurrentPressCaptured = true;
         captured = true;
@@ -211,9 +212,11 @@ export class ViewPort {
 
   private handleMouseMove = (e: MouseEvent) => {
     if (this.isCurrentPressCaptured && this.options?.onPressMove) {
-      const x = e.clientX * this.zoomFactor + this.left;
-      const y = e.clientY * this.zoomFactor + this.top;
-      if (this.options?.onPressMove(e, x, y) === 'RELEASE') {
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      const x = clientX * this.zoomFactor + this.left;
+      const y = clientY * this.zoomFactor + this.top;
+      if (this.options?.onPressMove(e, { x, y, clientX, clientY }) === 'RELEASE') {
         this.panZoomControl.resumePanning();
         this.isCurrentPressCaptured = false;
       }
@@ -222,13 +225,15 @@ export class ViewPort {
 
   private handleMouseUp = (e: MouseEvent) => {
     if (this.isCurrentPressCaptured && this.options?.onPressEnd) {
-      const x = e.clientX * this.zoomFactor + this.left;
-      const y = e.clientY * this.zoomFactor + this.top;
-      this.options?.onPressEnd(e, x, y);
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      const x = clientX * this.zoomFactor + this.left;
+      const y = clientY * this.zoomFactor + this.top;
+      this.options?.onPressEnd(e, { x, y, clientX, clientY });
     }
 
     if (this.isCurrentPressCaptured) {
-      this.panZoomControl.resumePanning();
+      this.panZoomControl.resumePanning(true);
       this.isCurrentPressCaptured = false;
     }
   };
@@ -237,9 +242,11 @@ export class ViewPort {
     if (e.touches.length === 1) {
       let captured = false;
       if (this.options?.onPressStart) {
-        const x = e.touches[0].clientX * this.zoomFactor + this.left;
-        const y = e.touches[0].clientY * this.zoomFactor + this.top;
-        if (this.options?.onPressStart(e, x, y) === 'CAPTURE') {
+        const clientX = e.touches[0].clientX;
+        const clientY = e.touches[0].clientY;
+        const x = clientX * this.zoomFactor + this.left;
+        const y = clientY * this.zoomFactor + this.top;
+        if (this.options?.onPressStart(e, { x, y, clientX, clientY }) === 'CAPTURE') {
           e.preventDefault();
           this.panZoomControl.pausePanning();
           this.isCurrentPressCaptured = true;
@@ -259,9 +266,11 @@ export class ViewPort {
   private handleTouchMove = (e: TouchEvent) => {
     if (e.touches.length === 1) {
       if (this.isCurrentPressCaptured && this.options?.onPressMove) {
-        const x = e.touches[0].clientX * this.zoomFactor + this.left;
-        const y = e.touches[0].clientY * this.zoomFactor + this.top;
-        if (this.options?.onPressMove(e, x, y) === 'RELEASE') {
+        const clientX = e.touches[0].clientX;
+        const clientY = e.touches[0].clientY;
+        const x = clientX * this.zoomFactor + this.left;
+        const y = clientY * this.zoomFactor + this.top;
+        if (this.options?.onPressMove(e, { x, y, clientX, clientY }) === 'RELEASE') {
           this.panZoomControl.resumePanning();
           this.isCurrentPressCaptured = false;
         }
@@ -273,9 +282,11 @@ export class ViewPort {
   private handleTouchEnd = (e: TouchEvent) => {
     if (e.touches.length === 1) {
       if (this.isCurrentPressCaptured && this.options?.onPressEnd) {
-        const x = e.touches[0].clientX * this.zoomFactor + this.left;
-        const y = e.touches[0].clientY * this.zoomFactor + this.top;
-        this.options?.onPressEnd(e, x, y);
+        const clientX = e.touches[0].clientX;
+        const clientY = e.touches[0].clientY;
+        const x = clientX * this.zoomFactor + this.left;
+        const y = clientY * this.zoomFactor + this.top;
+        this.options?.onPressEnd(e, { x, y, clientX, clientY });
       }
 
       if (this.isCurrentPressCaptured) {

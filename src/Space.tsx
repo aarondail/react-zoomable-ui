@@ -7,7 +7,7 @@ import { Pressable } from './Pressable';
 import { PressHandlingConfig, PressInterpreter } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { generateRandomId } from './utils';
-import { ClientPixelUnit, ViewPort, ZoomFactor } from './ViewPort';
+import { PressEventCoordinates, ViewPort, ZoomFactor } from './ViewPort';
 
 // tslint:disable-next-line: no-empty-interface
 export interface SpaceProps {
@@ -135,15 +135,14 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
 
   private handleDecideHowToHandlePress = (
     e: MouseEvent | TouchEvent,
-    x: ClientPixelUnit,
-    y: ClientPixelUnit,
+    coordinates: PressEventCoordinates,
   ): PressHandlingConfig | undefined => {
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
     if (e.type === 'mousedown') {
-      const elementTagName = e.target && (e.target as any).tagName;
-      if (elementTagName === 'a' || elementTagName === 'A') {
+      const elementTagName = ((e.target && (e.target as any).tagName) || '').toLowerCase();
+      if (elementTagName === 'a' || elementTagName === 'button') {
         // Prevent dragging on <a> tags since A. the browsers may interpret the
         // drag end as a click on it and B. desktop Safari (possibly others) has
         // its own drag handling for links which conflicts with what we are doing.
