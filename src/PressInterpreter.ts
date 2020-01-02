@@ -35,6 +35,7 @@ export class PressInterpreter {
 
   private currentConfig?: PressHandlingConfig;
   private currentPressStartingCoordinates?: PressEventCoordinates;
+  private currentPressLastCoordinates?: PressEventCoordinates;
   private currentPressLongPressThresholdMet?: boolean;
   private longPressTimerId?: any;
 
@@ -49,6 +50,9 @@ export class PressInterpreter {
   private handleLongPressThresholdMet = () => {
     this.longPressTimerId = undefined;
     this.currentPressLongPressThresholdMet = true;
+    if (this.currentPressLastCoordinates) {
+      this.currentConfig?.onPotentialLongTap?.(this.currentPressLastCoordinates);
+    }
   };
 
   private handlePressStart = (
@@ -61,6 +65,7 @@ export class PressInterpreter {
     this.currentConfig = this.onDecideHowToHandlePress(e, coordinates);
     if (this.currentConfig) {
       this.currentPressStartingCoordinates = coordinates;
+      this.currentPressLastCoordinates = coordinates;
       this.currentPressLongPressThresholdMet = false;
       if (this.currentConfig.onTap && this.currentConfig.onPotentialTap) {
         this.currentConfig.onPotentialTap(coordinates);
@@ -77,6 +82,8 @@ export class PressInterpreter {
     if (!this.currentConfig || this.currentConfig.ignorePressEntirely || !this.currentPressStartingCoordinates) {
       return undefined;
     }
+
+    this.currentPressLastCoordinates = coordinates;
 
     const xDelta = Math.abs(coordinates.clientX - this.currentPressStartingCoordinates.clientX);
     const yDelta = Math.abs(coordinates.clientY - this.currentPressStartingCoordinates.clientY);
@@ -109,6 +116,7 @@ export class PressInterpreter {
   private reset = () => {
     this.currentConfig = undefined;
     this.currentPressStartingCoordinates = undefined;
+    this.currentPressLastCoordinates = undefined;
     this.currentPressLongPressThresholdMet = undefined;
     if (this.longPressTimerId) {
       clearTimeout(this.longPressTimerId);
