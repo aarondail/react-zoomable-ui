@@ -107,3 +107,5 @@ export function* walkElementHierarchyUp(leafElement: HTMLElement): Iterable<HTML
 // }
 
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+
+export const browserIsAndroid = navigator.userAgent.match(/Android/);

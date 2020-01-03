@@ -6,7 +6,7 @@ import { NoPanArea } from './NoPanArea';
 import { Pressable } from './Pressable';
 import { PressHandlingConfig, PressInterpreter } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
-import { generateRandomId } from './utils';
+import { browserIsAndroid, generateRandomId } from './utils';
 import { PressEventCoordinates, ViewPort, ZoomFactor } from './ViewPort';
 
 // tslint:disable-next-line: no-empty-interface
@@ -182,6 +182,7 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
       this.viewPort = new ViewPort(this.containerDivRef, {
         zoomFactorMax: this.props.zoomFactorMax,
         zoomFactorMin: this.props.zoomFactorMin,
+        onPressContextMenu: this.handlePressContextMenu,
         ...this.pressInterpreter.pressHandlers,
       });
 
@@ -204,6 +205,20 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
         contextValue,
         transformStyle: this.createTransformStyle(),
       });
+    }
+  };
+
+  private handlePressContextMenu = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    // We have to prevent default this in a few cases on Android because it can
+    // interfere w/ panning
+    if (browserIsAndroid) {
+      const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
+      const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
+      if (interactable && interactable instanceof NoPanArea) {
+        // Don't do anything
+      } else {
+        e.preventDefault();
+      }
     }
   };
 

@@ -35,8 +35,8 @@ export interface ViewPortOptions extends ZoomFactorMinMaxOptions {
    * motion.
    */
   readonly onPressCancelled?: (e: MouseEvent | TouchEvent) => void;
-  // readonly onHover?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
-  // readonly onPressContextMenu?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
+  // readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
+  readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
 }
 
 /**
@@ -117,6 +117,7 @@ export class ViewPort {
     this.containerDiv.addEventListener('touchstart', this.handleTouchStart);
     this.containerDiv.addEventListener('touchmove', this.handleTouchMove);
     this.containerDiv.addEventListener('touchend', this.handleTouchEnd);
+    this.containerDiv.addEventListener('contextmenu', this.handleContextMenu);
     // There is no good way to detect whether an individual element is
     // resized. We can only do that at the window level. There are some
     // techniques for tracking element sizes, and we provide an OPTIONAL
@@ -150,6 +151,7 @@ export class ViewPort {
     this.containerDiv.removeEventListener('touchstart', this.handleTouchStart);
     this.containerDiv.removeEventListener('touchmove', this.handleTouchMove);
     this.containerDiv.removeEventListener('touchend', this.handleTouchEnd);
+    this.containerDiv.removeEventListener('contextmenu', this.handleContextMenu);
     window.removeEventListener('resize', this.updateContainerSize);
   }
 
@@ -263,6 +265,14 @@ export class ViewPort {
       v = minMax.zoomFactorMax;
     }
     return v;
+  };
+
+  private handleContextMenu = (e: MouseEvent) => {
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    const x = clientX * this.zoomFactor + this.left;
+    const y = clientY * this.zoomFactor + this.top;
+    this.options?.onPressContextMenu?.(e, { x, y, clientX, clientY });
   };
 
   private handleMouseDown = (e: MouseEvent) => {
