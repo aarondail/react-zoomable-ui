@@ -13,9 +13,13 @@ import { PressEventCoordinates, ViewPort, ZoomFactor } from './ViewPort';
 export interface SpaceProps {
   readonly className?: string;
   readonly style?: React.CSSProperties;
+  readonly transformedDivClassName?: string;
+  readonly transformedDivStyle?: React.CSSProperties;
   readonly pollForElementResizing?: boolean;
   readonly zoomFactorMax?: ZoomFactor;
   readonly zoomFactorMin?: ZoomFactor;
+
+  readonly onCreate?: (viewPort: ViewPort) => void;
 }
 
 interface SpaceState {
@@ -62,6 +66,10 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
   }
 
   public render() {
+    let transformedDivStyle = this.state.transformStyle;
+    if (this.props.transformedDivStyle) {
+      transformedDivStyle = { ...transformedDivStyle, ...this.props.transformedDivStyle };
+    }
     return (
       <div
         ref={this.setContainerDivRef}
@@ -72,7 +80,10 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
         <style>{this.constantStyles}</style>
         {this.state.contextValue && (
           <SpaceContext.Provider value={this.state.contextValue}>
-            <div className="react-zoomable-ui-space-transform-div" style={this.state.transformStyle}>
+            <div
+              className={`react-zoomable-ui-space-transform-div ${this.props.transformedDivClassName || ''}`}
+              style={transformedDivStyle}
+            >
               {this.props.children}
             </div>
           </SpaceContext.Provider>
@@ -88,10 +99,10 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
   };
 
   private createTransformStyle = () => {
-    const viewPort = this.state.contextValue?.viewPort;
-    if (viewPort) {
+    if (this.viewPort) {
       return {
-        transform: `scale(${viewPort.zoomFactor}) translate(${-1 * viewPort.left}px,${-1 * viewPort.top}px)`,
+        transform: `scale(${this.viewPort.zoomFactor}) translate(${-1 * this.viewPort.left}px,${-1 *
+          this.viewPort.top}px)`,
       };
     }
     return undefined;
@@ -171,6 +182,8 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
         zoomFactorMin: this.props.zoomFactorMin,
         ...this.pressInterpreter.pressHandlers,
       });
+
+      this.props.onCreate?.(this.viewPort);
 
       this.containerDivRef.addEventListener('dragstart', this.handleDragStart);
       this.viewPort.addEventListener('updated', this.handleViewPortUpdated);
