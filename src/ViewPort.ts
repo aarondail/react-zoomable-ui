@@ -26,6 +26,15 @@ export interface ViewPortOptions extends ZoomFactorMinMaxOptions {
   readonly onPressStart?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'CAPTURE' | undefined;
   readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'RELEASE' | undefined;
   readonly onPressEnd?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => void;
+  /**
+   * After a press starts there are some cases where it can be canceled rather
+   * than ended. For example when on finger starts touching the screen that
+   * will trigger `onPressStart`. If a second finger starts touching the screen
+   * though, that will cause the press to be "cancelled". A press is
+   * effectively a single finger touch or mouse/track-pad click and drag
+   * motion.
+   */
+  readonly onPressCancelled?: (e: MouseEvent | TouchEvent) => void;
   // readonly onHover?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
   // readonly onPressContextMenu?: (x: ClientPixelUnit, y: ClientPixelUnit) => void;
 }
@@ -328,6 +337,10 @@ export class ViewPort {
         this.panZoomControl.resumePanning();
         this.isCurrentPressCaptured = false;
       }
+    } else if (e.touches.length >= 1 && this.isCurrentPressCaptured) {
+      this.panZoomControl.resumePanning();
+      this.isCurrentPressCaptured = false;
+      this.options?.onPressCancelled?.(e);
     }
   };
 
@@ -349,10 +362,10 @@ export class ViewPort {
 
   // tslint:disable-next-line: no-empty
   private handleTouchEnd = (e: TouchEvent) => {
-    if (e.touches.length === 1) {
+    if (e.touches.length === 0 && e.changedTouches.length === 1) {
       if (this.isCurrentPressCaptured && this.options?.onPressEnd) {
-        const clientX = e.touches[0].clientX;
-        const clientY = e.touches[0].clientY;
+        const clientX = e.changedTouches[0].clientX;
+        const clientY = e.changedTouches[0].clientY;
         const x = clientX * this.zoomFactor + this.left;
         const y = clientY * this.zoomFactor + this.top;
         this.options?.onPressEnd(e, { x, y, clientX, clientY });

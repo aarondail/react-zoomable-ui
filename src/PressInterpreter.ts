@@ -28,10 +28,14 @@ export interface PressHandlingConfig {
   // readonly onCapturePressStart?: (coordinates: PressEventCoordinates) => void;
   // readonly onCapturePressMove?: (coordinates: PressEventCoordinates) => void;
   // readonly onCapturePressEnd?: (coordinates: PressEventCoordinates) => void;
+  // readonly onCapturePressCancelled?: () => void;
 }
 
 export class PressInterpreter {
-  public readonly pressHandlers: Pick<ViewPortOptions, 'onPressStart' | 'onPressMove' | 'onPressEnd'>;
+  public readonly pressHandlers: Pick<
+    ViewPortOptions,
+    'onPressStart' | 'onPressMove' | 'onPressEnd' | 'onPressCancelled'
+  >;
 
   private currentConfig?: PressHandlingConfig;
   private currentPressStartingCoordinates?: PressEventCoordinates;
@@ -44,6 +48,7 @@ export class PressInterpreter {
       onPressStart: this.handlePressStart,
       onPressMove: this.handlePressMove,
       onPressEnd: this.handlePressEnd,
+      onPressCancelled: this.handlePressCancelled,
     };
   }
 
@@ -110,6 +115,11 @@ export class PressInterpreter {
       this.currentConfig.onTap?.(coordinates);
     }
 
+    this.reset();
+  };
+
+  private handlePressCancelled = (e: MouseEvent | TouchEvent) => {
+    this.currentConfig?.onTapAbandoned?.();
     this.reset();
   };
 
