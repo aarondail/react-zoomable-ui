@@ -17,10 +17,12 @@ export interface PressEventCoordinates {
   readonly y: VirtualSpacePixelUnit;
 }
 
-export interface ViewPortOptions {
+export interface ZoomFactorMinMaxOptions {
   readonly zoomFactorMax?: ZoomFactor;
   readonly zoomFactorMin?: ZoomFactor;
+}
 
+export interface ViewPortOptions extends ZoomFactorMinMaxOptions {
   readonly onPressStart?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'CAPTURE' | undefined;
   readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'RELEASE' | undefined;
   readonly onPressEnd?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => void;
@@ -140,15 +142,68 @@ export class ViewPort {
     window.removeEventListener('resize', this.updateContainerSize);
   }
 
-  public update(centerX: VirtualSpacePixelUnit, centerY: VirtualSpacePixelUnit, newZoomFactor: ZoomFactor): void {
+  public centerFitAreaIntoView(
+    left: VirtualSpacePixelUnit,
+    top: VirtualSpacePixelUnit,
+    width: VirtualSpacePixelUnit,
+    height: VirtualSpacePixelUnit,
+    options?: ZoomFactorMinMaxOptions,
+  ): void {
+    const cx = left + width / 2;
+    const cy = top + height / 2;
+    const zoomFactorBasedOnWidth = this.containerWidth / width;
+    const zoomFactorBasedOnHeight = this.containerHeight / height;
+    let newZoomFactor = Math.min(zoomFactorBasedOnWidth, zoomFactorBasedOnHeight);
+    newZoomFactor = this.clampZoomFactor(newZoomFactor, options);
+    newZoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
+    this.recenterView(cx, cy, newZoomFactor);
+  }
+
+  public centerFitHorizontalAreaIntoView(
+    left: VirtualSpacePixelUnit,
+    width: VirtualSpacePixelUnit,
+    options?: ZoomFactorMinMaxOptions,
+  ): void {
+    const cx = left + width / 2;
+    let newZoomFactor = this.containerWidth / width;
+    newZoomFactor = this.clampZoomFactor(newZoomFactor, options);
+    newZoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
+    this.updateViewTopLeft(cx - this.width / newZoomFactor / 2, this.top, newZoomFactor);
+  }
+
+  public recenterView(
+    centerX: VirtualSpacePixelUnit,
+    centerY: VirtualSpacePixelUnit,
+    newZoomFactor?: ZoomFactor,
+  ): void {
     const writableThis = this as Writeable<ViewPort>;
-    writableThis.zoomFactor = newZoomFactor;
+    if (newZoomFactor !== undefined) {
+      writableThis.zoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
+    }
     writableThis.width = this.containerWidth / this.zoomFactor;
     writableThis.height = this.containerHeight / this.zoomFactor;
     writableThis.centerX = centerX;
     writableThis.centerY = centerY;
     writableThis.left = centerX - this.width / 2;
     writableThis.top = centerY - this.height / 2;
+
+    if (this.updateListeners) {
+      for (const listener of this.updateListeners) {
+        listener();
+      }
+    }
+  }
+  public updateViewTopLeft(left: VirtualSpacePixelUnit, top: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
+    const writableThis = this as Writeable<ViewPort>;
+    if (newZoomFactor !== undefined) {
+      writableThis.zoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
+    }
+    writableThis.width = this.containerWidth / this.zoomFactor;
+    writableThis.height = this.containerHeight / this.zoomFactor;
+    writableThis.centerX = left + this.width / 2;
+    writableThis.centerY = top + this.height / 2;
+    writableThis.left = left;
+    writableThis.top = top;
 
     if (this.updateListeners) {
       for (const listener of this.updateListeners) {
@@ -183,6 +238,20 @@ export class ViewPort {
         listener();
       }
     }
+  };
+
+  private clampZoomFactor = (value: ZoomFactor, minMax?: ZoomFactorMinMaxOptions) => {
+    if (!minMax) {
+      return value;
+    }
+    let v = value;
+    if (minMax && minMax.zoomFactorMin && v < minMax.zoomFactorMin) {
+      v = minMax.zoomFactorMin;
+    }
+    if (minMax && minMax.zoomFactorMax && v > minMax.zoomFactorMax) {
+      v = minMax.zoomFactorMax;
+    }
+    return v;
   };
 
   private handleMouseDown = (e: MouseEvent) => {
