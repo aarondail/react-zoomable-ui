@@ -127,19 +127,21 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
     // having a "ghost image" follow the pointer, across all browsers.
     // See this link for more info:
     // https://stackoverflow.com/questions/3873595/how-to-disable-firefoxs-default-drag-and-drop-on-all-images-behavior-with-jquer
+    //
+    // This additionally prevents another werid-o case of double clicking to
+    // select text in Desktop Safari and then long clicking and dragging. This
+    // will enter some sorta drag state where all the text is being dragged.
+    // This is bad and it also conflicts with our <Pressable> components.
     if (e.target) {
-      const tagName = (e.target as any).tagName;
-      if (tagName === 'img' || tagName === 'IMG') {
-        const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
-        const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
+      const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
+      const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
-        // Suppress the drag _unless_ it is within a no pan handling area, then
-        // let it happen.
-        if (interactable && interactable instanceof NoPanArea) {
-          // Intentionally do nothing
-        } else {
-          e.preventDefault();
-        }
+      // Suppress the drag _unless_ it is within a no pan handling area, then
+      // let it happen.
+      if (interactable && interactable instanceof NoPanArea) {
+        // Intentionally do nothing
+      } else {
+        e.preventDefault();
       }
     }
   };
