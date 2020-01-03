@@ -24,6 +24,7 @@ export class NoPanArea extends React.PureComponent<NoPanAreaProps> {
 div.${context.rootDivUniqueClassName} div.${this.uniqueClassName} {
   -ms-touch-action: default;
   -webkit-user-select: text;
+  -webkit-touch-callout: default;
   user-select: text;
   cursor: auto;
 } 

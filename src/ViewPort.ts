@@ -55,6 +55,8 @@ export class ViewPort {
     position: relative;
     ${/* Prevent the user from highlighting while dragging */ ''}
     -webkit-user-select: none;
+    ${/* Prevent Mobile Safari from handling long press on images itself */ ''}
+    -webkit-touch-callout: none;
     user-select: none;
     ${/* Prevent the user from getting a text input box cursor when hovering over text that can be dragged */ ''}
     cursor: default;
