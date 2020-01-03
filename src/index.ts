@@ -1,4 +1,3 @@
-export * from './DebugHelper';
 export * from './NoPanArea';
 export * from './Pressable';
 export * from './PressInterpreter';
