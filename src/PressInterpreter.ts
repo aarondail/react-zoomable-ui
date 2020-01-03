@@ -31,6 +31,10 @@ export interface PressHandlingConfig {
   // readonly onCapturePressCancelled?: () => void;
 }
 
+export interface PressInterpreterOptions {
+  readonly debugEvents?: boolean;
+}
+
 export class PressInterpreter {
   public readonly pressHandlers: Pick<
     ViewPortOptions,
@@ -43,7 +47,10 @@ export class PressInterpreter {
   private currentPressLongPressThresholdMet?: boolean;
   private longPressTimerId?: any;
 
-  public constructor(private readonly onDecideHowToHandlePress: DecidePressHandlingConfigCallback) {
+  public constructor(
+    private readonly onDecideHowToHandlePress: DecidePressHandlingConfigCallback,
+    private readonly options?: PressInterpreterOptions,
+  ) {
     this.pressHandlers = {
       onPressStart: this.handlePressStart,
       onPressMove: this.handlePressMove,
@@ -64,6 +71,9 @@ export class PressInterpreter {
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
   ): 'CAPTURE' | undefined => {
+    if (this.options?.debugEvents) {
+      console.log(`PressInterpreter:handlePressStart`);
+    }
     if (this.currentConfig) {
       this.reset();
     }
@@ -84,6 +94,9 @@ export class PressInterpreter {
   };
 
   private handlePressMove = (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates): 'RELEASE' | undefined => {
+    if (this.options?.debugEvents) {
+      console.log(`PressInterpreter:handlePressMove`);
+    }
     if (!this.currentConfig || this.currentConfig.ignorePressEntirely || !this.currentPressStartingCoordinates) {
       return undefined;
     }
@@ -104,6 +117,9 @@ export class PressInterpreter {
   };
 
   private handlePressEnd = (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => {
+    if (this.options?.debugEvents) {
+      console.log(`PressInterpreter:handlePressEnd`);
+    }
     if (!this.currentConfig || this.currentConfig.ignorePressEntirely) {
       this.reset();
       return;
@@ -119,6 +135,9 @@ export class PressInterpreter {
   };
 
   private handlePressCancelled = (e: MouseEvent | TouchEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`PressInterpreter:handlePressCancelled`);
+    }
     this.currentConfig?.onTapAbandoned?.();
     this.reset();
   };

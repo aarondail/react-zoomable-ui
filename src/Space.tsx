@@ -12,6 +12,7 @@ import { PressEventCoordinates, ViewPort, ZoomFactor } from './ViewPort';
 // tslint:disable-next-line: no-empty-interface
 export interface SpaceProps {
   readonly className?: string;
+  readonly debugEvents?: boolean;
   readonly style?: React.CSSProperties;
   readonly transformedDivClassName?: string;
   readonly transformedDivStyle?: React.CSSProperties;
@@ -49,7 +50,7 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
     this.interactableRegistry = new Map();
     this.state = {};
 
-    this.pressInterpreter = new PressInterpreter(this.handleDecideHowToHandlePress);
+    this.pressInterpreter = new PressInterpreter(this.handleDecideHowToHandlePress, { debugEvents: props.debugEvents });
     // This won't actually start polling until we give it an element, and tell
     // it to start polling...
     this.elementSizeChangePoller = new ElementSizeChangePoller(this.updateContainerSize);
@@ -180,6 +181,7 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
 
     if (this.containerDivRef) {
       this.viewPort = new ViewPort(this.containerDivRef, {
+        debugEvents: this.props.debugEvents,
         zoomFactorMax: this.props.zoomFactorMax,
         zoomFactorMin: this.props.zoomFactorMin,
         onPressContextMenu: this.handlePressContextMenu,

@@ -23,6 +23,8 @@ export interface ZoomFactorMinMaxOptions {
 }
 
 export interface ViewPortOptions extends ZoomFactorMinMaxOptions {
+  readonly debugEvents?: boolean;
+
   readonly onPressStart?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'CAPTURE' | undefined;
   readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'RELEASE' | undefined;
   readonly onPressEnd?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => void;
@@ -268,6 +270,9 @@ export class ViewPort {
   };
 
   private handleContextMenu = (e: MouseEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleContextMenu`);
+    }
     const clientX = e.clientX;
     const clientY = e.clientY;
     const x = clientX * this.zoomFactor + this.left;
@@ -276,7 +281,22 @@ export class ViewPort {
   };
 
   private handleMouseDown = (e: MouseEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleMouseDown: ` + e.buttons);
+    }
     if (!e.target) {
+      return;
+    }
+
+    // e.buttons === 1 means the left/primary button is pressed and ONLY that
+    if (e.buttons !== 1) {
+      // We have to stopImmediatePropagation because the impetus library (used
+      // by pan-zoom) will start panning due to this. Hopefully this doesn't
+      // have any negative side effects... I guess it will stop right clicks
+      // from like bubbling out of the ViewPort div (or Space component). That
+      // is probably reasonable though. Long term we probably want to fix this
+      // in impetus.
+      e.stopImmediatePropagation();
       return;
     }
 
@@ -301,6 +321,9 @@ export class ViewPort {
   };
 
   private handleMouseMove = (e: MouseEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleMouseMove (isCurrentPressCaptured: ${this.isCurrentPressCaptured})`);
+    }
     if (this.isCurrentPressCaptured && this.options?.onPressMove) {
       const clientX = e.clientX;
       const clientY = e.clientY;
@@ -314,6 +337,9 @@ export class ViewPort {
   };
 
   private handleMouseUp = (e: MouseEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleMouseUp`);
+    }
     if (this.isCurrentPressCaptured && this.options?.onPressEnd) {
       const clientX = e.clientX;
       const clientY = e.clientY;
@@ -329,6 +355,9 @@ export class ViewPort {
   };
 
   private handleTouchStart = (e: TouchEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleTouchStart`);
+    }
     if (e.touches.length === 1) {
       let captured = false;
       if (this.options?.onPressStart) {
@@ -358,6 +387,9 @@ export class ViewPort {
 
   // tslint:disable-next-line: no-empty
   private handleTouchMove = (e: TouchEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleTouchMove`);
+    }
     if (e.touches.length === 1) {
       if (this.isCurrentPressCaptured && this.options?.onPressMove) {
         const clientX = e.touches[0].clientX;
@@ -374,6 +406,9 @@ export class ViewPort {
 
   // tslint:disable-next-line: no-empty
   private handleTouchEnd = (e: TouchEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleTouchEnd`);
+    }
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
       if (this.isCurrentPressCaptured && this.options?.onPressEnd) {
         const clientX = e.changedTouches[0].clientX;
@@ -391,6 +426,9 @@ export class ViewPort {
   };
 
   private handlePanZoomEvent = (e: PanZoomEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handlePanZoomEvent`);
+    }
     const writableThis = this as Writeable<ViewPort>;
 
     let zoomFactor = this.zoomFactor;
