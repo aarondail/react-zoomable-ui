@@ -25,3 +25,27 @@ Components:
 Unsure about IE. Probably fine for mouse and fails horribly for touch.
 
 Unsure about stylus.
+
+## Notes to Self
+
+### Why did we not use impetus?
+
+- We had to selectively ignore pan gestures sometimes, but this was tricky with the after-touch-end-momentum-pan-animation that impetus does. I think
+  I was able to work around this everywhere but iOS (maybe Android too)
+- Non left mouse buttons were triggering impetus
+- Library looks unmaintained, long standing PRs and issues
+- Specifically this one https://github.com/chrisbateman/impetus/issues/13 which has a fix and a PR and a fork repo.
+
+Additionally:
+
+- We already have to listen for mouse and touch events in the ViewPort to
+  support interaction (detecting taps, long taps, capturing the pan for drag
+  and drop, etc) so we were some of the way there to doing what it did.
+- I think we need a similar animation based mechanism for moving the ViewPort,
+  independent of pan gestures.
+- Note a hugely used library according to npm.
+
+### Why not hammer.js?
+
+Not sure, need to investigate. Probably need to do the animation stuff
+anyways but could overall be better.

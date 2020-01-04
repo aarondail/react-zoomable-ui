@@ -379,6 +379,8 @@ export class ViewPort {
         this.isCurrentPressCaptured = false;
       }
     } else if (e.touches.length >= 1 && this.isCurrentPressCaptured) {
+      // If we detect a second finger touching the screen while a press is
+      // captured...
       this.panZoomControl.resumePanning();
       this.isCurrentPressCaptured = false;
       this.options?.onPressCancelled?.(e);
