@@ -1,3 +1,18 @@
 {
-  "cSpell.words": ["Interactable", "Pressable", "Unmount", "Zoomable", "div's", "panzoom"]
+  "cSpell.words": [
+    "Interactable",
+    "Pressable",
+    "Unmount",
+    "Zoomable",
+    "div's",
+    "pancancel",
+    "panend",
+    "panmove",
+    "panstart",
+    "panzoom",
+    "pinchcancel",
+    "pinchend",
+    "pinchmove",
+    "pinchstart"
+  ]
 }

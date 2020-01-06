@@ -36,10 +36,7 @@ export interface PressInterpreterOptions {
 }
 
 export class PressInterpreter {
-  public readonly pressHandlers: Pick<
-    ViewPortOptions,
-    'onPressStart' | 'onPressMove' | 'onPressEnd' | 'onPressCancelled'
-  >;
+  public readonly pressHandlers: Pick<ViewPortOptions, 'onPressStart' | 'onPressMove' | 'onPressEnd' | 'onPressCancel'>;
 
   private currentConfig?: PressHandlingConfig;
   private currentPressStartingCoordinates?: PressEventCoordinates;
@@ -55,7 +52,7 @@ export class PressInterpreter {
       onPressStart: this.handlePressStart,
       onPressMove: this.handlePressMove,
       onPressEnd: this.handlePressEnd,
-      onPressCancelled: this.handlePressCancelled,
+      onPressCancel: this.handlePressCancel,
     };
   }
 
@@ -134,7 +131,7 @@ export class PressInterpreter {
     this.reset();
   };
 
-  private handlePressCancelled = (e: MouseEvent | TouchEvent) => {
+  private handlePressCancel = (e: MouseEvent | TouchEvent) => {
     if (this.options?.debugEvents) {
       console.log(`PressInterpreter:handlePressCancelled`);
     }

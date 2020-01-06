@@ -110,4 +110,4 @@ export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 
 export const browserIsAndroid = navigator.userAgent.match(/Android/);
 export const browserIsSafari = navigator.vendor.match(/Apple/);
-export const browserIsSafariMobile = browserIsSafari && typeof Touch !== 'undefined';
+export const browserIsSafariDesktop = browserIsSafari && typeof Touch === 'undefined';

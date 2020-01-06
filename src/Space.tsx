@@ -184,13 +184,13 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
         zoomFactorMax: this.props.zoomFactorMax,
         zoomFactorMin: this.props.zoomFactorMin,
         onPressContextMenu: this.handlePressContextMenu,
+        onUpdated: this.handleViewPortUpdated,
         ...this.pressInterpreter.pressHandlers,
       });
 
       this.props.onCreate?.(this.viewPort);
 
       this.containerDivRef.addEventListener('dragstart', this.handleDragStart);
-      this.viewPort.addEventListener('updated', this.handleViewPortUpdated);
 
       // Polling is optional because it is unnecessary if the only way the div's
       // size will change is with the window itself
