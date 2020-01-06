@@ -156,13 +156,12 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
 
     if (e.type === 'mousedown') {
       const elementTagName = ((e.target && (e.target as any).tagName) || '').toLowerCase();
+      // TODO -->
       if (elementTagName === 'a' || elementTagName === 'button') {
-        // Prevent dragging on <a> tags since A. the browsers may interpret the
+        // Prevent dragging on these elements A. the browsers may interpret the
         // drag end as a click on it and B. desktop Safari (possibly others) has
-        // its own drag handling for links which conflicts with what we are doing.
-        //
-        // For my own future reference: the mouse down event gets fired before the
-        // impetus library used by pan-zoom fires any events for the pan.
+        // its own drag handling for links which conflicts with what we are
+        // doing.
         return { ignorePressEntirely: true };
       }
     }
