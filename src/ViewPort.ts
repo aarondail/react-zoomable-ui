@@ -1,6 +1,6 @@
 import Hammer from 'hammerjs';
 
-import { browserIsSafariDesktop, clamp, Writeable } from './utils';
+import { browserIsSafariDesktop, clamp, isMouseEvent, Writeable } from './utils';
 
 // 0,0 as top left of browser window to screenWidth, screenHeight as button right.
 export type ClientPixelUnit = number;
@@ -124,6 +124,9 @@ export class ViewPort {
     this.containerDiv.style.cssText = ViewPort.DivStyle;
 
     // Add event listeners
+    // We use hammer for handling pinches and panning, and our own listeners for
+    // everything else, including taps.
+
     this.containerDiv.addEventListener('mousedown', this.handleMouseDown);
     this.containerDiv.addEventListener('mousemove', this.handleMouseMove);
     // Doing this on window to catch it if it goes outside the window
@@ -152,17 +155,10 @@ export class ViewPort {
     // Set up the pan-zoom library
     // this.panZoomControl = panzoom(this.containerDiv, this.handlePanZoomEvent);
     this.hammer = new Hammer(this.containerDiv, {});
-    // Press is almost what we want, but the order of press and press up events
-    // is non-deterministic and if a pan starts it kills the press (wont get
-    // press up) and sometimes when a pan starts we won't even get the press.
-    // This all ends up meaning its easier to handle presses with our own event
-    // handlers on the mouse and touch events.
+    // Press and tap almost do what we want, but not quite. See README.md for
+    // more info.
     this.hammer.remove('press');
-    // Tap happens after you release, so its also not what we want (still need
-    // to know about the press when it starts, so we have the same problems as
-    // above)
     this.hammer.remove('tap');
-
     this.hammer.get('pinch').set({ enable: true });
     this.hammer.get('pan').set({ threshold: 0, direction: Hammer.DIRECTION_ALL });
 
@@ -293,17 +289,22 @@ export class ViewPort {
   };
 
   private clampZoomFactor = (value: ZoomFactor, minMax?: ZoomFactorMinMaxOptions) => {
-    if (!minMax) {
-      return value;
+    return clamp(value, minMax?.zoomFactorMin || 0.01, minMax?.zoomFactorMax || 10);
+  };
+
+  private getPressCoordinatesFromEvent = (e: MouseEvent | TouchEvent): PressEventCoordinates => {
+    let clientX;
+    let clientY;
+    if (isMouseEvent(e)) {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    } else {
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
     }
-    let v = value;
-    if (minMax && minMax.zoomFactorMin && v < minMax.zoomFactorMin) {
-      v = minMax.zoomFactorMin;
-    }
-    if (minMax && minMax.zoomFactorMax && v > minMax.zoomFactorMax) {
-      v = minMax.zoomFactorMax;
-    }
-    return v;
+    const x = clientX * this.zoomFactor + this.left;
+    const y = clientY * this.zoomFactor + this.top;
+    return { x, y, clientX, clientY };
   };
 
   private handleAnimationFrame = (time: number) => {
@@ -328,11 +329,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleContextMenu`);
     }
-    const clientX = e.clientX;
-    const clientY = e.clientY;
-    const x = clientX * this.zoomFactor + this.left;
-    const y = clientY * this.zoomFactor + this.top;
-    this.options?.onPressContextMenu?.(e, { x, y, clientX, clientY });
+    this.options?.onPressContextMenu?.(e, this.getPressCoordinatesFromEvent(e));
   };
 
   private handleGestureStartForDesktopSafari = (e: any) => {
@@ -477,6 +474,83 @@ export class ViewPort {
     this.currentHammerGestureState = undefined;
   };
 
+  private handleMouseDown = (e: MouseEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleMouseDown`);
+    }
+    // e.buttons === 1 means the left/primary button is pressed and ONLY that
+    if (e.buttons !== 1) {
+      return;
+    }
+    this.isCurrentPressBeingHandledAsNonPan =
+      this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
+  };
+
+  private handleMouseMove = (e: MouseEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleMouseMove (isCurrentPressCaptured: ${this.isCurrentPressBeingHandledAsNonPan})`);
+    }
+    if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressMove) {
+      if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
+        this.isCurrentPressBeingHandledAsNonPan = false;
+      }
+    }
+  };
+
+  private handleMouseUp = (e: MouseEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleMouseUp`);
+    }
+    if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressEnd) {
+      this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
+    }
+    this.isCurrentPressBeingHandledAsNonPan = false;
+  };
+
+  private handleTouchStart = (e: TouchEvent) => {
+    if (e.touches.length !== 1) {
+      if (this.isCurrentPressBeingHandledAsNonPan) {
+        this.isCurrentPressBeingHandledAsNonPan = false;
+        this.options?.onPressCancel?.(e);
+        return;
+      }
+    }
+
+    this.isCurrentPressBeingHandledAsNonPan =
+      this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
+    if (this.isCurrentPressBeingHandledAsNonPan) {
+      e.preventDefault();
+    }
+  };
+
+  private handleTouchMove = (e: TouchEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleTouchMove`);
+    }
+    if (e.touches.length === 1) {
+      if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressMove) {
+        if (this.options?.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
+          this.isCurrentPressBeingHandledAsNonPan = false;
+        }
+      }
+    }
+  };
+
+  private handleTouchEnd = (e: TouchEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleTouchEnd`);
+    }
+    if (e.touches.length === 0 && e.changedTouches.length === 1) {
+      if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressEnd) {
+        this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
+      }
+
+      if (this.isCurrentPressBeingHandledAsNonPan) {
+        this.isCurrentPressBeingHandledAsNonPan = false;
+      }
+    }
+  };
+
   private handleWheel = (e: WheelEvent) => {
     e.preventDefault();
     let scale = 1;
@@ -497,134 +571,6 @@ export class ViewPort {
       e.clientY - clientBoundingRect.top,
       'wheel',
     );
-  };
-
-  private handleMouseDown = (e: MouseEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleMouseDown: ` + e.buttons);
-    }
-
-    // e.buttons === 1 means the left/primary button is pressed and ONLY that
-    if (e.buttons !== 1) {
-      return;
-    }
-
-    let captured = false;
-    if (this.options?.onPressStart) {
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      const x = clientX * this.zoomFactor + this.left;
-      const y = clientY * this.zoomFactor + this.top;
-      if (this.options?.onPressStart(e, { x, y, clientX, clientY }) === 'CAPTURE') {
-        this.isCurrentPressBeingHandledAsNonPan = true;
-        captured = true;
-      }
-    }
-
-    // Just in case we have a lingering capture
-    if (!captured && this.isCurrentPressBeingHandledAsNonPan) {
-      this.isCurrentPressBeingHandledAsNonPan = false;
-    }
-  };
-
-  private handleMouseMove = (e: MouseEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleMouseMove (isCurrentPressCaptured: ${this.isCurrentPressBeingHandledAsNonPan})`);
-    }
-    if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressMove) {
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      const x = clientX * this.zoomFactor + this.left;
-      const y = clientY * this.zoomFactor + this.top;
-      if (this.options?.onPressMove(e, { x, y, clientX, clientY }) === 'RELEASE') {
-        this.isCurrentPressBeingHandledAsNonPan = false;
-      }
-    }
-  };
-
-  private handleMouseUp = (e: MouseEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleMouseUp`);
-    }
-    if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressEnd) {
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      const x = clientX * this.zoomFactor + this.left;
-      const y = clientY * this.zoomFactor + this.top;
-      this.options?.onPressEnd(e, { x, y, clientX, clientY });
-    }
-
-    if (this.isCurrentPressBeingHandledAsNonPan) {
-      this.isCurrentPressBeingHandledAsNonPan = false;
-    }
-  };
-
-  private handleTouchStart = (e: TouchEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleTouchStart`);
-    }
-    if (e.touches.length === 1) {
-      let captured = false;
-      if (this.options?.onPressStart) {
-        const clientX = e.touches[0].clientX;
-        const clientY = e.touches[0].clientY;
-        const x = clientX * this.zoomFactor + this.left;
-        const y = clientY * this.zoomFactor + this.top;
-        if (this.options?.onPressStart(e, { x, y, clientX, clientY }) === 'CAPTURE') {
-          e.preventDefault();
-          this.isCurrentPressBeingHandledAsNonPan = true;
-          captured = true;
-        }
-      }
-
-      // Just in case we have a lingering capture
-      if (!captured && this.isCurrentPressBeingHandledAsNonPan) {
-        this.isCurrentPressBeingHandledAsNonPan = false;
-      }
-    } else if (e.touches.length >= 1 && this.isCurrentPressBeingHandledAsNonPan) {
-      // If we detect a second finger touching the screen while a press is
-      // captured...
-      this.isCurrentPressBeingHandledAsNonPan = false;
-      this.options?.onPressCancel?.(e);
-    }
-  };
-
-  // tslint:disable-next-line: no-empty
-  private handleTouchMove = (e: TouchEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleTouchMove`);
-    }
-    if (e.touches.length === 1) {
-      if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressMove) {
-        const clientX = e.touches[0].clientX;
-        const clientY = e.touches[0].clientY;
-        const x = clientX * this.zoomFactor + this.left;
-        const y = clientY * this.zoomFactor + this.top;
-        if (this.options?.onPressMove(e, { x, y, clientX, clientY }) === 'RELEASE') {
-          this.isCurrentPressBeingHandledAsNonPan = false;
-        }
-      }
-    }
-  };
-
-  // tslint:disable-next-line: no-empty
-  private handleTouchEnd = (e: TouchEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleTouchEnd`);
-    }
-    if (e.touches.length === 0 && e.changedTouches.length === 1) {
-      if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressEnd) {
-        const clientX = e.changedTouches[0].clientX;
-        const clientY = e.changedTouches[0].clientY;
-        const x = clientX * this.zoomFactor + this.left;
-        const y = clientY * this.zoomFactor + this.top;
-        this.options?.onPressEnd(e, { x, y, clientX, clientY });
-      }
-
-      if (this.isCurrentPressBeingHandledAsNonPan) {
-        this.isCurrentPressBeingHandledAsNonPan = false;
-      }
-    }
   };
 
   private updateBySmoothly = (
@@ -687,7 +633,7 @@ export class ViewPort {
         // It feels too fast if we don't divide by two... some hammer.js issue?
         zoomFactor = zoomFactor + dz / 2;
       }
-      zoomFactor = clamp(zoomFactor, this.options?.zoomFactorMin || 0.01, this.options?.zoomFactorMax || 10);
+      zoomFactor = this.clampZoomFactor(zoomFactor, this.options);
     }
 
     let virtualSpaceCenterX: VirtualSpacePixelUnit;

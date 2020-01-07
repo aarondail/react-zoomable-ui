@@ -111,3 +111,7 @@ export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export const browserIsAndroid = navigator.userAgent.match(/Android/);
 export const browserIsSafari = navigator.vendor.match(/Apple/);
 export const browserIsSafariDesktop = browserIsSafari && typeof Touch === 'undefined';
+
+export function isMouseEvent(e: MouseEvent | TouchEvent): e is MouseEvent {
+  return (e as any).touches === undefined;
+}
