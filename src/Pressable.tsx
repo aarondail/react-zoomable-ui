@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { InteractableIdAttributeName } from './Interactable';
-import { PressHandlingConfig } from './PressInterpreter';
+import { PressHandlingOptions } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { generateRandomId } from './utils';
 
@@ -51,7 +51,7 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
     this.context.unregisterInteractable(this);
   }
 
-  public getPressHandlingConfig(): PressHandlingConfig {
+  public getPressHandlingConfig(): PressHandlingOptions {
     return {
       onPotentialTap: this.handlePotentialTap,
       onTap: this.handleTap,

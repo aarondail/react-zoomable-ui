@@ -6,12 +6,12 @@ import { ClientPixelUnit, PressEventCoordinates, ViewPortOptions } from './ViewP
  */
 const POTENTIAL_TAP_BOUNDS_DEFAULT: ClientPixelUnit = 8;
 
-export type DecidePressHandlingConfigCallback = (
+export type DecidePressHandlingCallback = (
   e: MouseEvent | TouchEvent,
   coordinates: PressEventCoordinates,
-) => PressHandlingConfig | undefined;
+) => PressHandlingOptions | undefined;
 
-export interface PressHandlingConfig {
+export interface PressHandlingOptions {
   readonly ignorePressEntirely?: boolean;
 
   readonly potentialTapBounds?: ClientPixelUnit;
@@ -38,14 +38,14 @@ export interface PressInterpreterOptions {
 export class PressInterpreter {
   public readonly pressHandlers: Pick<ViewPortOptions, 'onPressStart' | 'onPressMove' | 'onPressEnd' | 'onPressCancel'>;
 
-  private currentConfig?: PressHandlingConfig;
+  private currentConfig?: PressHandlingOptions;
   private currentPressStartingCoordinates?: PressEventCoordinates;
   private currentPressLastCoordinates?: PressEventCoordinates;
   private currentPressLongPressThresholdMet?: boolean;
   private longPressTimerId?: any;
 
   public constructor(
-    private readonly onDecideHowToHandlePress: DecidePressHandlingConfigCallback,
+    private readonly onDecideHowToHandlePress: DecidePressHandlingCallback,
     private readonly options?: PressInterpreterOptions,
   ) {
     this.pressHandlers = {

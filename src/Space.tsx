@@ -4,7 +4,7 @@ import { ElementSizeChangePoller } from './ElementSizeChangePoller';
 import { getInteractableIdMostApplicableToElement, InteractableComponent } from './Interactable';
 import { NoPanArea } from './NoPanArea';
 import { Pressable } from './Pressable';
-import { PressHandlingConfig, PressInterpreter } from './PressInterpreter';
+import { PressHandlingOptions, PressInterpreter } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { browserIsAndroid, generateRandomId } from './utils';
 import { PressEventCoordinates, ViewPort, ZoomFactor } from './ViewPort';
@@ -150,7 +150,7 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
   private handleDecideHowToHandlePress = (
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
-  ): PressHandlingConfig | undefined => {
+  ): PressHandlingOptions | undefined => {
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
