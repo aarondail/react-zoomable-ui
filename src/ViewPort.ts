@@ -1,6 +1,7 @@
 import Hammer from 'hammerjs';
 
 import { browserIsSafariDesktop, clamp, isMouseEvent, Writeable } from './utils';
+import { ViewPortAnimator } from './ViewPortAnimator';
 
 // 0,0 as top left of browser window to screenWidth, screenHeight as button right.
 export type ClientPixelUnit = number;
@@ -72,9 +73,8 @@ export class ViewPort {
   public readonly height: VirtualSpacePixelUnit;
   public readonly zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
 
-  private animationFrameId: number;
+  private animator: ViewPortAnimator;
   private containerDiv: HTMLElement;
-  private isCurrentPressBeingHandledAsNonPan: boolean;
   private currentHammerGestureState?: {
     deltaX: number;
     deltaY: number;
@@ -86,16 +86,8 @@ export class ViewPort {
     scale: ZoomFactor;
   };
   private hammer: HammerManager;
+  private isCurrentPressBeingHandledAsNonPan: boolean;
   private options?: ViewPortOptions;
-  private pendingUpdateForSmoothUpdates: {
-    updateNeeded: boolean;
-    dx: VirtualSpacePixelUnit;
-    dy: VirtualSpacePixelUnit;
-    dz: VirtualSpacePixelUnit;
-    pointerContainerX: ClientPixelUnit;
-    pointerContainerY: ClientPixelUnit;
-    type: string;
-  };
 
   constructor(containerDiv: HTMLDivElement, options?: ViewPortOptions) {
     this.containerDiv = containerDiv;
@@ -112,18 +104,12 @@ export class ViewPort {
     this.containerWidth = 0;
     this.containerHeight = 0;
     this.isCurrentPressBeingHandledAsNonPan = false;
-    this.pendingUpdateForSmoothUpdates = {
-      updateNeeded: false,
-      dx: 0,
-      dy: 0,
-      dz: 0,
-      pointerContainerX: 0,
-      pointerContainerY: 0,
-      type: '',
-    };
 
     // Set the div's styles
     this.containerDiv.style.cssText = ViewPort.DivStyle;
+
+    // Setup other stuff
+    this.animator = new ViewPortAnimator(this.updateBy);
 
     // Add event listeners
     // We use hammer for handling pinches and panning, and our own listeners for
@@ -174,12 +160,14 @@ export class ViewPort {
     this.hammer.on('pinchend', this.handleHammerPinchEnd);
     this.hammer.on('pinchcancel', this.handleHammerPinchCancel);
 
-    this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
-
+    // Set the real values (make sure this happens AFTER setting the css text
+    // above)
     this.updateContainerSize();
   }
 
   public destroy(): void {
+    this.animator.destroy();
+
     this.containerDiv.removeEventListener('mousedown', this.handleMouseDown);
     this.containerDiv.removeEventListener('mousemove', this.handleMouseMove);
     window.removeEventListener('mouseup', this.handleMouseUp);
@@ -198,8 +186,6 @@ export class ViewPort {
     }
 
     this.hammer.destroy();
-
-    cancelAnimationFrame(this.animationFrameId);
   }
 
   public centerFitAreaIntoView(
@@ -312,24 +298,6 @@ export class ViewPort {
     return { x, y, clientX, clientY, containerX, containerY };
   };
 
-  private handleAnimationFrame = (time: number) => {
-    // var progress = time - (this.priorTimestamp || time);
-    // this.priorTimestamp = time;
-    this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
-
-    if (this.pendingUpdateForSmoothUpdates.updateNeeded) {
-      this.updateBy(
-        this.pendingUpdateForSmoothUpdates.dx,
-        this.pendingUpdateForSmoothUpdates.dy,
-        this.pendingUpdateForSmoothUpdates.dz,
-        this.pendingUpdateForSmoothUpdates.pointerContainerX,
-        this.pendingUpdateForSmoothUpdates.pointerContainerY,
-        this.pendingUpdateForSmoothUpdates.type,
-      );
-      this.pendingUpdateForSmoothUpdates.updateNeeded = false;
-    }
-  };
-
   private handleContextMenu = (e: MouseEvent) => {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleContextMenu`);
@@ -359,11 +327,11 @@ export class ViewPort {
       return;
     }
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
-    const x = this.currentDesktopSafariGestureState.startingCenterX - clientBoundingRect.left;
-    const y = this.currentDesktopSafariGestureState.startingCenterY - clientBoundingRect.top;
+    const pointerContainerX = this.currentDesktopSafariGestureState.startingCenterX - clientBoundingRect.left;
+    const pointerContainerY = this.currentDesktopSafariGestureState.startingCenterY - clientBoundingRect.top;
     const dz = e.scale - this.currentDesktopSafariGestureState.scale;
     this.currentDesktopSafariGestureState.scale = e.scale;
-    this.updateBySmoothly(0, 0, dz, x, y, 'mouse');
+    this.animator.updateBy(0, 0, dz, pointerContainerX, pointerContainerY, 'mouse');
   };
 
   private handleGestureEndForDesktopSafari = (e: any) => {
@@ -403,14 +371,9 @@ export class ViewPort {
       return;
     }
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
-    this.updateBySmoothly(
-      dx,
-      dy,
-      0,
-      e.center.x - clientBoundingRect.left,
-      e.center.y - clientBoundingRect.top,
-      e.pointerType,
-    );
+    const pointerContainerX = e.center.x - clientBoundingRect.left;
+    const pointerContainerY = e.center.y - clientBoundingRect.top;
+    this.animator.updateBy(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType);
   };
 
   private handleHammerPanEnd = (e: HammerInput) => {
@@ -456,14 +419,9 @@ export class ViewPort {
     this.currentHammerGestureState.scale = e.scale;
 
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
-    this.updateBySmoothly(
-      dx,
-      dy,
-      dz,
-      e.center.x - clientBoundingRect.left,
-      e.center.y - clientBoundingRect.top,
-      e.pointerType,
-    );
+    const pointerContainerX = e.center.x - clientBoundingRect.left;
+    const pointerContainerY = e.center.y - clientBoundingRect.top;
+    this.animator.updateBy(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType);
   };
 
   private handleHammerPinchEnd = (e: HammerInput) => {
@@ -569,53 +527,10 @@ export class ViewPort {
         break;
     }
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
-    this.updateBySmoothly(
-      0,
-      0,
-      e.deltaY * scale, // Vertical scroll is doing to be interpreted by us as delta z
-      e.clientX - clientBoundingRect.left,
-      e.clientY - clientBoundingRect.top,
-      'wheel',
-    );
-  };
-
-  private updateBySmoothly = (
-    dx: ClientPixelUnit,
-    dy: ClientPixelUnit,
-    dz: ClientPixelUnit,
-    pointerContainerX: ClientPixelUnit,
-    pointerContainerY: ClientPixelUnit,
-    type: string,
-  ) => {
-    if (this.pendingUpdateForSmoothUpdates.updateNeeded === false) {
-      this.pendingUpdateForSmoothUpdates.dx = dx;
-      this.pendingUpdateForSmoothUpdates.dy = dy;
-      this.pendingUpdateForSmoothUpdates.dz = dz;
-      this.pendingUpdateForSmoothUpdates.pointerContainerX = pointerContainerX;
-      this.pendingUpdateForSmoothUpdates.pointerContainerY = pointerContainerY;
-      this.pendingUpdateForSmoothUpdates.type = type;
-      this.pendingUpdateForSmoothUpdates.updateNeeded = true;
-    } else {
-      if (this.pendingUpdateForSmoothUpdates.type !== type && this.pendingUpdateForSmoothUpdates.type !== '') {
-        this.updateBy(
-          this.pendingUpdateForSmoothUpdates.dx,
-          this.pendingUpdateForSmoothUpdates.dy,
-          this.pendingUpdateForSmoothUpdates.dz,
-          this.pendingUpdateForSmoothUpdates.pointerContainerX,
-          this.pendingUpdateForSmoothUpdates.pointerContainerY,
-          this.pendingUpdateForSmoothUpdates.type,
-        );
-        this.pendingUpdateForSmoothUpdates.updateNeeded = false;
-        this.updateBySmoothly(dx, dy, dz, pointerContainerX, pointerContainerY, type);
-        return;
-      } else {
-        this.pendingUpdateForSmoothUpdates.dx += dx;
-        this.pendingUpdateForSmoothUpdates.dy += dy;
-        this.pendingUpdateForSmoothUpdates.dz += dz;
-        this.pendingUpdateForSmoothUpdates.pointerContainerX = pointerContainerX;
-        this.pendingUpdateForSmoothUpdates.pointerContainerY = pointerContainerY;
-      }
-    }
+    const pointerContainerX = e.clientX - clientBoundingRect.left;
+    const pointerContainerY = e.clientY - clientBoundingRect.top;
+    // Vertical scroll is doing to be interpreted by us as changing z
+    this.animator.updateBy(0, 0, e.deltaY * scale, pointerContainerX, pointerContainerY, 'wheel');
   };
 
   private updateBy = (
