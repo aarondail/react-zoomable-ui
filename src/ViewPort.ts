@@ -12,6 +12,8 @@ export type ZoomFactor = number;
 export interface PressEventCoordinates {
   readonly clientX: ClientPixelUnit;
   readonly clientY: ClientPixelUnit;
+  readonly containerX: ClientPixelUnit;
+  readonly containerY: ClientPixelUnit;
   readonly x: VirtualSpacePixelUnit;
   readonly y: VirtualSpacePixelUnit;
 }
@@ -90,8 +92,8 @@ export class ViewPort {
     dx: VirtualSpacePixelUnit;
     dy: VirtualSpacePixelUnit;
     dz: VirtualSpacePixelUnit;
-    pointerClientX: ClientPixelUnit;
-    pointerClientY: ClientPixelUnit;
+    pointerContainerX: ClientPixelUnit;
+    pointerContainerY: ClientPixelUnit;
     type: string;
   };
 
@@ -115,8 +117,8 @@ export class ViewPort {
       dx: 0,
       dy: 0,
       dz: 0,
-      pointerClientX: 0,
-      pointerClientY: 0,
+      pointerContainerX: 0,
+      pointerContainerY: 0,
       type: '',
     };
 
@@ -304,7 +306,10 @@ export class ViewPort {
     }
     const x = clientX * this.zoomFactor + this.left;
     const y = clientY * this.zoomFactor + this.top;
-    return { x, y, clientX, clientY };
+    const clientBoundingRect = this.containerDiv.getBoundingClientRect();
+    const containerX = clientX - clientBoundingRect.left;
+    const containerY = clientY - clientBoundingRect.top;
+    return { x, y, clientX, clientY, containerX, containerY };
   };
 
   private handleAnimationFrame = (time: number) => {
@@ -317,8 +322,8 @@ export class ViewPort {
         this.pendingUpdateForSmoothUpdates.dx,
         this.pendingUpdateForSmoothUpdates.dy,
         this.pendingUpdateForSmoothUpdates.dz,
-        this.pendingUpdateForSmoothUpdates.pointerClientX,
-        this.pendingUpdateForSmoothUpdates.pointerClientY,
+        this.pendingUpdateForSmoothUpdates.pointerContainerX,
+        this.pendingUpdateForSmoothUpdates.pointerContainerY,
         this.pendingUpdateForSmoothUpdates.type,
       );
       this.pendingUpdateForSmoothUpdates.updateNeeded = false;
@@ -353,8 +358,9 @@ export class ViewPort {
     if (!this.currentDesktopSafariGestureState) {
       return;
     }
-    const x = this.currentDesktopSafariGestureState.startingCenterX;
-    const y = this.currentDesktopSafariGestureState.startingCenterY;
+    const clientBoundingRect = this.containerDiv.getBoundingClientRect();
+    const x = this.currentDesktopSafariGestureState.startingCenterX - clientBoundingRect.left;
+    const y = this.currentDesktopSafariGestureState.startingCenterY - clientBoundingRect.top;
     const dz = e.scale - this.currentDesktopSafariGestureState.scale;
     this.currentDesktopSafariGestureState.scale = e.scale;
     this.updateBySmoothly(0, 0, dz, x, y, 'mouse');
@@ -563,7 +569,7 @@ export class ViewPort {
         break;
     }
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
-    this.updateBy(
+    this.updateBySmoothly(
       0,
       0,
       e.deltaY * scale, // Vertical scroll is doing to be interpreted by us as delta z
@@ -577,16 +583,16 @@ export class ViewPort {
     dx: ClientPixelUnit,
     dy: ClientPixelUnit,
     dz: ClientPixelUnit,
-    pointerClientX: ClientPixelUnit,
-    pointerClientY: ClientPixelUnit,
+    pointerContainerX: ClientPixelUnit,
+    pointerContainerY: ClientPixelUnit,
     type: string,
   ) => {
     if (this.pendingUpdateForSmoothUpdates.updateNeeded === false) {
       this.pendingUpdateForSmoothUpdates.dx = dx;
       this.pendingUpdateForSmoothUpdates.dy = dy;
       this.pendingUpdateForSmoothUpdates.dz = dz;
-      this.pendingUpdateForSmoothUpdates.pointerClientX = pointerClientX;
-      this.pendingUpdateForSmoothUpdates.pointerClientY = pointerClientY;
+      this.pendingUpdateForSmoothUpdates.pointerContainerX = pointerContainerX;
+      this.pendingUpdateForSmoothUpdates.pointerContainerY = pointerContainerY;
       this.pendingUpdateForSmoothUpdates.type = type;
       this.pendingUpdateForSmoothUpdates.updateNeeded = true;
     } else {
@@ -595,19 +601,19 @@ export class ViewPort {
           this.pendingUpdateForSmoothUpdates.dx,
           this.pendingUpdateForSmoothUpdates.dy,
           this.pendingUpdateForSmoothUpdates.dz,
-          this.pendingUpdateForSmoothUpdates.pointerClientX,
-          this.pendingUpdateForSmoothUpdates.pointerClientY,
+          this.pendingUpdateForSmoothUpdates.pointerContainerX,
+          this.pendingUpdateForSmoothUpdates.pointerContainerY,
           this.pendingUpdateForSmoothUpdates.type,
         );
         this.pendingUpdateForSmoothUpdates.updateNeeded = false;
-        this.updateBySmoothly(dx, dy, dz, pointerClientX, pointerClientY, type);
+        this.updateBySmoothly(dx, dy, dz, pointerContainerX, pointerContainerY, type);
         return;
       } else {
         this.pendingUpdateForSmoothUpdates.dx += dx;
         this.pendingUpdateForSmoothUpdates.dy += dy;
         this.pendingUpdateForSmoothUpdates.dz += dz;
-        this.pendingUpdateForSmoothUpdates.pointerClientX = pointerClientX;
-        this.pendingUpdateForSmoothUpdates.pointerClientY = pointerClientY;
+        this.pendingUpdateForSmoothUpdates.pointerContainerX = pointerContainerX;
+        this.pendingUpdateForSmoothUpdates.pointerContainerY = pointerContainerY;
       }
     }
   };
@@ -616,8 +622,8 @@ export class ViewPort {
     dx: ClientPixelUnit,
     dy: ClientPixelUnit,
     dz: ClientPixelUnit,
-    pointerClientX: ClientPixelUnit,
-    pointerClientY: ClientPixelUnit,
+    pointerContainerX: ClientPixelUnit,
+    pointerContainerY: ClientPixelUnit,
     type: string,
   ) => {
     const writableThis = this as Writeable<ViewPort>;
@@ -655,8 +661,8 @@ export class ViewPort {
 
     // The reason we use x and y here is to zoom in or out towards where the
     // pointer is positioned
-    const xFocusPercent = pointerClientX / this.containerWidth;
-    const yFocusPercent = pointerClientY / this.containerHeight;
+    const xFocusPercent = pointerContainerX / this.containerWidth;
+    const yFocusPercent = pointerContainerY / this.containerHeight;
 
     writableThis.left = virtualSpaceCenterX - virtualSpaceVisibleWidthDelta * xFocusPercent;
     writableThis.top = virtualSpaceCenterY - virtualSpaceVisibleHeightDelta * yFocusPercent;

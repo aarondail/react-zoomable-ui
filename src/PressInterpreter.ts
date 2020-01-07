@@ -100,8 +100,8 @@ export class PressInterpreter {
 
     this.currentPressLastCoordinates = coordinates;
 
-    const xDelta = Math.abs(coordinates.clientX - this.currentPressStartingCoordinates.clientX);
-    const yDelta = Math.abs(coordinates.clientY - this.currentPressStartingCoordinates.clientY);
+    const xDelta = Math.abs(coordinates.containerX - this.currentPressStartingCoordinates.containerX);
+    const yDelta = Math.abs(coordinates.containerY - this.currentPressStartingCoordinates.containerY);
 
     const maxDeltaAllowed = this.currentConfig.potentialTapBounds ?? POTENTIAL_TAP_BOUNDS_DEFAULT;
     if (xDelta > maxDeltaAllowed || yDelta > maxDeltaAllowed) {
