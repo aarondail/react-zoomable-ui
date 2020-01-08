@@ -1,7 +1,6 @@
 import Hammer from 'hammerjs';
 
 import { browserIsSafariDesktop, isMouseEvent } from './utils';
-import { ViewPortAnimator } from './ViewPortAnimator';
 import { ViewPortCamera, ViewPortCameraValues } from './ViewPortCamera';
 
 // 0,0 as top left of browser window to screenWidth, screenHeight as button right.
@@ -77,7 +76,6 @@ export class ViewPort {
 
   public readonly camera: ViewPortCamera;
 
-  private animator: ViewPortAnimator;
   private containerDiv: HTMLElement;
   private currentHammerGestureState?: {
     deltaX: number;
@@ -114,7 +112,6 @@ export class ViewPort {
 
     // Setup other stuff
     this.camera = new ViewPortCamera(this as ViewPortCameraValues, this.options?.onUpdated, this.options);
-    this.animator = new ViewPortAnimator(this.camera.moveBy.bind(this.camera));
 
     // Add event listeners
     // We use hammer for handling pinches and panning, and our own listeners for
@@ -171,7 +168,7 @@ export class ViewPort {
   }
 
   public destroy(): void {
-    this.animator.destroy();
+    this.camera.destroy();
 
     this.containerDiv.removeEventListener('mousedown', this.handleMouseDown);
     this.containerDiv.removeEventListener('mousemove', this.handleMouseMove);
@@ -256,7 +253,7 @@ export class ViewPort {
     const pointerContainerY = this.currentDesktopSafariGestureState.startingCenterY - clientBoundingRect.top;
     const dz = e.scale - this.currentDesktopSafariGestureState.scale;
     this.currentDesktopSafariGestureState.scale = e.scale;
-    this.animator.updateBy(0, 0, dz, pointerContainerX, pointerContainerY, 'mouse');
+    this.camera.moveBy(0, 0, dz, pointerContainerX, pointerContainerY, 'mouse');
   };
 
   private handleGestureEndForDesktopSafari = (e: any) => {
@@ -298,13 +295,14 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.animator.updateBy(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType as any);
+    this.camera.moveBy(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType as any);
   };
 
   private handleHammerPanEnd = (e: HammerInput) => {
     if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleHammerPanEnd`);
+      console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
+    this.camera.moveByDeceleration(e.velocityX, e.velocityY);
     this.currentHammerGestureState = undefined;
   };
 
@@ -346,7 +344,7 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.animator.updateBy(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType as any);
+    this.camera.moveBy(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType as any);
   };
 
   private handleHammerPinchEnd = (e: HammerInput) => {
@@ -456,6 +454,6 @@ export class ViewPort {
     const pointerContainerY = e.clientY - clientBoundingRect.top;
 
     // Vertical scroll is doing to be interpreted by us as changing z
-    this.animator.updateBy(0, 0, e.deltaY * scale, pointerContainerX, pointerContainerY, 'wheel');
+    this.camera.moveBy(0, 0, e.deltaY * scale, pointerContainerX, pointerContainerY, 'wheel');
   };
 }
