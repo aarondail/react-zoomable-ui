@@ -6,7 +6,7 @@ type UpdateMethod = (
   dz: VirtualSpacePixelUnit,
   pointerContainerX: ClientPixelUnit,
   pointerContainerY: ClientPixelUnit,
-  type: string,
+  eventType?: 'mouse' | 'touch' | 'wheel',
 ) => void;
 
 export class ViewPortAnimator {
@@ -16,7 +16,7 @@ export class ViewPortAnimator {
 
   public constructor(private readonly updateMethod: UpdateMethod) {
     this.hasPendingUpdate = false;
-    this.pendingUpdateParameters = [0, 0, 0, 0, 0, ''];
+    this.pendingUpdateParameters = [0, 0, 0, 0, 0, undefined];
   }
 
   public destroy() {
@@ -32,7 +32,7 @@ export class ViewPortAnimator {
     dz: ClientPixelUnit,
     pointerContainerX: ClientPixelUnit,
     pointerContainerY: ClientPixelUnit,
-    type: string,
+    eventType?: 'mouse' | 'touch' | 'wheel',
   ) => {
     if (this.hasPendingUpdate === false) {
       this.pendingUpdateParameters[0] = dx;
@@ -40,13 +40,13 @@ export class ViewPortAnimator {
       this.pendingUpdateParameters[2] = dz;
       this.pendingUpdateParameters[3] = pointerContainerX;
       this.pendingUpdateParameters[4] = pointerContainerY;
-      this.pendingUpdateParameters[5] = type;
+      this.pendingUpdateParameters[5] = eventType;
       this.hasPendingUpdate = true;
       this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
     } else {
       // There is already a pending update so we need to merge the new values
       // with that or do it if we don't think it can safely be merged
-      if (this.pendingUpdateParameters[5] !== type && this.pendingUpdateParameters[5] !== '') {
+      if (this.pendingUpdateParameters[5] !== eventType && this.pendingUpdateParameters[5] !== undefined) {
         // The updates for from a different type (mouse, touch) so just do them
         // separately. If we try to merge them the update method might do the
         // wrong thing (even though its unlikely)
@@ -54,7 +54,7 @@ export class ViewPortAnimator {
         this.hasPendingUpdate = false;
         // Just call ourselves again so we will hit the code above and schedule
         // the new update
-        this.updateBy(dx, dy, dz, pointerContainerX, pointerContainerY, type);
+        this.updateBy(dx, dy, dz, pointerContainerX, pointerContainerY, eventType);
       } else {
         // Merge the pending update with the new values
         this.pendingUpdateParameters[0] += dx;

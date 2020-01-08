@@ -1,7 +1,8 @@
 import Hammer from 'hammerjs';
 
-import { browserIsSafariDesktop, clamp, isMouseEvent, Writeable } from './utils';
+import { browserIsSafariDesktop, isMouseEvent } from './utils';
 import { ViewPortAnimator } from './ViewPortAnimator';
+import { ViewPortCamera, ViewPortCameraValues } from './ViewPortCamera';
 
 // 0,0 as top left of browser window to screenWidth, screenHeight as button right.
 export type ClientPixelUnit = number;
@@ -62,7 +63,8 @@ export class ViewPort {
     `;
 
   // While these public properties APPEAR readonly they are in fact NOT. They
-  // are just readonly for consumer's of this class.
+  // are just readonly for consumer's of this class. They are changed by the
+  // ViewPortCamera.
   public readonly containerWidth: ClientPixelUnit;
   public readonly containerHeight: ClientPixelUnit;
   public readonly centerX: VirtualSpacePixelUnit;
@@ -72,6 +74,8 @@ export class ViewPort {
   public readonly width: VirtualSpacePixelUnit;
   public readonly height: VirtualSpacePixelUnit;
   public readonly zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
+
+  public readonly camera: ViewPortCamera;
 
   private animator: ViewPortAnimator;
   private containerDiv: HTMLElement;
@@ -109,7 +113,8 @@ export class ViewPort {
     this.containerDiv.style.cssText = ViewPort.DivStyle;
 
     // Setup other stuff
-    this.animator = new ViewPortAnimator(this.updateBy);
+    this.camera = new ViewPortCamera(this as ViewPortCameraValues, this.options?.onUpdated, this.options);
+    this.animator = new ViewPortAnimator(this.camera.moveBy.bind(this.camera));
 
     // Add event listeners
     // We use hammer for handling pinches and panning, and our own listeners for
@@ -188,69 +193,6 @@ export class ViewPort {
     this.hammer.destroy();
   }
 
-  public centerFitAreaIntoView(
-    left: VirtualSpacePixelUnit,
-    top: VirtualSpacePixelUnit,
-    width: VirtualSpacePixelUnit,
-    height: VirtualSpacePixelUnit,
-    options?: ZoomFactorMinMaxOptions,
-  ): void {
-    const cx = left + width / 2;
-    const cy = top + height / 2;
-    const zoomFactorBasedOnWidth = this.containerWidth / width;
-    const zoomFactorBasedOnHeight = this.containerHeight / height;
-    let newZoomFactor = Math.min(zoomFactorBasedOnWidth, zoomFactorBasedOnHeight);
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, options);
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
-    this.recenterView(cx, cy, newZoomFactor);
-  }
-
-  public centerFitHorizontalAreaIntoView(
-    left: VirtualSpacePixelUnit,
-    width: VirtualSpacePixelUnit,
-    options?: ZoomFactorMinMaxOptions,
-  ): void {
-    const cx = left + width / 2;
-    let newZoomFactor = this.containerWidth / width;
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, options);
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
-    this.updateViewTopLeft(cx - this.width / newZoomFactor / 2, this.top, newZoomFactor);
-  }
-
-  public recenterView(
-    centerX: VirtualSpacePixelUnit,
-    centerY: VirtualSpacePixelUnit,
-    newZoomFactor?: ZoomFactor,
-  ): void {
-    const writableThis = this as Writeable<ViewPort>;
-    if (newZoomFactor !== undefined) {
-      writableThis.zoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
-    }
-    writableThis.width = this.containerWidth / this.zoomFactor;
-    writableThis.height = this.containerHeight / this.zoomFactor;
-    writableThis.centerX = centerX;
-    writableThis.centerY = centerY;
-    writableThis.left = centerX - this.width / 2;
-    writableThis.top = centerY - this.height / 2;
-
-    this.options?.onUpdated?.();
-  }
-
-  public updateViewTopLeft(left: VirtualSpacePixelUnit, top: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
-    const writableThis = this as Writeable<ViewPort>;
-    if (newZoomFactor !== undefined) {
-      writableThis.zoomFactor = this.clampZoomFactor(newZoomFactor, this.options);
-    }
-    writableThis.width = this.containerWidth / this.zoomFactor;
-    writableThis.height = this.containerHeight / this.zoomFactor;
-    writableThis.centerX = left + this.width / 2;
-    writableThis.centerY = top + this.height / 2;
-    writableThis.left = left;
-    writableThis.top = top;
-
-    this.options?.onUpdated?.();
-  }
-
   /**
    * This should be used when the container div is resized.  By default resizes due
    * to the window itself resizing will be automatically handled, but any other
@@ -260,24 +202,7 @@ export class ViewPort {
   public updateContainerSize = () => {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const { width, height } = clientBoundingRect;
-    if (width === this.containerWidth && height === this.containerHeight) {
-      return;
-    }
-
-    const writableThis = this as Writeable<ViewPort>;
-    writableThis.containerWidth = width;
-    writableThis.containerHeight = height;
-    writableThis.width = this.containerWidth / this.zoomFactor;
-    writableThis.height = this.containerHeight / this.zoomFactor;
-    // Keep focus on the top left
-    writableThis.centerX = this.left + this.width / 2;
-    writableThis.centerY = this.top + this.width / 2;
-
-    this.options?.onUpdated?.();
-  };
-
-  private clampZoomFactor = (value: ZoomFactor, minMax?: ZoomFactorMinMaxOptions) => {
-    return clamp(value, minMax?.zoomFactorMin || 0.01, minMax?.zoomFactorMax || 10);
+    this.camera.handleContainerSizeChanged(width, height);
   };
 
   private getPressCoordinatesFromEvent = (e: MouseEvent | TouchEvent): PressEventCoordinates => {
@@ -373,7 +298,7 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.animator.updateBy(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType);
+    this.animator.updateBy(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType as any);
   };
 
   private handleHammerPanEnd = (e: HammerInput) => {
@@ -421,7 +346,7 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.animator.updateBy(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType);
+    this.animator.updateBy(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType as any);
   };
 
   private handleHammerPinchEnd = (e: HammerInput) => {
@@ -529,61 +454,8 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.clientX - clientBoundingRect.left;
     const pointerContainerY = e.clientY - clientBoundingRect.top;
+
     // Vertical scroll is doing to be interpreted by us as changing z
     this.animator.updateBy(0, 0, e.deltaY * scale, pointerContainerX, pointerContainerY, 'wheel');
-  };
-
-  private updateBy = (
-    dx: ClientPixelUnit,
-    dy: ClientPixelUnit,
-    dz: ClientPixelUnit,
-    pointerContainerX: ClientPixelUnit,
-    pointerContainerY: ClientPixelUnit,
-    type: string,
-  ) => {
-    const writableThis = this as Writeable<ViewPort>;
-
-    let zoomFactor = this.zoomFactor;
-    if (dz !== 0) {
-      // tslint:disable-next-line: prefer-conditional-expression
-      if (type === 'wheel') {
-        // In the wheel case this makes the zoom feel more like its going at a
-        // linear speed.
-        zoomFactor = (this.containerHeight * this.zoomFactor) / (this.containerHeight + dz * 2);
-      } else {
-        // It feels too fast if we don't divide by two... some hammer.js issue?
-        zoomFactor = zoomFactor + dz / 2;
-      }
-      zoomFactor = this.clampZoomFactor(zoomFactor, this.options);
-    }
-
-    let virtualSpaceCenterX: VirtualSpacePixelUnit;
-    let virtualSpaceCenterY: VirtualSpacePixelUnit;
-
-    // Basic pan handling
-    virtualSpaceCenterX = this.left + (-1 * dx) / zoomFactor;
-    virtualSpaceCenterY = this.top + (-1 * dy) / zoomFactor;
-
-    // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
-    const oldVirtualSpaceVisibleSpaceWidth = this.containerWidth / this.zoomFactor;
-    const oldVirtualSpaceVisibleSpaceHeight = this.containerHeight / this.zoomFactor;
-    writableThis.width = this.containerWidth / zoomFactor;
-    writableThis.height = this.containerHeight / zoomFactor;
-    writableThis.zoomFactor = zoomFactor;
-
-    const virtualSpaceVisibleWidthDelta = this.width - oldVirtualSpaceVisibleSpaceWidth;
-    const virtualSpaceVisibleHeightDelta = this.height - oldVirtualSpaceVisibleSpaceHeight;
-
-    // The reason we use x and y here is to zoom in or out towards where the
-    // pointer is positioned
-    const xFocusPercent = pointerContainerX / this.containerWidth;
-    const yFocusPercent = pointerContainerY / this.containerHeight;
-
-    writableThis.left = virtualSpaceCenterX - virtualSpaceVisibleWidthDelta * xFocusPercent;
-    writableThis.top = virtualSpaceCenterY - virtualSpaceVisibleHeightDelta * yFocusPercent;
-    writableThis.centerX = virtualSpaceCenterX + this.width / 2;
-    writableThis.centerY = virtualSpaceCenterY + this.height / 2;
-
-    this.options?.onUpdated?.();
   };
 }
