@@ -253,7 +253,7 @@ export class ViewPort {
     const pointerContainerY = this.currentDesktopSafariGestureState.startingCenterY - clientBoundingRect.top;
     const dz = e.scale - this.currentDesktopSafariGestureState.scale;
     this.currentDesktopSafariGestureState.scale = e.scale;
-    this.camera.moveBy(0, 0, dz, pointerContainerX, pointerContainerY, 'mouse');
+    this.camera.moveByInClientSpace(0, 0, dz, pointerContainerX, pointerContainerY, 'mouse');
   };
 
   private handleGestureEndForDesktopSafari = (e: any) => {
@@ -295,14 +295,14 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.camera.moveBy(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType as any);
+    this.camera.moveByInClientSpace(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType as any);
   };
 
   private handleHammerPanEnd = (e: HammerInput) => {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
-    this.camera.moveByDeceleration(e.velocityX, e.velocityY);
+    this.camera.moveByDecelerationInClientSpace(e.velocityX, e.velocityY);
     this.currentHammerGestureState = undefined;
   };
 
@@ -344,7 +344,7 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.camera.moveBy(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType as any);
+    this.camera.moveByInClientSpace(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType as any);
   };
 
   private handleHammerPinchEnd = (e: HammerInput) => {
@@ -454,6 +454,6 @@ export class ViewPort {
     const pointerContainerY = e.clientY - clientBoundingRect.top;
 
     // Vertical scroll is doing to be interpreted by us as changing z
-    this.camera.moveBy(0, 0, e.deltaY * scale, pointerContainerX, pointerContainerY, 'wheel');
+    this.camera.moveByInClientSpace(0, 0, e.deltaY * scale, pointerContainerX, pointerContainerY, 'wheel');
   };
 }
