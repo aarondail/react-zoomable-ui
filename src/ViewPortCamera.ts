@@ -1,5 +1,17 @@
-import { clamp } from './utils';
-import { ClientPixelUnit, VirtualSpacePixelUnit, ZoomFactor, ZoomFactorMinMaxOptions } from './ViewPort';
+import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, ZoomFactor } from './ViewPort';
+
+function clamp(from: number, to: number, bounds?: readonly [number | undefined, number | undefined]): ZoomFactor {
+  if (bounds) {
+    const [min, max] = bounds;
+    if (min !== undefined && to < from && to < min) {
+      return min;
+    }
+    if (max !== undefined && to > from && to > max) {
+      return max;
+    }
+  }
+  return to;
+}
 
 export interface ViewPortCameraValues {
   // tslint:disable: readonly-keyword
@@ -16,19 +28,16 @@ export interface ViewPortCameraValues {
 }
 
 export class ViewPortCamera {
-  private animationFrameId?: number;
+  private bounds?: ViewPortBounds;
 
+  private animationFrameId?: number;
   private animatingVelocityX: VirtualSpacePixelUnit;
   private animatingVelocityY: VirtualSpacePixelUnit;
   private isAnimating: boolean;
 
   private workingValues: ViewPortCameraValues;
 
-  constructor(
-    private readonly values: ViewPortCameraValues,
-    private readonly onUpdated?: () => void,
-    private readonly zoomMinMax?: ZoomFactorMinMaxOptions,
-  ) {
+  constructor(private readonly values: ViewPortCameraValues, private readonly onUpdated?: () => void) {
     this.animatingVelocityX = 0;
     this.animatingVelocityY = 0;
     this.isAnimating = false;
@@ -40,27 +49,25 @@ export class ViewPortCamera {
     top: VirtualSpacePixelUnit,
     width: VirtualSpacePixelUnit,
     height: VirtualSpacePixelUnit,
-    options?: ZoomFactorMinMaxOptions,
+    additionalBounds?: Pick<ViewPortBounds, 'z'>,
   ): void {
     const cx = left + width / 2;
     const cy = top + height / 2;
     const zoomFactorBasedOnWidth = this.workingValues.containerWidth / width;
     const zoomFactorBasedOnHeight = this.workingValues.containerHeight / height;
     let newZoomFactor = Math.min(zoomFactorBasedOnWidth, zoomFactorBasedOnHeight);
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, options);
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, this.zoomMinMax);
+    newZoomFactor = clamp(this.workingValues.zoomFactor, newZoomFactor, additionalBounds?.z);
     this.recenter(cx, cy, newZoomFactor);
   }
 
   public centerFitHorizontalAreaIntoView(
     left: VirtualSpacePixelUnit,
     width: VirtualSpacePixelUnit,
-    options?: ZoomFactorMinMaxOptions,
+    additionalBounds?: Pick<ViewPortBounds, 'z'>,
   ): void {
     const centerX = left + width / 2;
     let newZoomFactor = this.workingValues.containerWidth / width;
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, options);
-    newZoomFactor = this.clampZoomFactor(newZoomFactor, this.zoomMinMax);
+    newZoomFactor = clamp(this.workingValues.zoomFactor, newZoomFactor, additionalBounds?.z);
     this.updateTopLeft(centerX - this.workingValues.width / newZoomFactor / 2, this.workingValues.top, newZoomFactor);
   }
 
@@ -92,7 +99,7 @@ export class ViewPortCamera {
         // It feels too fast if we don't divide by two... some hammer.js issue?
         zoomFactor = zoomFactor + dz / 2;
       }
-      zoomFactor = this.clampZoomFactor(zoomFactor, this.zoomMinMax);
+      zoomFactor = clamp(this.workingValues.zoomFactor, zoomFactor, this.bounds?.z);
     }
 
     let virtualSpaceCenterX: VirtualSpacePixelUnit;
@@ -151,7 +158,7 @@ export class ViewPortCamera {
 
   public recenter(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
     if (newZoomFactor !== undefined) {
-      this.workingValues.zoomFactor = this.clampZoomFactor(newZoomFactor, this.zoomMinMax);
+      this.workingValues.zoomFactor = clamp(this.workingValues.zoomFactor, newZoomFactor, this.bounds?.z);
       this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
       this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
     }
@@ -163,9 +170,14 @@ export class ViewPortCamera {
     this.scheduleHardUpdate();
   }
 
+  public setBounds(bounds?: ViewPortBounds) {
+    this.bounds = bounds;
+    this.scheduleHardUpdate();
+  }
+
   public updateTopLeft(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, zoomFactor?: ZoomFactor): void {
     if (zoomFactor !== undefined) {
-      this.workingValues.zoomFactor = this.clampZoomFactor(zoomFactor, this.zoomMinMax);
+      this.workingValues.zoomFactor = clamp(this.workingValues.zoomFactor, zoomFactor, this.bounds?.z);
       this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
       this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
     }
@@ -176,10 +188,6 @@ export class ViewPortCamera {
 
     this.scheduleHardUpdate();
   }
-
-  private clampZoomFactor = (value: ZoomFactor, minMax?: ZoomFactorMinMaxOptions) => {
-    return clamp(value, minMax?.zoomFactorMin || 0.01, minMax?.zoomFactorMax || 10);
-  };
 
   private handleAnimationFrame = (/*time: number*/) => {
     this.animationFrameId = undefined;

@@ -19,12 +19,13 @@ export interface PressEventCoordinates {
   readonly y: VirtualSpacePixelUnit;
 }
 
-export interface ZoomFactorMinMaxOptions {
-  readonly zoomFactorMax?: ZoomFactor;
-  readonly zoomFactorMin?: ZoomFactor;
+export interface ViewPortBounds {
+  readonly x?: readonly [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined];
+  readonly y?: readonly [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined];
+  readonly z?: readonly [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined];
 }
 
-export interface ViewPortOptions extends ZoomFactorMinMaxOptions {
+export interface ViewPortOptions {
   readonly debugEvents?: boolean;
 
   readonly onUpdated?: () => void;
@@ -111,7 +112,8 @@ export class ViewPort {
     this.containerDiv.style.cssText = ViewPort.DivStyle;
 
     // Setup other stuff
-    this.camera = new ViewPortCamera(this as ViewPortCameraValues, this.options?.onUpdated, this.options);
+    this.camera = new ViewPortCamera(this as ViewPortCameraValues, this.options?.onUpdated);
+    this.camera.setBounds({ z: [0.001, 100] });
 
     // Add event listeners
     // We use hammer for handling pinches and panning, and our own listeners for
@@ -188,6 +190,10 @@ export class ViewPort {
     }
 
     this.hammer.destroy();
+  }
+
+  public setBounds(bounds?: ViewPortBounds): void {
+    this.camera.setBounds(bounds);
   }
 
   /**

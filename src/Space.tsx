@@ -7,7 +7,7 @@ import { Pressable } from './Pressable';
 import { PressHandlingOptions, PressInterpreter } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { browserIsAndroid, generateRandomId } from './utils';
-import { PressEventCoordinates, ViewPort, ZoomFactor } from './ViewPort';
+import { PressEventCoordinates, ViewPort } from './ViewPort';
 
 // tslint:disable-next-line: no-empty-interface
 export interface SpaceProps {
@@ -17,8 +17,6 @@ export interface SpaceProps {
   readonly transformedDivClassName?: string;
   readonly transformedDivStyle?: React.CSSProperties;
   readonly pollForElementResizing?: boolean;
-  readonly zoomFactorMax?: ZoomFactor;
-  readonly zoomFactorMin?: ZoomFactor;
 
   readonly onCreate?: (viewPort: ViewPort) => void;
 }
@@ -129,7 +127,7 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
     // See this link for more info:
     // https://stackoverflow.com/questions/3873595/how-to-disable-firefoxs-default-drag-and-drop-on-all-images-behavior-with-jquer
     //
-    // This additionally prevents another werid-o case of double clicking to
+    // This additionally prevents another weird-o case of double clicking to
     // select text in Desktop Safari and then long clicking and dragging. This
     // will enter some sorta drag state where all the text is being dragged.
     // This is bad and it also conflicts with our <Pressable> components.
@@ -181,8 +179,6 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
     if (this.containerDivRef) {
       this.viewPort = new ViewPort(this.containerDivRef, {
         debugEvents: this.props.debugEvents,
-        zoomFactorMax: this.props.zoomFactorMax,
-        zoomFactorMin: this.props.zoomFactorMin,
         onPressContextMenu: this.handlePressContextMenu,
         onUpdated: this.handleViewPortUpdated,
         ...this.pressInterpreter.pressHandlers,
