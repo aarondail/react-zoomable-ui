@@ -14,8 +14,14 @@ export interface SpaceProps {
   readonly className?: string;
   readonly debugEvents?: boolean;
   readonly style?: React.CSSProperties;
-  readonly transformedDivClassName?: string;
-  readonly transformedDivStyle?: React.CSSProperties;
+  readonly sizeContainerToContent?: boolean;
+  /**
+   * Only read during mounting. Subsequent changes have to be done via methods
+   * on the view port's `camera` property.
+   */
+  readonly boundCameraToContent?: boolean;
+  readonly contentDivClassName?: string;
+  readonly contentDivStyle?: React.CSSProperties;
   readonly pollForElementResizing?: boolean;
 
   readonly onCreate?: (viewPort: ViewPort) => void;
@@ -29,12 +35,14 @@ interface SpaceState {
 export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   private readonly rootDivUniqueClassName = `react-zoomable-ui-${generateRandomId()}`;
 
-  private readonly constantStyles = `
-div.${this.rootDivUniqueClassName} {
+  private readonly constantStyleForFullSizeContainer = `
+.${this.rootDivUniqueClassName} {
   width: 100%;
   height: 100%;
 }
-div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
+`;
+  private readonly constantStyleForContentDiv = `
+.${this.rootDivUniqueClassName} > .react-zoomable-ui-content-div {
   margin: 0; padding: 0; 
   transform-origin: 0% 0%;
 }`;
@@ -68,21 +76,21 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
 
   public render() {
     let transformedDivStyle = this.state.transformStyle;
-    if (this.props.transformedDivStyle) {
-      transformedDivStyle = { ...transformedDivStyle, ...this.props.transformedDivStyle };
+    if (this.props.contentDivStyle) {
+      transformedDivStyle = { ...transformedDivStyle, ...this.props.contentDivStyle };
     }
     return (
       <div
-        ref={this.setContainerDivRef}
-        className={`react-zoomable-ui ${this.rootDivUniqueClassName} react-zoomable-ui-space ${this.props.className ||
-          ''}`}
+        ref={this.setContainerDivRefAndCreateViewPort}
+        className={`react-zoomable-ui-container-div ${this.rootDivUniqueClassName} ${this.props.className || ''}`}
         style={this.props.style}
       >
-        <style>{this.constantStyles}</style>
+        {!this.props.sizeContainerToContent && <style>{this.constantStyleForFullSizeContainer}</style>}
+        <style>{this.constantStyleForContentDiv}</style>
         {this.state.contextValue && (
           <SpaceContext.Provider value={this.state.contextValue}>
             <div
-              className={`react-zoomable-ui-space-transform-div ${this.props.transformedDivClassName || ''}`}
+              className={`react-zoomable-ui-content-div ${this.props.contentDivClassName || ''}`}
               style={transformedDivStyle}
             >
               {this.props.children}
@@ -174,7 +182,7 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
     return undefined;
   };
 
-  private setContainerDivRef = (ref: any) => {
+  private setContainerDivRefAndCreateViewPort = (ref: any) => {
     this.destroyViewPort();
     this.containerDivRef = ref;
 
@@ -185,6 +193,10 @@ div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
         onUpdated: this.handleViewPortUpdated,
         ...this.pressInterpreter.pressHandlers,
       });
+
+      if (this.props.boundCameraToContent) {
+        this.viewPort.camera.setBoundsToContent();
+      }
 
       this.props.onCreate?.(this.viewPort);
 

@@ -175,6 +175,16 @@ export class ViewPortCamera {
     this.scheduleHardUpdate();
   }
 
+  public setBoundsToContent() {
+    this.bounds = {
+      x: [0, this.workingValues.containerWidth],
+      y: [0, this.workingValues.containerHeight],
+      // Can't zoom out but you can zoom in
+      z: [1, undefined],
+    };
+    this.scheduleHardUpdate();
+  }
+
   public updateTopLeft(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, zoomFactor?: ZoomFactor): void {
     if (zoomFactor !== undefined) {
       this.workingValues.zoomFactor = clamp(this.workingValues.zoomFactor, zoomFactor, this.bounds?.z);
