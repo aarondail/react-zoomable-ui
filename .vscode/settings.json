@@ -13,6 +13,7 @@
     "pinchcancel",
     "pinchend",
     "pinchmove",
-    "pinchstart"
+    "pinchstart",
+    "rederive"
   ]
 }

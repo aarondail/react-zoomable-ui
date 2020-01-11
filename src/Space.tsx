@@ -45,6 +45,8 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 .${this.rootDivUniqueClassName} > .react-zoomable-ui-content-div {
   margin: 0; padding: 0; 
   transform-origin: 0% 0%;
+  height: 100%;
+  width: 100%;
 }`;
 
   private containerDivRef?: HTMLDivElement;
@@ -194,11 +196,27 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
         ...this.pressInterpreter.pressHandlers,
       });
 
-      if (this.props.boundCameraToContent) {
-        this.viewPort.camera.setBoundsToContent();
-      }
+      const moreViewPortSetup = () => {
+        if (!this.viewPort) {
+          return;
+        }
+        if (this.props.boundCameraToContent) {
+          this.viewPort.camera.setBoundsToContent();
+        }
+        this.props.onCreate?.(this.viewPort);
+      };
 
-      this.props.onCreate?.(this.viewPort);
+      if (this.props.sizeContainerToContent) {
+        // Have to setImmediate in some cases because the div may not be at its
+        // final size yet (and thus, getBoundingClientRect will return the wrong
+        // size).
+        setImmediate(() => {
+          this.viewPort?.updateContainerSize();
+          moreViewPortSetup();
+        });
+      } else {
+        moreViewPortSetup();
+      }
 
       this.containerDivRef.addEventListener('dragstart', this.handleDragStart);
 

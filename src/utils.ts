@@ -81,13 +81,77 @@ export const generateRandomId = () =>
 //   return result;
 // }
 
-export function clamp(v: number, min: number, max: number): number {
-  if (v < min) {
-    return min;
-  } else if (v > max) {
-    return max;
+export function clampNormally(value: number, bounds?: readonly [number | undefined, number | undefined]): number {
+  if (bounds) {
+    const [min, max] = bounds;
+    if (min !== undefined && value < min) {
+      return min;
+    }
+    if (max !== undefined && value > max) {
+      return max;
+    }
   }
-  return v;
+  return value;
+}
+
+export function clampFromTo(
+  from: number,
+  to: number,
+  bounds?: readonly [number | undefined, number | undefined],
+): number {
+  if (bounds) {
+    const [min, max] = bounds;
+    if (min !== undefined && to < from && to < min) {
+      return min;
+    }
+    if (max !== undefined && to > from && to > max) {
+      return max;
+    }
+  }
+  return to;
+}
+
+export function clampWithSpace(
+  value: number,
+  space: number,
+  bounds?: readonly [number | undefined, number | undefined],
+): number {
+  if (bounds) {
+    const [min, max] = bounds;
+    // if (min !== undefined && max !== undefined && centerTo - space/2 < min && centerTo + space/2 > max) {
+    //   return centerFrom;
+    // }
+    // if (min !== undefined && centerTo < centerFrom && centerTo - space / 2 < min) {
+    //   return min + space / 2;
+    // }
+    // if (max !== undefined && centerTo > centerFrom && centerTo + space / 2 > max) {
+    //   return max - space / 2;
+    // }
+
+    // v2
+    // if (min !== undefined && max !== undefined && centerTo - space/2 < min && centerTo + space/2 > max) {
+    //   return centerFrom;
+    // }
+    // if (min !== undefined && centerTo - space / 2 < min) {
+    //   return centerFrom;
+    // }
+    // if (max !== undefined && centerTo + space / 2 > max) {
+    //   return centerFrom;
+    // }
+
+    // v3
+    if (min !== undefined && max !== undefined && value - space / 2 < min && value + space / 2 > max) {
+      // Return center of space
+      return min + (max - min) / 2;
+    }
+    if (min !== undefined && value - space / 2 < min) {
+      return min + space / 2;
+    }
+    if (max !== undefined && value + space / 2 > max) {
+      return max - space / 2;
+    }
+  }
+  return value;
 }
 
 export function rectContainsPoint(clientRect: ClientRect, x: number, y: number) {

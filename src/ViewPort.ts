@@ -108,7 +108,8 @@ export class ViewPort {
 
     // Setup other stuff
     this.camera = new ViewPortCamera(this as ViewPortCameraValues, this.options?.onUpdated);
-    this.camera.setBounds({ z: [0.001, 100] });
+    // Tell the camera about our div size this has to be after we change the style above...
+    this.updateContainerSize();
 
     // Add event listeners
     // We use hammer for handling pinches and panning, and our own listeners for
@@ -158,10 +159,6 @@ export class ViewPort {
     this.hammer.on('pinchmove', this.handleHammerPinchMove);
     this.hammer.on('pinchend', this.handleHammerPinchEnd);
     this.hammer.on('pinchcancel', this.handleHammerPinchCancel);
-
-    // Set the real values (make sure this happens AFTER setting the css text
-    // above)
-    this.updateContainerSize();
   }
 
   public destroy(): void {
