@@ -30,10 +30,12 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   private readonly rootDivUniqueClassName = `react-zoomable-ui-${generateRandomId()}`;
 
   private readonly constantStyles = `
+div.${this.rootDivUniqueClassName} {
+  width: 100%;
+  height: 100%;
+}
 div.${this.rootDivUniqueClassName} > div.react-zoomable-ui-space-transform-div {
-  margin: 0; padding: 0; height: 100%; width: 100%;
-  position: absolute;
-  top: 0; left: 0;
+  margin: 0; padding: 0; 
   transform-origin: 0% 0%;
 }`;
 

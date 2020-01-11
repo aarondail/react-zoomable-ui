@@ -56,12 +56,6 @@ export interface ViewPortOptions {
  * bounds of containing HTML element where the virtual space is being rendered.
  */
 export class ViewPort {
-  private static DivStyle = `
-    overflow: hidden;
-    margin: 0; padding: 0; height: 100%; width: 100%;
-    position: relative;
-    `;
-
   // While these public properties APPEAR readonly they are in fact NOT. They
   // are just readonly for consumer's of this class. They are changed by the
   // ViewPortCamera.
@@ -109,7 +103,8 @@ export class ViewPort {
     this.isCurrentPressBeingHandledAsNonPan = false;
 
     // Set the div's styles
-    this.containerDiv.style.cssText = ViewPort.DivStyle;
+    this.containerDiv.style.overflow = 'hidden';
+    this.containerDiv.style.padding = '0';
 
     // Setup other stuff
     this.camera = new ViewPortCamera(this as ViewPortCameraValues, this.options?.onUpdated);
