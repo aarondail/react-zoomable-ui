@@ -218,41 +218,43 @@ export class ViewPortCamera {
         this.animatingVelocityY = 0;
       }
 
+      // Note we subtract the animation velocity because...
+
       if (Math.abs(this.animatingVelocityX) > 0 || Math.abs(this.animatingVelocityY) > 0) {
         if (
-          this.animatingVelocityX > 0 &&
+          this.animatingVelocityX < 0 &&
           this.bounds?.x?.[0] !== undefined &&
-          this.workingValues.left - this.animatingVelocityX < this.bounds.x[0]
+          this.workingValues.left + this.animatingVelocityX < this.bounds.x[0]
         ) {
           this.animatingVelocityX *= 0;
           this.workingValues.centerX = this.bounds.x[0] + this.workingValues.width / 2;
         } else if (
-          this.animatingVelocityX < 0 &&
+          this.animatingVelocityX > 0 &&
           this.bounds?.x?.[1] !== undefined &&
-          this.workingValues.left + this.workingValues.width - this.animatingVelocityX > this.bounds.x[1]
+          this.workingValues.left + this.workingValues.width + this.animatingVelocityX > this.bounds.x[1]
         ) {
           this.animatingVelocityX *= 0;
           this.workingValues.centerX = this.bounds.x[1] - this.workingValues.width / 2;
         } else {
-          this.workingValues.centerX -= this.animatingVelocityX;
+          this.workingValues.centerX += this.animatingVelocityX;
         }
 
         if (
-          this.animatingVelocityY > 0 &&
+          this.animatingVelocityY < 0 &&
           this.bounds?.y?.[0] !== undefined &&
-          this.workingValues.top - this.animatingVelocityY < this.bounds.y[0]
+          this.workingValues.top + this.animatingVelocityY < this.bounds.y[0]
         ) {
           this.animatingVelocityY *= 0;
           this.workingValues.centerY = this.bounds.y[0] + this.workingValues.height / 2;
         } else if (
-          this.animatingVelocityY < 0 &&
+          this.animatingVelocityY > 0 &&
           this.bounds?.y?.[1] !== undefined &&
-          this.workingValues.top + this.workingValues.height - this.animatingVelocityY > this.bounds.y[1]
+          this.workingValues.top + this.workingValues.height + this.animatingVelocityY > this.bounds.y[1]
         ) {
           this.animatingVelocityY *= 0;
           this.workingValues.centerY = this.bounds.y[1] - this.workingValues.height / 2;
         } else {
-          this.workingValues.centerY -= this.animatingVelocityY;
+          this.workingValues.centerY += this.animatingVelocityY;
         }
 
         this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;

@@ -301,7 +301,9 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
-    this.camera.moveByDecelerationInClientSpace(e.velocityX, e.velocityY);
+    // Negative one because the direction of the pointer is the opposite of the
+    // direction we are moving the viewport
+    this.camera.moveByDecelerationInClientSpace(-1 * e.velocityX, -1 * e.velocityY);
     this.currentHammerGestureState = undefined;
   };
 
@@ -351,6 +353,9 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPinchEnd`);
     }
+    // Negative one because the direction of the pointer is the opposite of the
+    // direction we are moving the viewport
+    this.camera.moveByDecelerationInClientSpace(-1 * e.velocityX, -1 * e.velocityY);
     this.currentHammerGestureState = undefined;
   };
 
