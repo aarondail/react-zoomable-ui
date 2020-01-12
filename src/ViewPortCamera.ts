@@ -1,3 +1,4 @@
+import { clamp, clampCenterOfLength } from './utils';
 import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, ZoomFactor } from './ViewPort';
 
 export interface ViewPortCameraValues {
@@ -32,7 +33,7 @@ export class ViewPortCamera {
     this.workingValues = { ...values };
 
     // Semi-sane default bounds...
-    this.bounds = { z: [0.001, 100] };
+    this.bounds = { zoom: [0.001, 100] };
   }
 
   public centerFitAreaIntoView(
@@ -40,25 +41,25 @@ export class ViewPortCamera {
     top: VirtualSpacePixelUnit,
     width: VirtualSpacePixelUnit,
     height: VirtualSpacePixelUnit,
-    additionalBounds?: Pick<ViewPortBounds, 'z'>,
+    additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
   ): void {
     const cx = left + width / 2;
     const cy = top + height / 2;
     const zoomFactorBasedOnWidth = this.workingValues.containerWidth / width;
     const zoomFactorBasedOnHeight = this.workingValues.containerHeight / height;
     let newZoomFactor = Math.min(zoomFactorBasedOnWidth, zoomFactorBasedOnHeight);
-    newZoomFactor = clampNormally(newZoomFactor, additionalBounds?.z);
+    newZoomFactor = clamp(newZoomFactor, additionalBounds?.zoom);
     this.recenter(cx, cy, newZoomFactor);
   }
 
   public centerFitHorizontalAreaIntoView(
     left: VirtualSpacePixelUnit,
     width: VirtualSpacePixelUnit,
-    additionalBounds?: Pick<ViewPortBounds, 'z'>,
+    additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
   ): void {
     const centerX = left + width / 2;
     let newZoomFactor = this.workingValues.containerWidth / width;
-    newZoomFactor = clampNormally(newZoomFactor, additionalBounds?.z);
+    newZoomFactor = clamp(newZoomFactor, additionalBounds?.zoom);
     this.updateTopLeft(centerX - this.workingValues.width / newZoomFactor / 2, this.workingValues.top, newZoomFactor);
   }
 
@@ -72,25 +73,14 @@ export class ViewPortCamera {
   public moveByInClientSpace(
     dx: ClientPixelUnit,
     dy: ClientPixelUnit,
-    dz: ClientPixelUnit,
+    dZoom: ClientPixelUnit,
     pointerContainerX: ClientPixelUnit,
     pointerContainerY: ClientPixelUnit,
-    eventType?: 'mouse' | 'touch' | 'wheel',
   ) {
     let zoomFactor = this.workingValues.zoomFactor;
-    if (dz !== 0) {
-      // tslint:disable-next-line: prefer-conditional-expression
-      if (eventType === 'wheel') {
-        // In the wheel case this makes the zoom feel more like its going at a
-        // linear speed.
-        zoomFactor =
-          (this.workingValues.containerHeight * this.workingValues.zoomFactor) /
-          (this.workingValues.containerHeight + dz * 2);
-      } else {
-        // It feels too fast if we don't divide by two... some hammer.js issue?
-        zoomFactor = zoomFactor + dz / 2;
-      }
-      zoomFactor = clampNormally(zoomFactor, this.actualDerivedZBounds);
+    if (dZoom !== 0) {
+      zoomFactor += dZoom;
+      zoomFactor = clamp(zoomFactor, this.actualDerivedZBounds);
     }
 
     // Basic pan handling
@@ -112,12 +102,12 @@ export class ViewPortCamera {
     const xFocusPercent = pointerContainerX / this.workingValues.containerWidth;
     const yFocusPercent = pointerContainerY / this.workingValues.containerHeight;
 
-    this.workingValues.centerX = clampWithSpace(
+    this.workingValues.centerX = clampCenterOfLength(
       virtualSpaceNewLeft - virtualSpaceVisibleWidthDelta * xFocusPercent + this.workingValues.width / 2,
       this.workingValues.width,
       this.bounds?.x,
     );
-    this.workingValues.centerY = clampWithSpace(
+    this.workingValues.centerY = clampCenterOfLength(
       virtualSpaceNewTop - virtualSpaceVisibleHeightDelta * yFocusPercent + this.workingValues.height / 2,
       this.workingValues.height,
       this.bounds?.y,
@@ -166,13 +156,13 @@ export class ViewPortCamera {
 
   public recenter(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
     if (newZoomFactor !== undefined) {
-      this.workingValues.zoomFactor = clampNormally(newZoomFactor, this.actualDerivedZBounds);
+      this.workingValues.zoomFactor = clamp(newZoomFactor, this.actualDerivedZBounds);
       this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
       this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
     }
 
-    this.workingValues.centerX = clampWithSpace(x, this.workingValues.width, this.bounds?.x);
-    this.workingValues.centerY = clampWithSpace(y, this.workingValues.height, this.bounds?.y);
+    this.workingValues.centerX = clampCenterOfLength(x, this.workingValues.width, this.bounds?.x);
+    this.workingValues.centerY = clampCenterOfLength(y, this.workingValues.height, this.bounds?.y);
     this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
     this.workingValues.top = this.workingValues.centerY - this.workingValues.height / 2;
 
@@ -191,7 +181,7 @@ export class ViewPortCamera {
       x: [0, this.workingValues.containerWidth],
       y: [0, this.workingValues.containerHeight],
       // Can't zoom out but you can zoom in
-      z: [1, undefined],
+      zoom: [1, undefined],
     };
     this.dealWithBoundsChange();
   }
@@ -201,7 +191,7 @@ export class ViewPortCamera {
     // the width and height area gets changed and so it can result in a
     // different result
     if (zoomFactor !== undefined) {
-      this.workingValues.zoomFactor = clampNormally(zoomFactor, this.bounds?.z);
+      this.workingValues.zoomFactor = clamp(zoomFactor, this.actualDerivedZBounds);
       this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
       this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
     }
@@ -230,39 +220,39 @@ export class ViewPortCamera {
 
       if (Math.abs(this.animatingVelocityX) > 0 || Math.abs(this.animatingVelocityY) > 0) {
         if (
-          this.animatingVelocityX < 0 &&
+          this.animatingVelocityX > 0 &&
           this.bounds?.x?.[0] !== undefined &&
-          this.workingValues.left - this.animatingVelocityX > this.bounds.x[0]
+          this.workingValues.left - this.animatingVelocityX < this.bounds.x[0]
         ) {
-          this.animatingVelocityX *= -1;
+          this.animatingVelocityX *= 0;
           this.workingValues.centerX = this.bounds.x[0] + this.workingValues.width / 2;
         } else if (
-          this.animatingVelocityX > 0 &&
+          this.animatingVelocityX < 0 &&
           this.bounds?.x?.[1] !== undefined &&
           this.workingValues.left + this.workingValues.width - this.animatingVelocityX > this.bounds.x[1]
         ) {
-          this.animatingVelocityX *= -1;
+          this.animatingVelocityX *= 0;
           this.workingValues.centerX = this.bounds.x[1] - this.workingValues.width / 2;
         } else {
           this.workingValues.centerX -= this.animatingVelocityX;
         }
 
         if (
-          this.animatingVelocityY < 0 &&
-          this.bounds?.y?.[0] !== undefined &&
-          this.workingValues.top - this.animatingVelocityY > this.bounds.y[0]
-        ) {
-          this.animatingVelocityY *= -1;
-          this.workingValues.centerX = this.bounds.y[0] + this.workingValues.height / 2;
-        } else if (
           this.animatingVelocityY > 0 &&
+          this.bounds?.y?.[0] !== undefined &&
+          this.workingValues.top - this.animatingVelocityY < this.bounds.y[0]
+        ) {
+          this.animatingVelocityY *= 0;
+          this.workingValues.centerY = this.bounds.y[0] + this.workingValues.height / 2;
+        } else if (
+          this.animatingVelocityY < 0 &&
           this.bounds?.y?.[1] !== undefined &&
           this.workingValues.top + this.workingValues.height - this.animatingVelocityY > this.bounds.y[1]
         ) {
-          this.animatingVelocityY *= -1;
-          this.workingValues.centerX = this.bounds.y[1] - this.workingValues.height / 2;
+          this.animatingVelocityY *= 0;
+          this.workingValues.centerY = this.bounds.y[1] - this.workingValues.height / 2;
         } else {
-          this.workingValues.centerX -= this.animatingVelocityY;
+          this.workingValues.centerY -= this.animatingVelocityY;
         }
 
         this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
@@ -303,29 +293,37 @@ export class ViewPortCamera {
         ? Math.min(min, this.workingValues.containerHeight / space)
         : this.workingValues.containerHeight / space;
     }
-    if (this.bounds?.z) {
-      if (this.bounds.z[0] !== undefined) {
-        min = min ? Math.min(min, this.bounds.z[0]) : this.bounds.z[0];
+    if (this.bounds?.zoom) {
+      if (this.bounds.zoom[0] !== undefined) {
+        min = min ? Math.min(min, this.bounds.zoom[0]) : this.bounds.zoom[0];
       }
-      if (this.bounds.z[1] !== undefined) {
-        max = this.bounds.z[1];
+      if (this.bounds.zoom[1] !== undefined) {
+        max = this.bounds.zoom[1];
       }
     }
     this.actualDerivedZBounds = min === undefined && max === undefined ? undefined : [min, max];
-
     // Then update zoomFactor is needed
-    this.workingValues.zoomFactor = clampNormally(this.workingValues.zoomFactor, this.actualDerivedZBounds);
+    this.workingValues.zoomFactor = clamp(this.workingValues.zoomFactor, this.actualDerivedZBounds);
     this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
     this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
 
     // And clamp down on the x and y position of the camera
-    this.workingValues.centerX = clampWithSpace(this.workingValues.centerX, this.workingValues.width, this.bounds?.x);
-    this.workingValues.centerY = clampWithSpace(this.workingValues.centerY, this.workingValues.height, this.bounds?.y);
+    this.workingValues.centerX = clampCenterOfLength(
+      this.workingValues.centerX,
+      this.workingValues.width,
+      this.bounds?.x,
+    );
+    this.workingValues.centerY = clampCenterOfLength(
+      this.workingValues.centerY,
+      this.workingValues.height,
+      this.bounds?.y,
+    );
     this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
     this.workingValues.top = this.workingValues.centerY - this.workingValues.height / 2;
 
     this.scheduleHardUpdate();
   }
+
   private scheduleAnimation() {
     this.isAnimating = true;
     if (!this.animationFrameId) {

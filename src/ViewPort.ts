@@ -22,7 +22,7 @@ export interface PressEventCoordinates {
 export interface ViewPortBounds {
   readonly x?: readonly [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined];
   readonly y?: readonly [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined];
-  readonly z?: readonly [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined];
+  readonly zoom?: readonly [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined];
 }
 
 export interface ViewPortOptions {
@@ -249,9 +249,10 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = this.currentDesktopSafariGestureState.startingCenterX - clientBoundingRect.left;
     const pointerContainerY = this.currentDesktopSafariGestureState.startingCenterY - clientBoundingRect.top;
-    const dz = e.scale - this.currentDesktopSafariGestureState.scale;
+    // Divide by 2 so it feels less fast
+    const dZoom = (e.scale - this.currentDesktopSafariGestureState.scale) / 2;
     this.currentDesktopSafariGestureState.scale = e.scale;
-    this.camera.moveByInClientSpace(0, 0, dz, pointerContainerX, pointerContainerY, 'mouse');
+    this.camera.moveByInClientSpace(0, 0, dZoom, pointerContainerX, pointerContainerY);
   };
 
   private handleGestureEndForDesktopSafari = (e: any) => {
@@ -293,7 +294,7 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.camera.moveByInClientSpace(dx, dy, 0, pointerContainerX, pointerContainerY, e.pointerType as any);
+    this.camera.moveByInClientSpace(dx, dy, 0, pointerContainerX, pointerContainerY);
   };
 
   private handleHammerPanEnd = (e: HammerInput) => {
@@ -333,7 +334,8 @@ export class ViewPort {
 
     const dx = e.deltaX - this.currentHammerGestureState.deltaX;
     const dy = e.deltaY - this.currentHammerGestureState.deltaY;
-    const dz = e.scale - (this.currentHammerGestureState.scale || e.scale);
+    // Divide by 2 so it feels less fast
+    const dZoom = (e.scale - (this.currentHammerGestureState.scale || e.scale)) / 2;
 
     this.currentHammerGestureState.deltaX = e.deltaX;
     this.currentHammerGestureState.deltaY = e.deltaY;
@@ -342,7 +344,7 @@ export class ViewPort {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const pointerContainerX = e.center.x - clientBoundingRect.left;
     const pointerContainerY = e.center.y - clientBoundingRect.top;
-    this.camera.moveByInClientSpace(dx, dy, dz, pointerContainerX, pointerContainerY, e.pointerType as any);
+    this.camera.moveByInClientSpace(dx, dy, dZoom, pointerContainerX, pointerContainerY);
   };
 
   private handleHammerPinchEnd = (e: HammerInput) => {
@@ -451,7 +453,12 @@ export class ViewPort {
     const pointerContainerX = e.clientX - clientBoundingRect.left;
     const pointerContainerY = e.clientY - clientBoundingRect.top;
 
+    // This is line number of pixels changed...
+    const dy = e.deltaY * scale;
+    // Adjust it a bit so that it is a delta from zoom
+    const dZoom = (this.containerHeight * this.zoomFactor) / (this.containerHeight + dy * 2) - this.zoomFactor;
+
     // Vertical scroll is doing to be interpreted by us as changing z
-    this.camera.moveByInClientSpace(0, 0, e.deltaY * scale, pointerContainerX, pointerContainerY, 'wheel');
+    this.camera.moveByInClientSpace(0, 0, dZoom, pointerContainerX, pointerContainerY);
   };
 }
