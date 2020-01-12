@@ -283,8 +283,8 @@ export class ViewPort {
       };
     }
 
-    const dx = e.deltaX - this.currentHammerGestureState.deltaX;
-    const dy = e.deltaY - this.currentHammerGestureState.deltaY;
+    const dx = this.currentHammerGestureState.deltaX - e.deltaX;
+    const dy = this.currentHammerGestureState.deltaY - e.deltaY;
     this.currentHammerGestureState.deltaX = e.deltaX;
     this.currentHammerGestureState.deltaY = e.deltaY;
 
@@ -332,8 +332,8 @@ export class ViewPort {
       };
     }
 
-    const dx = e.deltaX - this.currentHammerGestureState.deltaX;
-    const dy = e.deltaY - this.currentHammerGestureState.deltaY;
+    const dx = this.currentHammerGestureState.deltaX - e.deltaX;
+    const dy = this.currentHammerGestureState.deltaY - e.deltaY;
     // Divide by 2 so it feels less fast
     const dZoom = (e.scale - (this.currentHammerGestureState.scale || e.scale)) / 2;
 

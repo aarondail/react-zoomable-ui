@@ -84,8 +84,8 @@ export class ViewPortCamera {
     }
 
     // Basic pan handling
-    const virtualSpaceNewLeft = this.workingValues.left + (-1 * dx) / zoomFactor;
-    const virtualSpaceNewTop = this.workingValues.top + (-1 * dy) / zoomFactor;
+    const virtualSpaceNewLeft = this.workingValues.left + dx / zoomFactor;
+    const virtualSpaceNewTop = this.workingValues.top + dy / zoomFactor;
 
     // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
     const oldVirtualSpaceVisibleSpaceWidth = this.workingValues.containerWidth / this.workingValues.zoomFactor;
