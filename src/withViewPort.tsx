@@ -5,8 +5,7 @@ import { ViewPort } from './ViewPort';
 
 /**
  * This is a simple higher order component that fills in a `viewPort` prop of
- * another component. The resulting component has to be used inside a `Space`
- * or `Provider`.
+ * another component. The resulting component has to be used inside a `Space`.
  */
 export function withViewPort<P extends { readonly viewPort: ViewPort }>(
   WrappedClass: React.ComponentType<P>,

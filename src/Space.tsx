@@ -6,7 +6,7 @@ import { NoPanArea } from './NoPanArea';
 import { Pressable } from './Pressable';
 import { PressHandlingOptions, PressInterpreter } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
-import { browserIsAndroid, generateRandomId } from './utils';
+import { browserIsAndroid, generateRandomId, Writeable } from './utils';
 import { PressEventCoordinates, ViewPort } from './ViewPort';
 
 // tslint:disable-next-line: no-empty-interface
@@ -19,12 +19,13 @@ export interface SpaceProps {
    * Only read during mounting. Subsequent changes have to be done via methods
    * on the view port's `camera` property.
    */
-  readonly boundCameraToContent?: boolean;
+  readonly boundCameraToContainer?: boolean;
   readonly contentDivClassName?: string;
   readonly contentDivStyle?: React.CSSProperties;
   readonly pollForElementResizing?: boolean;
 
   readonly onCreate?: (viewPort: ViewPort) => void;
+  readonly onUpdated?: (viewPort: ViewPort) => void;
 }
 
 interface SpaceState {
@@ -33,6 +34,10 @@ interface SpaceState {
 }
 
 export class Space extends React.PureComponent<SpaceProps, SpaceState> {
+  // This is not really readonly but we want to make it appear that way for code
+  // using this library
+  public readonly viewPort?: ViewPort;
+
   private readonly rootDivUniqueClassName = `react-zoomable-ui-${generateRandomId()}`;
 
   private readonly constantStyleForFullSizeContainer = `
@@ -53,7 +58,6 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   private elementSizeChangePoller: ElementSizeChangePoller;
   private readonly interactableRegistry: Map<string, InteractableComponent>;
   private readonly pressInterpreter: PressInterpreter;
-  private viewPort?: ViewPort;
 
   public constructor(props: SpaceProps) {
     super(props);
@@ -122,7 +126,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   private destroyViewPort = () => {
     if (this.viewPort) {
       this.viewPort.destroy();
-      this.viewPort = undefined;
+      (this as Writeable<Space>).viewPort = undefined;
     }
 
     if (this.containerDivRef) {
@@ -189,7 +193,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     this.containerDivRef = ref;
 
     if (this.containerDivRef) {
-      this.viewPort = new ViewPort(this.containerDivRef, {
+      (this as Writeable<Space>).viewPort = new ViewPort(this.containerDivRef, {
         debugEvents: this.props.debugEvents,
         onPressContextMenu: this.handlePressContextMenu,
         onUpdated: this.handleViewPortUpdated,
@@ -200,8 +204,8 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
         if (!this.viewPort) {
           return;
         }
-        if (this.props.boundCameraToContent) {
-          this.viewPort.camera.setBoundsToContent();
+        if (this.props.boundCameraToContainer) {
+          this.viewPort.camera.setBoundsToContainer();
         }
         this.props.onCreate?.(this.viewPort);
       };
@@ -228,7 +232,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
         rootDivUniqueClassName: this.rootDivUniqueClassName,
         registerInteractable: i => this.interactableRegistry.set(i.id, i),
         unregisterInteractable: i => this.interactableRegistry.delete(i.id),
-        viewPort: this.viewPort,
+        viewPort: this.viewPort!,
       };
       this.setState({
         contextValue,
@@ -253,5 +257,8 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 
   private handleViewPortUpdated = () => {
     this.setState({ transformStyle: this.createTransformStyle() });
+    if (this.viewPort) {
+      this.props.onUpdated?.(this.viewPort);
+    }
   };
 }

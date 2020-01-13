@@ -30,11 +30,27 @@ export class ViewPortCamera {
     this.animatingVelocityX = 0;
     this.animatingVelocityY = 0;
     this.isAnimating = false;
-    this.workingValues = { ...values };
+
+    const { containerWidth, containerHeight, centerX, centerY, left, top, width, height, zoomFactor } = values;
+
+    this.workingValues = {
+      containerWidth,
+      containerHeight,
+      centerX,
+      centerY,
+      left,
+      top,
+      width,
+      height,
+      zoomFactor,
+    };
 
     // Semi-sane default bounds...
     this.bounds = { zoom: [0.001, 100] };
   }
+
+  // tslint:disable-next-line: no-empty
+  public animatedMoveBy(durationMs: number, dx: VirtualSpacePixelUnit, dy: VirtualSpacePixelUnit, dZoom?: ZoomFactor) {}
 
   public centerFitAreaIntoView(
     left: VirtualSpacePixelUnit,
@@ -60,15 +76,33 @@ export class ViewPortCamera {
     }
   }
 
+  public moveBy(
+    dx: VirtualSpacePixelUnit,
+    dy: VirtualSpacePixelUnit,
+    dZoom?: ZoomFactor,
+    anchorContainerX?: VirtualSpacePixelUnit,
+    anchorContainerY?: VirtualSpacePixelUnit,
+  ) {
+    // Translate all the coordinates to client pixels and then let the other
+    // method deal with this...
+    this.moveByInClientSpace(
+      dx * this.workingValues.zoomFactor,
+      dy * this.workingValues.zoomFactor,
+      dZoom,
+      anchorContainerX !== undefined ? anchorContainerX * this.workingValues.zoomFactor : undefined,
+      anchorContainerY !== undefined ? anchorContainerY * this.workingValues.zoomFactor : undefined,
+    );
+  }
+
   public moveByInClientSpace(
     dx: ClientPixelUnit,
     dy: ClientPixelUnit,
-    dZoom: ClientPixelUnit,
-    pointerContainerX: ClientPixelUnit,
-    pointerContainerY: ClientPixelUnit,
+    dZoom?: ZoomFactor,
+    anchorContainerX?: ClientPixelUnit,
+    anchorContainerY?: ClientPixelUnit,
   ) {
     let zoomFactor = this.workingValues.zoomFactor;
-    if (dZoom !== 0) {
+    if (dZoom !== undefined && dZoom !== 0) {
       zoomFactor += dZoom;
       zoomFactor = clamp(zoomFactor, this.actualDerivedZBounds);
     }
@@ -76,6 +110,8 @@ export class ViewPortCamera {
     // Basic pan handling
     const virtualSpaceNewLeft = this.workingValues.left + dx / zoomFactor;
     const virtualSpaceNewTop = this.workingValues.top + dy / zoomFactor;
+
+    // The math below here could probably get cleaned up...
 
     // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
     const oldVirtualSpaceVisibleSpaceWidth = this.workingValues.containerWidth / this.workingValues.zoomFactor;
@@ -89,8 +125,8 @@ export class ViewPortCamera {
 
     // The reason we use x and y here is to zoom in or out towards where the
     // pointer is positioned
-    const xFocusPercent = pointerContainerX / this.workingValues.containerWidth;
-    const yFocusPercent = pointerContainerY / this.workingValues.containerHeight;
+    const xFocusPercent = anchorContainerX === undefined ? 0.5 : anchorContainerX / this.workingValues.containerWidth;
+    const yFocusPercent = anchorContainerY === undefined ? 0.5 : anchorContainerY / this.workingValues.containerHeight;
 
     this.workingValues.centerX = clampCenterOfLength(
       virtualSpaceNewLeft - virtualSpaceVisibleWidthDelta * xFocusPercent + this.workingValues.width / 2,
@@ -108,12 +144,17 @@ export class ViewPortCamera {
     this.scheduleHardUpdate();
   }
 
-  public moveByDecelerationInClientSpace = (vx: ClientPixelUnit, vy: ClientPixelUnit) => {
-    const VELOCITY_BOOST = 20;
-    this.animatingVelocityX += (vx * VELOCITY_BOOST) / this.workingValues.zoomFactor;
-    this.animatingVelocityY += (vy * VELOCITY_BOOST) / this.workingValues.zoomFactor;
+  public moveByDeceleration(vx: VirtualSpacePixelUnit, vy: VirtualSpacePixelUnit) {
+    this.animatingVelocityX += vx;
+    this.animatingVelocityY += vy;
     this.scheduleAnimation();
-  };
+  }
+
+  public moveByDecelerationInClientSpace(vx: ClientPixelUnit, vy: ClientPixelUnit) {
+    this.animatingVelocityX += vx / this.workingValues.zoomFactor;
+    this.animatingVelocityY += vy / this.workingValues.zoomFactor;
+    this.scheduleAnimation();
+  }
 
   /**
    * This is not intended to be called by code outside of react-zoomable-ui itself.
@@ -166,7 +207,7 @@ export class ViewPortCamera {
     this.dealWithBoundsChange();
   }
 
-  public setBoundsToContent() {
+  public setBoundsToContainer() {
     this.bounds = {
       x: [0, this.workingValues.containerWidth],
       y: [0, this.workingValues.containerHeight],
