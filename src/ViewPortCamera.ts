@@ -48,27 +48,16 @@ export class ViewPortCamera {
     this.derivedBounds = { zoom: [0.001, 100] };
   }
 
-  // tslint:disable-next-line: no-empty
-  public animatedMoveBy(durationMs: number, dx: VirtualSpacePixelUnit, dy: VirtualSpacePixelUnit, dZoom?: ZoomFactor) {}
-
   public centerFitAreaIntoView(
-    left: VirtualSpacePixelUnit,
-    top: VirtualSpacePixelUnit,
-    width: VirtualSpacePixelUnit,
-    height: VirtualSpacePixelUnit,
+    area: {
+      readonly left: VirtualSpacePixelUnit;
+      readonly top: VirtualSpacePixelUnit;
+      readonly width: VirtualSpacePixelUnit;
+      readonly height: VirtualSpacePixelUnit;
+    },
     additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
   ): void {
-    ViewPortMath.centerFitArea(
-      this.workingValues,
-      this.derivedBounds,
-      {
-        left,
-        top,
-        width,
-        height,
-      },
-      additionalBounds,
-    );
+    ViewPortMath.centerFitArea(this.workingValues, this.derivedBounds, area, additionalBounds);
     this.scheduleHardUpdate();
   }
 
@@ -83,8 +72,8 @@ export class ViewPortCamera {
     dx: VirtualSpacePixelUnit,
     dy: VirtualSpacePixelUnit,
     dZoom?: ZoomFactor,
-    anchorContainerX?: VirtualSpacePixelUnit,
-    anchorContainerY?: VirtualSpacePixelUnit,
+    anchorContainerX?: ClientPixelUnit,
+    anchorContainerY?: ClientPixelUnit,
   ) {
     ViewPortMath.updateBy(this.workingValues, this.derivedBounds, dx, dy, dZoom, anchorContainerX, anchorContainerY);
     this.scheduleHardUpdate();
@@ -97,11 +86,11 @@ export class ViewPortCamera {
     anchorContainerX?: ClientPixelUnit,
     anchorContainerY?: ClientPixelUnit,
   ) {
-    ViewPortMath.updateByInClientPixels(
+    ViewPortMath.updateBy(
       this.workingValues,
       this.derivedBounds,
-      dx,
-      dy,
+      dx / this.workingValues.zoomFactor,
+      dy / this.workingValues.zoomFactor,
       dZoom,
       anchorContainerX,
       anchorContainerY,
@@ -146,21 +135,20 @@ export class ViewPortCamera {
       this.workingValues.centerY = this.workingValues.height / 2;
     }
 
-    this.derivedBounds = {
-      ...this.derivedBounds,
-      ...ViewPortMath.deriveActualZoomBounds(
-        this.derivedBounds,
-        this.workingValues.containerWidth,
-        this.workingValues.containerHeight,
-      ),
-    };
-
-    ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
-    this.scheduleHardUpdate();
+    // The new container height and width may influence the actual z bounds
+    this.dealWithBoundsChanges();
   }
 
   public recenter(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
-    ViewPortMath.centerOn(this.workingValues, this.derivedBounds, x, y, newZoomFactor);
+    if (newZoomFactor) {
+      ViewPortMath.updateZoom(this.workingValues, this.derivedBounds, newZoomFactor);
+    }
+    ViewPortMath.updateTopLeft(
+      this.workingValues,
+      this.derivedBounds,
+      x - this.workingValues.width / 2,
+      y - this.workingValues.height / 2,
+    );
     this.scheduleHardUpdate();
   }
 
@@ -168,18 +156,9 @@ export class ViewPortCamera {
    * This is not intended to be called by code outside of react-zoomable-ui itself.
    */
   public setBounds(bounds: ViewPortBounds) {
-    this.derivedBounds = {
-      ...bounds,
-      ...ViewPortMath.deriveActualZoomBounds(
-        bounds,
-        this.workingValues.containerWidth,
-        this.workingValues.containerHeight,
-      ),
-    };
+    this.derivedBounds = { ...bounds };
 
-    console.log(this.derivedBounds);
-    ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
-    this.scheduleHardUpdate();
+    this.dealWithBoundsChanges();
   }
 
   public setBoundsToContainer() {
@@ -189,22 +168,25 @@ export class ViewPortCamera {
       // Can't zoom out but you can zoom in
       zoom: [1, undefined],
     };
-    this.derivedBounds = {
-      ...this.derivedBounds,
-      ...ViewPortMath.deriveActualZoomBounds(
-        this.derivedBounds,
-        this.workingValues.containerWidth,
-        this.workingValues.containerHeight,
-      ),
-    };
-    ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
+    this.dealWithBoundsChanges();
+  }
+
+  public updateTopLeft(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
+    if (newZoomFactor) {
+      ViewPortMath.updateZoom(this.workingValues, this.derivedBounds, newZoomFactor);
+    }
+    ViewPortMath.updateTopLeft(this.workingValues, this.derivedBounds, x, y);
     this.scheduleHardUpdate();
   }
 
-  public updateTopLeft(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, zoomFactor?: ZoomFactor): void {
-    ViewPortMath.updateTopLeft(this.workingValues, this.derivedBounds, x, y, zoomFactor);
+  private dealWithBoundsChanges = () => {
+    this.derivedBounds = {
+      ...this.derivedBounds,
+      ...ViewPortMath.deriveActualZoomBounds(this.workingValues, this.derivedBounds),
+    };
+    ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
     this.scheduleHardUpdate();
-  }
+  };
 
   private handleAnimationFrame = (/*time: number*/) => {
     this.animationFrameId = undefined;

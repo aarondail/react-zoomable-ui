@@ -4,9 +4,8 @@ import { ViewPortCameraValues } from './ViewPortCamera';
 
 export const ViewPortMath = {
   deriveActualZoomBounds(
+    { containerWidth, containerHeight }: ViewPortCameraValues,
     bounds: ViewPortBounds,
-    containerWidth: ClientPixelUnit,
-    containerHeight: ClientPixelUnit,
   ): Pick<ViewPortBounds, 'zoom'> {
     let min;
     let max;
@@ -29,26 +28,6 @@ export const ViewPortMath = {
     return { zoom: min === undefined && max === undefined ? undefined : [min, max] };
   },
 
-  // Try to get rid of
-  centerOn(
-    values: ViewPortCameraValues,
-    bounds: ViewPortBounds,
-    x: VirtualSpacePixelUnit,
-    y: VirtualSpacePixelUnit,
-    zoomFactor?: ZoomFactor,
-  ): void {
-    if (zoomFactor !== undefined) {
-      values.zoomFactor = clamp(zoomFactor, bounds.zoom);
-      values.width = values.containerWidth / values.zoomFactor;
-      values.height = values.containerHeight / values.zoomFactor;
-    }
-
-    values.centerX = clampCenterOfLength(x, values.width, bounds.x);
-    values.centerY = clampCenterOfLength(y, values.height, bounds.y);
-    values.left = values.centerX - values.width / 2;
-    values.top = values.centerY - values.height / 2;
-  },
-
   centerFitArea(
     values: ViewPortCameraValues,
     bounds: ViewPortBounds,
@@ -68,7 +47,8 @@ export const ViewPortMath = {
     let newZoomFactor = Math.min(zoomFactorBasedOnWidth, zoomFactorBasedOnHeight);
     newZoomFactor = clamp(newZoomFactor, additionalBounds?.zoom);
     newZoomFactor = clamp(newZoomFactor, bounds.zoom);
-    ViewPortMath.centerOn(values, bounds, cx, cy, newZoomFactor);
+    ViewPortMath.updateZoom(values, bounds, newZoomFactor);
+    ViewPortMath.updateTopLeft(values, bounds, cx - values.width / 2, cy - values.height / 2);
   },
 
   updateBounds(values: ViewPortCameraValues, bounds: ViewPortBounds) {
@@ -100,50 +80,23 @@ export const ViewPortMath = {
     dx: VirtualSpacePixelUnit,
     dy: VirtualSpacePixelUnit,
     dZoom?: ZoomFactor,
-    anchorContainerX?: VirtualSpacePixelUnit,
-    anchorContainerY?: VirtualSpacePixelUnit,
-  ) {
-    // Translate all the coordinates to client pixels and then let the other
-    // method deal with this...
-    ViewPortMath.updateByInClientPixels(
-      values,
-      bounds,
-      dx * values.zoomFactor,
-      dy * values.zoomFactor,
-      dZoom,
-      anchorContainerX !== undefined ? anchorContainerX * values.zoomFactor : undefined,
-      anchorContainerY !== undefined ? anchorContainerY * values.zoomFactor : undefined,
-    );
-  },
-
-  updateByInClientPixels(
-    values: ViewPortCameraValues,
-    bounds: ViewPortBounds,
-    dx: ClientPixelUnit,
-    dy: ClientPixelUnit,
-    dZoom?: ZoomFactor,
     anchorContainerX?: ClientPixelUnit,
     anchorContainerY?: ClientPixelUnit,
   ) {
-    let zoomFactor = values.zoomFactor;
+    // The math in here could probably get cleaned up...
+
+    const oldVirtualSpaceVisibleSpaceWidth = values.containerWidth / values.zoomFactor;
+    const oldVirtualSpaceVisibleSpaceHeight = values.containerHeight / values.zoomFactor;
+
     if (dZoom !== undefined && dZoom !== 0) {
-      zoomFactor += dZoom;
-      zoomFactor = clamp(zoomFactor, bounds.zoom);
+      ViewPortMath.updateZoom(values, bounds, values.zoomFactor + dZoom);
     }
 
     // Basic pan handling
-    const virtualSpaceNewLeft = values.left + dx / zoomFactor;
-    const virtualSpaceNewTop = values.top + dy / zoomFactor;
-
-    // The math below here could probably get cleaned up...
+    const virtualSpaceNewLeft = values.left + dx;
+    const virtualSpaceNewTop = values.top + dy;
 
     // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
-    const oldVirtualSpaceVisibleSpaceWidth = values.containerWidth / values.zoomFactor;
-    const oldVirtualSpaceVisibleSpaceHeight = values.containerHeight / values.zoomFactor;
-    values.width = values.containerWidth / zoomFactor;
-    values.height = values.containerHeight / zoomFactor;
-    values.zoomFactor = zoomFactor;
-
     const virtualSpaceVisibleWidthDelta = values.width - oldVirtualSpaceVisibleSpaceWidth;
     const virtualSpaceVisibleHeightDelta = values.height - oldVirtualSpaceVisibleSpaceHeight;
 
@@ -171,19 +124,18 @@ export const ViewPortMath = {
     bounds: ViewPortBounds,
     x: VirtualSpacePixelUnit,
     y: VirtualSpacePixelUnit,
-    zoomFactor?: ZoomFactor,
   ): void {
-    // This looks deceptively like recenter, but if the zoomFactor is changing
-    // the width and height area gets changed and so it can result in a
-    // different result
+    values.centerX = clampCenterOfLength(x + values.width / 2, values.width, bounds.x);
+    values.centerY = clampCenterOfLength(y + values.height / 2, values.height, bounds.y);
+    values.left = values.centerX - values.width / 2;
+    values.top = values.centerY - values.height / 2;
+  },
+
+  updateZoom(values: ViewPortCameraValues, bounds: ViewPortBounds, zoomFactor: ZoomFactor) {
     if (zoomFactor !== undefined) {
       values.zoomFactor = clamp(zoomFactor, bounds.zoom);
       values.width = values.containerWidth / values.zoomFactor;
       values.height = values.containerHeight / values.zoomFactor;
     }
-    values.centerX = clampCenterOfLength(x + values.width / 2, values.width, bounds.x);
-    values.centerY = clampCenterOfLength(y + values.height / 2, values.height, bounds.y);
-    values.left = values.centerX - values.width / 2;
-    values.top = values.centerY - values.height / 2;
   },
 };
