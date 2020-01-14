@@ -1,5 +1,5 @@
-import { clamp, clampCenterOfLength } from './utils';
 import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, ZoomFactor } from './ViewPort';
+import { ViewPortMath } from './ViewPortMath';
 
 export interface ViewPortCameraValues {
   // tslint:disable: readonly-keyword
@@ -16,8 +16,7 @@ export interface ViewPortCameraValues {
 }
 
 export class ViewPortCamera {
-  private actualDerivedZBounds?: readonly [number | undefined, number | undefined];
-  private bounds: ViewPortBounds;
+  private derivedBounds: ViewPortBounds;
 
   private animationFrameId?: number;
   private animatingVelocityX: VirtualSpacePixelUnit;
@@ -46,7 +45,7 @@ export class ViewPortCamera {
     };
 
     // Semi-sane default bounds...
-    this.bounds = { zoom: [0.001, 100] };
+    this.derivedBounds = { zoom: [0.001, 100] };
   }
 
   // tslint:disable-next-line: no-empty
@@ -59,14 +58,18 @@ export class ViewPortCamera {
     height: VirtualSpacePixelUnit,
     additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
   ): void {
-    const cx = left + width / 2;
-    const cy = top + height / 2;
-    const zoomFactorBasedOnWidth = this.workingValues.containerWidth / width;
-    const zoomFactorBasedOnHeight = this.workingValues.containerHeight / height;
-    let newZoomFactor = Math.min(zoomFactorBasedOnWidth, zoomFactorBasedOnHeight);
-    newZoomFactor = clamp(newZoomFactor, additionalBounds?.zoom);
-    newZoomFactor = clamp(newZoomFactor, this.actualDerivedZBounds);
-    this.recenter(cx, cy, newZoomFactor);
+    ViewPortMath.centerFitArea(
+      this.workingValues,
+      this.derivedBounds,
+      {
+        left,
+        top,
+        width,
+        height,
+      },
+      additionalBounds,
+    );
+    this.scheduleHardUpdate();
   }
 
   public destroy() {
@@ -83,15 +86,8 @@ export class ViewPortCamera {
     anchorContainerX?: VirtualSpacePixelUnit,
     anchorContainerY?: VirtualSpacePixelUnit,
   ) {
-    // Translate all the coordinates to client pixels and then let the other
-    // method deal with this...
-    this.moveByInClientSpace(
-      dx * this.workingValues.zoomFactor,
-      dy * this.workingValues.zoomFactor,
-      dZoom,
-      anchorContainerX !== undefined ? anchorContainerX * this.workingValues.zoomFactor : undefined,
-      anchorContainerY !== undefined ? anchorContainerY * this.workingValues.zoomFactor : undefined,
-    );
+    ViewPortMath.updateBy(this.workingValues, this.derivedBounds, dx, dy, dZoom, anchorContainerX, anchorContainerY);
+    this.scheduleHardUpdate();
   }
 
   public moveByInClientSpace(
@@ -101,46 +97,15 @@ export class ViewPortCamera {
     anchorContainerX?: ClientPixelUnit,
     anchorContainerY?: ClientPixelUnit,
   ) {
-    let zoomFactor = this.workingValues.zoomFactor;
-    if (dZoom !== undefined && dZoom !== 0) {
-      zoomFactor += dZoom;
-      zoomFactor = clamp(zoomFactor, this.actualDerivedZBounds);
-    }
-
-    // Basic pan handling
-    const virtualSpaceNewLeft = this.workingValues.left + dx / zoomFactor;
-    const virtualSpaceNewTop = this.workingValues.top + dy / zoomFactor;
-
-    // The math below here could probably get cleaned up...
-
-    // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
-    const oldVirtualSpaceVisibleSpaceWidth = this.workingValues.containerWidth / this.workingValues.zoomFactor;
-    const oldVirtualSpaceVisibleSpaceHeight = this.workingValues.containerHeight / this.workingValues.zoomFactor;
-    this.workingValues.width = this.workingValues.containerWidth / zoomFactor;
-    this.workingValues.height = this.workingValues.containerHeight / zoomFactor;
-    this.workingValues.zoomFactor = zoomFactor;
-
-    const virtualSpaceVisibleWidthDelta = this.workingValues.width - oldVirtualSpaceVisibleSpaceWidth;
-    const virtualSpaceVisibleHeightDelta = this.workingValues.height - oldVirtualSpaceVisibleSpaceHeight;
-
-    // The reason we use x and y here is to zoom in or out towards where the
-    // pointer is positioned
-    const xFocusPercent = anchorContainerX === undefined ? 0.5 : anchorContainerX / this.workingValues.containerWidth;
-    const yFocusPercent = anchorContainerY === undefined ? 0.5 : anchorContainerY / this.workingValues.containerHeight;
-
-    this.workingValues.centerX = clampCenterOfLength(
-      virtualSpaceNewLeft - virtualSpaceVisibleWidthDelta * xFocusPercent + this.workingValues.width / 2,
-      this.workingValues.width,
-      this.bounds?.x,
+    ViewPortMath.updateByInClientPixels(
+      this.workingValues,
+      this.derivedBounds,
+      dx,
+      dy,
+      dZoom,
+      anchorContainerX,
+      anchorContainerY,
     );
-    this.workingValues.centerY = clampCenterOfLength(
-      virtualSpaceNewTop - virtualSpaceVisibleHeightDelta * yFocusPercent + this.workingValues.height / 2,
-      this.workingValues.height,
-      this.bounds?.y,
-    );
-    this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
-    this.workingValues.top = this.workingValues.centerY - this.workingValues.height / 2;
-
     this.scheduleHardUpdate();
   }
 
@@ -181,64 +146,63 @@ export class ViewPortCamera {
       this.workingValues.centerY = this.workingValues.height / 2;
     }
 
-    // Since the new size may decrease or change the actual derived z bounds...
-    this.dealWithBoundsChange();
+    this.derivedBounds = {
+      ...this.derivedBounds,
+      ...ViewPortMath.deriveActualZoomBounds(
+        this.derivedBounds,
+        this.workingValues.containerWidth,
+        this.workingValues.containerHeight,
+      ),
+    };
+
+    ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
+    this.scheduleHardUpdate();
   }
 
   public recenter(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
-    if (newZoomFactor !== undefined) {
-      this.workingValues.zoomFactor = clamp(newZoomFactor, this.actualDerivedZBounds);
-      this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
-      this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
-    }
-
-    this.workingValues.centerX = clampCenterOfLength(x, this.workingValues.width, this.bounds?.x);
-    this.workingValues.centerY = clampCenterOfLength(y, this.workingValues.height, this.bounds?.y);
-    this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
-    this.workingValues.top = this.workingValues.centerY - this.workingValues.height / 2;
-
+    ViewPortMath.centerOn(this.workingValues, this.derivedBounds, x, y, newZoomFactor);
     this.scheduleHardUpdate();
   }
+
   /**
    * This is not intended to be called by code outside of react-zoomable-ui itself.
    */
-  public setBounds(bounds?: ViewPortBounds) {
-    this.bounds = { ...this.bounds, ...bounds };
-    this.dealWithBoundsChange();
+  public setBounds(bounds: ViewPortBounds) {
+    this.derivedBounds = {
+      ...bounds,
+      ...ViewPortMath.deriveActualZoomBounds(
+        bounds,
+        this.workingValues.containerWidth,
+        this.workingValues.containerHeight,
+      ),
+    };
+
+    console.log(this.derivedBounds);
+    ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
+    this.scheduleHardUpdate();
   }
 
   public setBoundsToContainer() {
-    this.bounds = {
+    this.derivedBounds = {
       x: [0, this.workingValues.containerWidth],
       y: [0, this.workingValues.containerHeight],
       // Can't zoom out but you can zoom in
       zoom: [1, undefined],
     };
-    this.dealWithBoundsChange();
+    this.derivedBounds = {
+      ...this.derivedBounds,
+      ...ViewPortMath.deriveActualZoomBounds(
+        this.derivedBounds,
+        this.workingValues.containerWidth,
+        this.workingValues.containerHeight,
+      ),
+    };
+    ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
+    this.scheduleHardUpdate();
   }
 
   public updateTopLeft(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, zoomFactor?: ZoomFactor): void {
-    // This looks deceptively like recenter, but if the zoomFactor is changing
-    // the width and height area gets changed and so it can result in a
-    // different result
-    if (zoomFactor !== undefined) {
-      this.workingValues.zoomFactor = clamp(zoomFactor, this.actualDerivedZBounds);
-      this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
-      this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
-    }
-    this.workingValues.centerX = clampCenterOfLength(
-      x + this.workingValues.width / 2,
-      this.workingValues.width,
-      this.bounds.x,
-    );
-    this.workingValues.centerY = clampCenterOfLength(
-      y + this.workingValues.height / 2,
-      this.workingValues.height,
-      this.bounds.y,
-    );
-    this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
-    this.workingValues.top = this.workingValues.centerY - this.workingValues.height / 2;
-
+    ViewPortMath.updateTopLeft(this.workingValues, this.derivedBounds, x, y, zoomFactor);
     this.scheduleHardUpdate();
   }
 
@@ -262,36 +226,36 @@ export class ViewPortCamera {
       if (Math.abs(this.animatingVelocityX) > 0 || Math.abs(this.animatingVelocityY) > 0) {
         if (
           this.animatingVelocityX < 0 &&
-          this.bounds?.x?.[0] !== undefined &&
-          this.workingValues.left + this.animatingVelocityX < this.bounds.x[0]
+          this.derivedBounds?.x?.[0] !== undefined &&
+          this.workingValues.left + this.animatingVelocityX < this.derivedBounds.x[0]
         ) {
           this.animatingVelocityX *= 0;
-          this.workingValues.centerX = this.bounds.x[0] + this.workingValues.width / 2;
+          this.workingValues.centerX = this.derivedBounds.x[0] + this.workingValues.width / 2;
         } else if (
           this.animatingVelocityX > 0 &&
-          this.bounds?.x?.[1] !== undefined &&
-          this.workingValues.left + this.workingValues.width + this.animatingVelocityX > this.bounds.x[1]
+          this.derivedBounds?.x?.[1] !== undefined &&
+          this.workingValues.left + this.workingValues.width + this.animatingVelocityX > this.derivedBounds.x[1]
         ) {
           this.animatingVelocityX *= 0;
-          this.workingValues.centerX = this.bounds.x[1] - this.workingValues.width / 2;
+          this.workingValues.centerX = this.derivedBounds.x[1] - this.workingValues.width / 2;
         } else {
           this.workingValues.centerX += this.animatingVelocityX;
         }
 
         if (
           this.animatingVelocityY < 0 &&
-          this.bounds?.y?.[0] !== undefined &&
-          this.workingValues.top + this.animatingVelocityY < this.bounds.y[0]
+          this.derivedBounds?.y?.[0] !== undefined &&
+          this.workingValues.top + this.animatingVelocityY < this.derivedBounds.y[0]
         ) {
           this.animatingVelocityY *= 0;
-          this.workingValues.centerY = this.bounds.y[0] + this.workingValues.height / 2;
+          this.workingValues.centerY = this.derivedBounds.y[0] + this.workingValues.height / 2;
         } else if (
           this.animatingVelocityY > 0 &&
-          this.bounds?.y?.[1] !== undefined &&
-          this.workingValues.top + this.workingValues.height + this.animatingVelocityY > this.bounds.y[1]
+          this.derivedBounds?.y?.[1] !== undefined &&
+          this.workingValues.top + this.workingValues.height + this.animatingVelocityY > this.derivedBounds.y[1]
         ) {
           this.animatingVelocityY *= 0;
-          this.workingValues.centerY = this.bounds.y[1] - this.workingValues.height / 2;
+          this.workingValues.centerY = this.derivedBounds.y[1] - this.workingValues.height / 2;
         } else {
           this.workingValues.centerY += this.animatingVelocityY;
         }
@@ -319,53 +283,6 @@ export class ViewPortCamera {
 
     this.onUpdated?.();
   };
-
-  private dealWithBoundsChange() {
-    // Rederive actualDerivedZBounds first
-    let min;
-    let max;
-    if (this.bounds?.x && this.bounds.x?.[0] !== undefined && this.bounds.x?.[1] !== undefined) {
-      const space: VirtualSpacePixelUnit = this.bounds.x[1] - this.bounds.x[0];
-      min = this.workingValues.containerWidth / space;
-    }
-    if (this.bounds?.y && this.bounds.y?.[0] !== undefined && this.bounds.y?.[1] !== undefined) {
-      const space: VirtualSpacePixelUnit = this.bounds.y[1] - this.bounds.y[0];
-      min = min
-        ? Math.max(min, this.workingValues.containerHeight / space)
-        : this.workingValues.containerHeight / space;
-    }
-    if (this.bounds?.zoom) {
-      if (this.bounds.zoom[0] !== undefined) {
-        min = min ? Math.max(min, this.bounds.zoom[0]) : this.bounds.zoom[0];
-      }
-      if (this.bounds.zoom[1] !== undefined) {
-        max = this.bounds.zoom[1];
-      }
-    }
-    this.actualDerivedZBounds = min === undefined && max === undefined ? undefined : [min, max];
-    // Then update zoomFactor is needed
-    this.workingValues.zoomFactor = clamp(this.workingValues.zoomFactor, this.actualDerivedZBounds);
-    const oldVirtualSpaceVisibleSpaceWidth = this.workingValues.width;
-    const oldVirtualSpaceVisibleSpaceHeight = this.workingValues.height;
-    this.workingValues.width = this.workingValues.containerWidth / this.workingValues.zoomFactor;
-    this.workingValues.height = this.workingValues.containerHeight / this.workingValues.zoomFactor;
-
-    // And clamp down on the x and y position of the camera
-    this.workingValues.centerX = clampCenterOfLength(
-      this.workingValues.centerX + (this.workingValues.width - oldVirtualSpaceVisibleSpaceWidth) / 2,
-      this.workingValues.width,
-      this.bounds?.x,
-    );
-    this.workingValues.centerY = clampCenterOfLength(
-      this.workingValues.centerY + (this.workingValues.height - oldVirtualSpaceVisibleSpaceHeight) / 2,
-      this.workingValues.height,
-      this.bounds?.y,
-    );
-    this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
-    this.workingValues.top = this.workingValues.centerY - this.workingValues.height / 2;
-
-    this.scheduleHardUpdate();
-  }
 
   private scheduleAnimation() {
     this.isAnimating = true;

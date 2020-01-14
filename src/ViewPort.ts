@@ -71,7 +71,7 @@ export class ViewPort {
 
   public readonly camera: ViewPortCamera;
 
-  private containerDiv: HTMLElement;
+  private readonly containerDiv: HTMLElement;
   private currentHammerGestureState?: {
     deltaX: number;
     deltaY: number;
@@ -119,8 +119,8 @@ export class ViewPort {
     this.containerDiv.addEventListener('mousemove', this.handleMouseMove);
     // Doing this on window to catch it if it goes outside the window
     window.addEventListener('mouseup', this.handleMouseUp);
-    this.containerDiv.addEventListener('touchstart', this.handleTouchStart);
-    this.containerDiv.addEventListener('touchmove', this.handleTouchMove);
+    this.containerDiv.addEventListener('touchstart', this.handleTouchStart, { passive: false });
+    this.containerDiv.addEventListener('touchmove', this.handleTouchMove, { passive: false });
     this.containerDiv.addEventListener('touchend', this.handleTouchEnd);
     this.containerDiv.addEventListener('contextmenu', this.handleContextMenu);
 
@@ -132,7 +132,7 @@ export class ViewPort {
     // with any more specific techniques.
     window.addEventListener('resize', this.updateContainerSize);
 
-    this.containerDiv.addEventListener('wheel', this.handleWheel);
+    this.containerDiv.addEventListener('wheel', this.handleWheel, { passive: false });
 
     if (browserIsSafariDesktop) {
       this.containerDiv.addEventListener('gesturestart', this.handleGestureStartForDesktopSafari);
@@ -184,7 +184,7 @@ export class ViewPort {
     this.hammer.destroy();
   }
 
-  public setBounds(bounds?: ViewPortBounds): void {
+  public setBounds(bounds: ViewPortBounds): void {
     this.camera.setBounds(bounds);
   }
 
@@ -194,11 +194,11 @@ export class ViewPort {
    * resizes won't be handled (since there isn't a good way to get notified when
    * the div resizes.
    */
-  public updateContainerSize() {
+  public updateContainerSize = () => {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const { width, height } = clientBoundingRect;
     this.camera.handleContainerSizeChanged(width, height);
-  }
+  };
 
   private getPressCoordinatesFromEvent = (e: MouseEvent | TouchEvent): PressEventCoordinates => {
     let clientX;
@@ -301,11 +301,14 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
-    // Negative one because the direction of the pointer is the opposite of the
-    // direction we are moving the viewport. Multiplying by 20 makes it feel more
-    // normal.
-    this.camera.moveByDecelerationInClientSpace(-1 * e.velocityX * 20, -1 * e.velocityY * 20);
+    if (!this.isCurrentPressBeingHandledAsNonPan) {
+      // Negative one because the direction of the pointer is the opposite of the
+      // direction we are moving the viewport. Multiplying by 20 makes it feel more
+      // normal.
+      this.camera.moveByDecelerationInClientSpace(-1 * e.velocityX * 20, -1 * e.velocityY * 20);
+    }
     this.currentHammerGestureState = undefined;
+    this.isCurrentPressBeingHandledAsNonPan = false;
   };
 
   private handleHammerPanCancel = (e: HammerInput) => {
