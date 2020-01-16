@@ -1,3 +1,5 @@
+import { invariant } from 'ts-invariant';
+import { transitionNumber } from './utils';
 import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, ZoomFactor } from './ViewPort';
 import { ViewPortMath } from './ViewPortMath';
 
@@ -15,10 +17,29 @@ export interface ViewPortCameraValues {
   // tslint:enable: readonly-keyword
 }
 
+export interface ViewPortCameraAnimationOptions {
+  readonly durationMilliseconds: number;
+  readonly preventInterruption?: boolean;
+}
+
+interface ViewPortCameraAnimation {
+  readonly durationMilliseconds: number;
+  readonly preventInterruption?: boolean;
+  //  We can't reliably get the actual starting time when creating the animation
+  //  so we set it later.
+  // tslint:disable-next-line: readonly-keyword
+  startingTimeMilliseconds?: number;
+  readonly startingValues: ViewPortCameraValues;
+  readonly targetValues: ViewPortCameraValues;
+}
+
 export class ViewPortCamera {
   private derivedBounds: ViewPortBounds;
 
   private animationFrameId?: number;
+
+  private newAnimation?: ViewPortCameraAnimation;
+
   private animatingVelocityX: VirtualSpacePixelUnit;
   private animatingVelocityY: VirtualSpacePixelUnit;
   private isAnimating: boolean;
@@ -74,9 +95,27 @@ export class ViewPortCamera {
     dZoom?: ZoomFactor,
     anchorContainerX?: ClientPixelUnit,
     anchorContainerY?: ClientPixelUnit,
+    animationOptions?: ViewPortCameraAnimationOptions,
   ) {
-    ViewPortMath.updateBy(this.workingValues, this.derivedBounds, dx, dy, dZoom, anchorContainerX, anchorContainerY);
-    this.scheduleHardUpdate();
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        return;
+      } else {
+        this.newAnimation = undefined;
+      }
+    }
+
+    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
+    ViewPortMath.updateBy(updateTarget, this.derivedBounds, dx, dy, dZoom, anchorContainerX, anchorContainerY);
+
+    if (!animationOptions) {
+      this.scheduleHardUpdate();
+    } else {
+      console.log('aaaaa' + updateTarget.zoomFactor);
+      // console.log({...this.workingValues});
+      // console.log(updateTarget);
+      this.scheduleNewAnimation(updateTarget, animationOptions);
+    }
   }
 
   public moveByInClientSpace(
@@ -179,7 +218,58 @@ export class ViewPortCamera {
     this.scheduleHardUpdate();
   }
 
+  private applyCurrentAnimation(percent: number) {
+    if (!this.newAnimation) {
+      return;
+    }
+
+    const { targetValues: tv, startingValues: sv } = this.newAnimation;
+    if (percent >= 1) {
+      this.copyValues(tv, this.workingValues);
+    } else {
+      // Simple ease out quartic
+      const z = 1 - percent;
+      const p = 1 - z * z * z * z;
+
+      // The reason we use `updateBy` with deltas is that when changing the zoom
+      // factor, sometimes, like when it is already small, there is some weird
+      // effect the math has where the animation appears to go down and to the
+      // right quite a bit before coming back up and to the left. Totally
+      // bizarre. Not really sure why to be honest, but I think it is due to us
+      // not being able to adjust the anchor position when the zoom changes, and
+      // thus getting the wrong x and y positions.
+      // Anyways, doing small updateBys like this is easier and is similar to
+      // what happens when zooming in and out with the mouse wheel.
+      const dx = transitionNumber(sv.centerX, tv.centerX, p) - this.workingValues.centerX;
+      const dy = transitionNumber(sv.centerY, tv.centerY, p) - this.workingValues.centerY;
+      const dz = transitionNumber(sv.zoomFactor, tv.zoomFactor, p) - this.workingValues.zoomFactor;
+      ViewPortMath.updateBy(this.workingValues, this.derivedBounds, dx, dy, dz);
+    }
+  }
+
+  private copyValues = (values: ViewPortCameraValues, to: ViewPortCameraValues) => {
+    // Its faster to do it this way rather than use Object.assign, though it
+    // probably doesn't matter much.
+    to.centerX = values.centerX;
+    to.centerY = values.centerY;
+    to.containerHeight = values.containerHeight;
+    to.containerWidth = values.containerWidth;
+    to.height = values.height;
+    to.left = values.left;
+    to.width = values.width;
+    to.top = values.top;
+    to.zoomFactor = values.zoomFactor;
+  };
+
   private dealWithBoundsChanges = () => {
+    // We don't know how to deal with this when an animation is in progress so
+    // we either cancel it or run it to completion.
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        this.copyValues(this.newAnimation.targetValues, this.workingValues);
+      }
+      this.newAnimation = undefined;
+    }
     this.derivedBounds = {
       ...this.derivedBounds,
       ...ViewPortMath.deriveActualZoomBounds(this.workingValues, this.derivedBounds),
@@ -188,10 +278,8 @@ export class ViewPortCamera {
     this.scheduleHardUpdate();
   };
 
-  private handleAnimationFrame = (/*time: number*/) => {
+  private handleAnimationFrame = (time: number) => {
     this.animationFrameId = undefined;
-    // var progress = time - (this.priorTimestamp || time);
-    // this.priorTimestamp = time;
     if (this.isAnimating) {
       const FRICTION = 0.84;
       this.animatingVelocityX *= FRICTION;
@@ -204,7 +292,6 @@ export class ViewPortCamera {
       }
 
       // Note we subtract the animation velocity because...
-
       if (Math.abs(this.animatingVelocityX) > 0 || Math.abs(this.animatingVelocityY) > 0) {
         if (
           this.animatingVelocityX < 0 &&
@@ -253,15 +340,23 @@ export class ViewPortCamera {
       }
     }
 
-    this.values.centerX = this.workingValues.centerX;
-    this.values.centerY = this.workingValues.centerY;
-    this.values.containerHeight = this.workingValues.containerHeight;
-    this.values.containerWidth = this.workingValues.containerWidth;
-    this.values.height = this.workingValues.height;
-    this.values.left = this.workingValues.left;
-    this.values.width = this.workingValues.width;
-    this.values.top = this.workingValues.top;
-    this.values.zoomFactor = this.workingValues.zoomFactor;
+    if (this.newAnimation) {
+      if (this.newAnimation.startingTimeMilliseconds === undefined) {
+        this.newAnimation.startingTimeMilliseconds = time - 1000 / 60; // Pretending like we are one frame into the animation
+      }
+      const completionPercent =
+        (time - this.newAnimation.startingTimeMilliseconds) / this.newAnimation.durationMilliseconds;
+      this.applyCurrentAnimation(completionPercent);
+      if (completionPercent < 1) {
+        if (!this.animationFrameId) {
+          this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
+        }
+      } else {
+        this.newAnimation = undefined;
+      }
+    }
+
+    this.copyValues(this.workingValues, this.values);
 
     this.onUpdated?.();
   };
@@ -273,10 +368,31 @@ export class ViewPortCamera {
     }
   }
 
+  private scheduleNewAnimation(targetValues: ViewPortCameraValues, animationOptions: ViewPortCameraAnimationOptions) {
+    invariant(!this.newAnimation, 'Cannot schedule animation while another animation is still in progress.');
+
+    this.newAnimation = {
+      startingValues: { ...this.workingValues },
+      targetValues,
+      // We don't have a good way to get the high-res time that will be passed
+      // to requestAnimationFrame (performance.now() is greater than the next
+      // time we get in requestAnimationFrame for some reason, sometimes). So we
+      // set this to null and deal with it in handleAnimationFrame.
+      startingTimeMilliseconds: undefined,
+      ...animationOptions,
+    };
+    if (!this.animationFrameId) {
+      this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
+    }
+  }
+
   private scheduleHardUpdate() {
     this.isAnimating = false;
     this.animatingVelocityX = 0;
     this.animatingVelocityY = 0;
+    // If there was a pending animation it should have been committed before
+    // this was called (so that the working values could have been updated)
+    this.newAnimation = undefined;
     if (!this.animationFrameId) {
       this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
     }

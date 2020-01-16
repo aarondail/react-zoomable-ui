@@ -140,6 +140,10 @@ export function rectContainsPoint(clientRect: ClientRect, x: number, y: number) 
   return clientRect.left < x && clientRect.right > x && clientRect.top < y && clientRect.bottom > y;
 }
 
+export function transitionNumber(start: number, end: number, percent: number): number {
+  return start + (end - start) * percent;
+}
+
 export function* walkElementHierarchyUp(leafElement: HTMLElement): Iterable<HTMLElement> {
   let e: HTMLElement | null = leafElement;
   while (e) {

@@ -23,7 +23,8 @@
     "tslint": "tslint --project ./tsconfig.tslint.json --fix"
   },
   "dependencies": {
-    "hammerjs": "^2.0.8"
+    "hammerjs": "^2.0.8",
+    "ts-invariant": "^0.4.4"
   },
   "peerDependencies": {
     "react": "^16.0.0"
