@@ -19,12 +19,15 @@ export interface ViewPortCameraValues {
 
 export interface ViewPortCameraAnimationOptions {
   readonly durationMilliseconds: number;
+  /**
+   * Note that if the container size changes or `setBounds` is called, it will
+   * still interrupt the animation. But instead of cancelling it, it will jump
+   * to the end.
+   */
   readonly preventInterruption?: boolean;
 }
 
-interface ViewPortCameraAnimation {
-  readonly durationMilliseconds: number;
-  readonly preventInterruption?: boolean;
+interface ViewPortCameraAnimation extends ViewPortCameraAnimationOptions {
   //  We can't reliably get the actual starting time when creating the animation
   //  so we set it later.
   // tslint:disable-next-line: readonly-keyword
@@ -77,9 +80,24 @@ export class ViewPortCamera {
       readonly height: VirtualSpacePixelUnit;
     },
     additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
+    animationOptions?: ViewPortCameraAnimationOptions,
   ): void {
-    ViewPortMath.centerFitArea(this.workingValues, this.derivedBounds, area, additionalBounds);
-    this.scheduleHardUpdate();
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        return;
+      } else {
+        this.newAnimation = undefined;
+      }
+    }
+
+    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
+    ViewPortMath.centerFitArea(updateTarget, this.derivedBounds, area, additionalBounds);
+
+    if (!animationOptions) {
+      this.scheduleHardUpdate();
+    } else {
+      this.scheduleNewAnimation(updateTarget, animationOptions);
+    }
   }
 
   public destroy() {
@@ -111,9 +129,6 @@ export class ViewPortCamera {
     if (!animationOptions) {
       this.scheduleHardUpdate();
     } else {
-      console.log('aaaaa' + updateTarget.zoomFactor);
-      // console.log({...this.workingValues});
-      // console.log(updateTarget);
       this.scheduleNewAnimation(updateTarget, animationOptions);
     }
   }
@@ -124,9 +139,19 @@ export class ViewPortCamera {
     dZoom?: ZoomFactor,
     anchorContainerX?: ClientPixelUnit,
     anchorContainerY?: ClientPixelUnit,
+    animationOptions?: ViewPortCameraAnimationOptions,
   ) {
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        return;
+      } else {
+        this.newAnimation = undefined;
+      }
+    }
+
+    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
     ViewPortMath.updateBy(
-      this.workingValues,
+      updateTarget,
       this.derivedBounds,
       dx / this.workingValues.zoomFactor,
       dy / this.workingValues.zoomFactor,
@@ -134,7 +159,12 @@ export class ViewPortCamera {
       anchorContainerX,
       anchorContainerY,
     );
-    this.scheduleHardUpdate();
+
+    if (!animationOptions) {
+      this.scheduleHardUpdate();
+    } else {
+      this.scheduleNewAnimation(updateTarget, animationOptions);
+    }
   }
 
   public moveByDeceleration(vx: VirtualSpacePixelUnit, vy: VirtualSpacePixelUnit) {
@@ -155,6 +185,15 @@ export class ViewPortCamera {
   public handleContainerSizeChanged(width: ClientPixelUnit, height: ClientPixelUnit) {
     if (width === this.workingValues.containerWidth && height === this.workingValues.containerHeight) {
       return;
+    }
+
+    // We don't know how to deal with this when an animation is in progress so
+    // we either cancel it or run it to completion.
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        this.copyValues(this.newAnimation.targetValues, this.workingValues);
+      }
+      this.newAnimation = undefined;
     }
 
     // This is intended to handle the case where we first get our container dimensions
@@ -178,29 +217,66 @@ export class ViewPortCamera {
     this.dealWithBoundsChanges();
   }
 
-  public recenter(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
+  public recenter(
+    x: VirtualSpacePixelUnit,
+    y: VirtualSpacePixelUnit,
+    newZoomFactor?: ZoomFactor,
+    animationOptions?: ViewPortCameraAnimationOptions,
+  ): void {
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        return;
+      } else {
+        this.newAnimation = undefined;
+      }
+    }
+
+    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
     if (newZoomFactor) {
-      ViewPortMath.updateZoom(this.workingValues, this.derivedBounds, newZoomFactor);
+      ViewPortMath.updateZoom(updateTarget, this.derivedBounds, newZoomFactor);
     }
     ViewPortMath.updateTopLeft(
-      this.workingValues,
+      updateTarget,
       this.derivedBounds,
-      x - this.workingValues.width / 2,
-      y - this.workingValues.height / 2,
+      x - updateTarget.width / 2,
+      y - updateTarget.height / 2,
     );
-    this.scheduleHardUpdate();
+
+    if (!animationOptions) {
+      this.scheduleHardUpdate();
+    } else {
+      this.scheduleNewAnimation(updateTarget, animationOptions);
+    }
   }
 
   /**
    * This is not intended to be called by code outside of react-zoomable-ui itself.
    */
   public setBounds(bounds: ViewPortBounds) {
+    // We don't know how to deal with this when an animation is in progress so
+    // we either cancel it or run it to completion.
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        this.copyValues(this.newAnimation.targetValues, this.workingValues);
+      }
+      this.newAnimation = undefined;
+    }
+
     this.derivedBounds = { ...bounds };
 
     this.dealWithBoundsChanges();
   }
 
   public setBoundsToContainer() {
+    // We don't know how to deal with this when an animation is in progress so
+    // we either cancel it or run it to completion.
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        this.copyValues(this.newAnimation.targetValues, this.workingValues);
+      }
+      this.newAnimation = undefined;
+    }
+
     this.derivedBounds = {
       x: [0, this.workingValues.containerWidth],
       y: [0, this.workingValues.containerHeight],
@@ -210,12 +286,32 @@ export class ViewPortCamera {
     this.dealWithBoundsChanges();
   }
 
-  public updateTopLeft(x: VirtualSpacePixelUnit, y: VirtualSpacePixelUnit, newZoomFactor?: ZoomFactor): void {
-    if (newZoomFactor) {
-      ViewPortMath.updateZoom(this.workingValues, this.derivedBounds, newZoomFactor);
+  public updateTopLeft(
+    x: VirtualSpacePixelUnit,
+    y: VirtualSpacePixelUnit,
+    newZoomFactor?: ZoomFactor,
+    animationOptions?: ViewPortCameraAnimationOptions,
+  ): void {
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        return;
+      } else {
+        this.newAnimation = undefined;
+      }
     }
-    ViewPortMath.updateTopLeft(this.workingValues, this.derivedBounds, x, y);
-    this.scheduleHardUpdate();
+
+    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
+
+    if (newZoomFactor) {
+      ViewPortMath.updateZoom(updateTarget, this.derivedBounds, newZoomFactor);
+    }
+    ViewPortMath.updateTopLeft(updateTarget, this.derivedBounds, x, y);
+
+    if (!animationOptions) {
+      this.scheduleHardUpdate();
+    } else {
+      this.scheduleNewAnimation(updateTarget, animationOptions);
+    }
   }
 
   private applyCurrentAnimation(percent: number) {
@@ -262,14 +358,6 @@ export class ViewPortCamera {
   };
 
   private dealWithBoundsChanges = () => {
-    // We don't know how to deal with this when an animation is in progress so
-    // we either cancel it or run it to completion.
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        this.copyValues(this.newAnimation.targetValues, this.workingValues);
-      }
-      this.newAnimation = undefined;
-    }
     this.derivedBounds = {
       ...this.derivedBounds,
       ...ViewPortMath.deriveActualZoomBounds(this.workingValues, this.derivedBounds),
