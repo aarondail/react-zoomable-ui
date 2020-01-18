@@ -41,6 +41,13 @@ enum StopAnimationKind {
   INTERRUPT = 'INTERRUPT',
 }
 
+/**
+ * This is the public interface to library users of the Camera. We basically
+ * just want ot hide the `setBounds` method so its only called inside this
+ * library.
+ */
+export type ViewPortCameraInterface = Omit<ViewPortCamera, 'setBounds'>;
+
 export class ViewPortCamera {
   private derivedBounds: ViewPortBounds;
 
@@ -255,7 +262,9 @@ export class ViewPortCamera {
   }
 
   /**
-   * This is not intended to be called by code outside of react-zoomable-ui itself.
+   * This is not intended to be called by code outside of react-zoomable-ui
+   * itself. It is hidden in the `ViewPortCameraInterface` that is exported
+   * from this library.
    */
   public setBounds(bounds: ViewPortBounds) {
     // We don't know how to deal with this when an animation is in progress so

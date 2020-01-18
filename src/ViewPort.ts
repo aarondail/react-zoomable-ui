@@ -1,7 +1,7 @@
 import Hammer from 'hammerjs';
 
 import { browserIsSafariDesktop, isMouseEvent } from './utils';
-import { ViewPortCamera, ViewPortCameraValues } from './ViewPortCamera';
+import { ViewPortCamera, ViewPortCameraInterface, ViewPortCameraValues } from './ViewPortCamera';
 
 // 0,0 as top left of browser window to screenWidth, screenHeight as button right.
 export type ClientPixelUnit = number;
@@ -69,7 +69,7 @@ export class ViewPort {
   public readonly height: VirtualSpacePixelUnit;
   public readonly zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
 
-  public readonly camera: ViewPortCamera;
+  public readonly camera: ViewPortCameraInterface;
 
   private readonly containerDiv: HTMLElement;
   private currentHammerGestureState?: {
@@ -159,6 +159,11 @@ export class ViewPort {
     this.hammer.on('pinchmove', this.handleHammerPinchMove);
     this.hammer.on('pinchend', this.handleHammerPinchEnd);
     this.hammer.on('pinchcancel', this.handleHammerPinchCancel);
+
+    // Bind methods JIC
+    // tslint:disable-next-line: unnecessary-bind
+    this.setBounds = this.setBounds.bind(this);
+    this.updateContainerSize = this.updateContainerSize.bind(this);
   }
 
   public destroy(): void {
@@ -185,7 +190,9 @@ export class ViewPort {
   }
 
   public setBounds(bounds: ViewPortBounds): void {
-    this.camera.setBounds(bounds);
+    // The `camera` is really a `ViewPortCamera`, we just declare the field as
+    // `ViewPortCameraInterface` to hide the `setBounds` method on it.
+    (this.camera as ViewPortCamera).setBounds(bounds);
   }
 
   /**
@@ -194,11 +201,11 @@ export class ViewPort {
    * resizes won't be handled (since there isn't a good way to get notified when
    * the div resizes.
    */
-  public updateContainerSize = () => {
+  public updateContainerSize() {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const { width, height } = clientBoundingRect;
     this.camera.handleContainerSizeChanged(width, height);
-  };
+  }
 
   private getPressCoordinatesFromEvent = (e: MouseEvent | TouchEvent): PressEventCoordinates => {
     let clientX;
