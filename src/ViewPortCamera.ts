@@ -45,20 +45,10 @@ export class ViewPortCamera {
   private derivedBounds: ViewPortBounds;
 
   private animationFrameId?: number;
-
-  private newAnimation?: ViewPortCameraAnimation;
-
-  private animatingVelocityX: VirtualSpacePixelUnit;
-  private animatingVelocityY: VirtualSpacePixelUnit;
-  private isAnimating: boolean;
-
+  private animation?: ViewPortCameraAnimation;
   private workingValues: ViewPortCameraValues;
 
   constructor(private readonly values: ViewPortCameraValues, private readonly onUpdated?: () => void) {
-    this.animatingVelocityX = 0;
-    this.animatingVelocityY = 0;
-    this.isAnimating = false;
-
     const { containerWidth, containerHeight, centerX, centerY, left, top, width, height, zoomFactor } = values;
 
     this.workingValues = {
@@ -97,7 +87,7 @@ export class ViewPortCamera {
     if (!animationOptions) {
       this.scheduleHardUpdate();
     } else {
-      this.scheduleNewAnimation(updateTarget, animationOptions);
+      this.scheduleAnimation(updateTarget, animationOptions);
     }
   }
 
@@ -126,7 +116,7 @@ export class ViewPortCamera {
     if (!animationOptions) {
       this.scheduleHardUpdate();
     } else {
-      this.scheduleNewAnimation(updateTarget, animationOptions);
+      this.scheduleAnimation(updateTarget, animationOptions);
     }
   }
 
@@ -186,7 +176,7 @@ export class ViewPortCamera {
       preventInterruption,
       durationMilliseconds: (1000 / 60) * animationFramesNeeded,
     };
-    this.scheduleNewAnimation(updateTarget, animationOptions);
+    this.scheduleAnimation(updateTarget, animationOptions);
   }
 
   public moveWithDecelerationInClientSpace(
@@ -260,7 +250,7 @@ export class ViewPortCamera {
     if (!animationOptions) {
       this.scheduleHardUpdate();
     } else {
-      this.scheduleNewAnimation(updateTarget, animationOptions);
+      this.scheduleAnimation(updateTarget, animationOptions);
     }
   }
 
@@ -307,16 +297,16 @@ export class ViewPortCamera {
     if (!animationOptions) {
       this.scheduleHardUpdate();
     } else {
-      this.scheduleNewAnimation(updateTarget, animationOptions);
+      this.scheduleAnimation(updateTarget, animationOptions);
     }
   }
 
   private advanceCurrentAnimation(percent: number) {
-    if (!this.newAnimation) {
+    if (!this.animation) {
       return;
     }
 
-    const { targetValues: tv, startingValues: sv } = this.newAnimation;
+    const { targetValues: tv, startingValues: sv } = this.animation;
     if (percent >= 1) {
       this.copyValues(tv, this.workingValues);
     } else {
@@ -365,79 +355,18 @@ export class ViewPortCamera {
 
   private handleAnimationFrame = (time: number) => {
     this.animationFrameId = undefined;
-    if (this.isAnimating) {
-      const FRICTION = 0.84;
-      this.animatingVelocityX *= FRICTION;
-      if (Math.abs(this.animatingVelocityX) < 0.2) {
-        this.animatingVelocityX = 0;
+    if (this.animation) {
+      if (this.animation.startingTimeMilliseconds === undefined) {
+        this.animation.startingTimeMilliseconds = time - 1000 / 60; // Pretending like we are one frame into the animation
       }
-      this.animatingVelocityY *= FRICTION;
-      if (Math.abs(this.animatingVelocityY) < 0.2) {
-        this.animatingVelocityY = 0;
-      }
-
-      // Note we subtract the animation velocity because...
-      if (Math.abs(this.animatingVelocityX) > 0 || Math.abs(this.animatingVelocityY) > 0) {
-        if (
-          this.animatingVelocityX < 0 &&
-          this.derivedBounds?.x?.[0] !== undefined &&
-          this.workingValues.left + this.animatingVelocityX < this.derivedBounds.x[0]
-        ) {
-          this.animatingVelocityX *= 0;
-          this.workingValues.centerX = this.derivedBounds.x[0] + this.workingValues.width / 2;
-        } else if (
-          this.animatingVelocityX > 0 &&
-          this.derivedBounds?.x?.[1] !== undefined &&
-          this.workingValues.left + this.workingValues.width + this.animatingVelocityX > this.derivedBounds.x[1]
-        ) {
-          this.animatingVelocityX *= 0;
-          this.workingValues.centerX = this.derivedBounds.x[1] - this.workingValues.width / 2;
-        } else {
-          this.workingValues.centerX += this.animatingVelocityX;
-        }
-
-        if (
-          this.animatingVelocityY < 0 &&
-          this.derivedBounds?.y?.[0] !== undefined &&
-          this.workingValues.top + this.animatingVelocityY < this.derivedBounds.y[0]
-        ) {
-          this.animatingVelocityY *= 0;
-          this.workingValues.centerY = this.derivedBounds.y[0] + this.workingValues.height / 2;
-        } else if (
-          this.animatingVelocityY > 0 &&
-          this.derivedBounds?.y?.[1] !== undefined &&
-          this.workingValues.top + this.workingValues.height + this.animatingVelocityY > this.derivedBounds.y[1]
-        ) {
-          this.animatingVelocityY *= 0;
-          this.workingValues.centerY = this.derivedBounds.y[1] - this.workingValues.height / 2;
-        } else {
-          this.workingValues.centerY += this.animatingVelocityY;
-        }
-
-        this.workingValues.left = this.workingValues.centerX - this.workingValues.width / 2;
-        this.workingValues.top = this.workingValues.centerY - this.workingValues.height / 2;
-        // Continue animating
-        this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
-      } else {
-        this.animatingVelocityX = 0;
-        this.animatingVelocityY = 0;
-        this.isAnimating = false;
-      }
-    }
-
-    if (this.newAnimation) {
-      if (this.newAnimation.startingTimeMilliseconds === undefined) {
-        this.newAnimation.startingTimeMilliseconds = time - 1000 / 60; // Pretending like we are one frame into the animation
-      }
-      const completionPercent =
-        (time - this.newAnimation.startingTimeMilliseconds) / this.newAnimation.durationMilliseconds;
+      const completionPercent = (time - this.animation.startingTimeMilliseconds) / this.animation.durationMilliseconds;
       this.advanceCurrentAnimation(completionPercent);
       if (completionPercent < 1) {
         if (!this.animationFrameId) {
           this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
         }
       } else {
-        this.newAnimation = undefined;
+        this.animation = undefined;
       }
     }
 
@@ -446,10 +375,10 @@ export class ViewPortCamera {
     this.onUpdated?.();
   };
 
-  private scheduleNewAnimation(targetValues: ViewPortCameraValues, animationOptions: ViewPortCameraAnimationOptions) {
-    invariant(!this.newAnimation, 'Cannot schedule animation while another animation is still in progress.');
+  private scheduleAnimation(targetValues: ViewPortCameraValues, animationOptions: ViewPortCameraAnimationOptions) {
+    invariant(!this.animation, 'Cannot schedule animation while another animation is still in progress.');
 
-    this.newAnimation = {
+    this.animation = {
       startingValues: { ...this.workingValues },
       targetValues,
       // We don't have a good way to get the high-res time that will be passed
@@ -465,27 +394,24 @@ export class ViewPortCamera {
   }
 
   private scheduleHardUpdate() {
-    this.isAnimating = false;
-    this.animatingVelocityX = 0;
-    this.animatingVelocityY = 0;
+    invariant(!this.animation, 'Cannot schedule update while an animation is still in progress.');
     // If there was a pending animation it should have been committed before
     // this was called (so that the working values could have been updated)
-    this.newAnimation = undefined;
     if (!this.animationFrameId) {
       this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
     }
   }
 
   private stopCurrentAnimation(stopKind: StopAnimationKind) {
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
+    if (this.animation) {
+      if (this.animation.preventInterruption) {
         if (stopKind === StopAnimationKind.FORCE) {
-          this.copyValues(this.newAnimation.targetValues, this.workingValues);
+          this.copyValues(this.animation.targetValues, this.workingValues);
         } else {
           return false;
         }
       }
-      this.newAnimation = undefined;
+      this.animation = undefined;
     }
     return true;
   }
