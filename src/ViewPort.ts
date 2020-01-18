@@ -302,10 +302,10 @@ export class ViewPort {
       console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
     if (!this.isCurrentPressBeingHandledAsNonPan) {
-      // Negative one because the direction of the pointer is the opposite of the
-      // direction we are moving the viewport. Multiplying by 20 makes it feel more
-      // normal.
-      this.camera.moveByDecelerationInClientSpace(-1 * e.velocityX * 20, -1 * e.velocityY * 20);
+      // Negative one because the direction of the pointer is the opposite of
+      // the direction we are moving the viewport. Multiplying by 20 makes it
+      // feel more normal.
+      this.camera.moveWithDecelerationInClientSpace(-1 * e.velocityX * 20, -1 * e.velocityY * 20);
     }
     this.currentHammerGestureState = undefined;
     this.isCurrentPressBeingHandledAsNonPan = false;
@@ -357,10 +357,12 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPinchEnd`);
     }
-    // Negative one because the direction of the pointer is the opposite of the
-    // direction we are moving the viewport. Multiplying by 20 makes it feel more
-    // normal.
-    this.camera.moveByDecelerationInClientSpace(-1 * e.velocityX * 20, -1 * e.velocityY * 20);
+    if (!this.isCurrentPressBeingHandledAsNonPan) {
+      // Negative one because the direction of the pointer is the opposite of
+      // the direction we are moving the viewport. Multiplying by 20 makes it
+      // feel more normal.
+      this.camera.moveWithDecelerationInClientSpace(-1 * e.velocityX * 20, -1 * e.velocityY * 20);
+    }
     this.currentHammerGestureState = undefined;
   };
 

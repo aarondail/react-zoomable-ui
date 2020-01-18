@@ -36,6 +36,11 @@ interface ViewPortCameraAnimation extends ViewPortCameraAnimationOptions {
   readonly targetValues: ViewPortCameraValues;
 }
 
+enum StopAnimationKind {
+  FORCE = 'FORCE',
+  INTERRUPT = 'INTERRUPT',
+}
+
 export class ViewPortCamera {
   private derivedBounds: ViewPortBounds;
 
@@ -82,12 +87,8 @@ export class ViewPortCamera {
     additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
     animationOptions?: ViewPortCameraAnimationOptions,
   ): void {
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        return;
-      } else {
-        this.newAnimation = undefined;
-      }
+    if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
+      return;
     }
 
     const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
@@ -115,12 +116,8 @@ export class ViewPortCamera {
     anchorContainerY?: ClientPixelUnit,
     animationOptions?: ViewPortCameraAnimationOptions,
   ) {
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        return;
-      } else {
-        this.newAnimation = undefined;
-      }
+    if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
+      return;
     }
 
     const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
@@ -141,42 +138,69 @@ export class ViewPortCamera {
     anchorContainerY?: ClientPixelUnit,
     animationOptions?: ViewPortCameraAnimationOptions,
   ) {
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        return;
-      } else {
-        this.newAnimation = undefined;
-      }
-    }
-
-    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
-    ViewPortMath.updateBy(
-      updateTarget,
-      this.derivedBounds,
+    this.moveBy(
       dx / this.workingValues.zoomFactor,
       dy / this.workingValues.zoomFactor,
       dZoom,
       anchorContainerX,
       anchorContainerY,
+      animationOptions,
     );
+  }
 
-    if (!animationOptions) {
-      this.scheduleHardUpdate();
-    } else {
-      this.scheduleNewAnimation(updateTarget, animationOptions);
+  public moveWithDeceleration(
+    vx: VirtualSpacePixelUnit,
+    vy: VirtualSpacePixelUnit,
+    friction: VirtualSpacePixelUnit,
+    preventInterruption?: boolean,
+  ) {
+    if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
+      return;
     }
+
+    const finalFriction = Math.min(Math.abs(friction), 0.99);
+    console.log({ vx, vy, friction });
+
+    const updateTarget = { ...this.workingValues };
+
+    // Figure out roughly how many animation frames we need, where we decrease
+    // the velocity by the friction on each frame, to get to 0 velocity. Also
+    // keep track of how far we go.
+    let currentVX = vx;
+    let currentVY = vy;
+    let dx = vx;
+    let dy = vy;
+    let animationFramesNeeded = 1; // Skip the first frame since its trivial
+    while (Math.abs(currentVX) > 0.2 || Math.abs(currentVY) > 0.2) {
+      currentVX *= finalFriction;
+      dx += currentVX;
+      currentVY *= finalFriction;
+      dy += currentVY;
+      animationFramesNeeded++;
+    }
+
+    console.log({ dx, dy });
+    ViewPortMath.updateBy(updateTarget, this.derivedBounds, dx, dy, 0);
+
+    const animationOptions = {
+      preventInterruption,
+      durationMilliseconds: (1000 / 60) * animationFramesNeeded,
+    };
+    this.scheduleNewAnimation(updateTarget, animationOptions);
   }
 
-  public moveByDeceleration(vx: VirtualSpacePixelUnit, vy: VirtualSpacePixelUnit) {
-    this.animatingVelocityX += vx;
-    this.animatingVelocityY += vy;
-    this.scheduleAnimation();
-  }
-
-  public moveByDecelerationInClientSpace(vx: ClientPixelUnit, vy: ClientPixelUnit) {
-    this.animatingVelocityX += vx / this.workingValues.zoomFactor;
-    this.animatingVelocityY += vy / this.workingValues.zoomFactor;
-    this.scheduleAnimation();
+  public moveWithDecelerationInClientSpace(
+    vx: ClientPixelUnit,
+    vy: ClientPixelUnit,
+    friction: ClientPixelUnit = 0.84,
+    preventInterruption?: boolean,
+  ) {
+    this.moveWithDeceleration(
+      vx / this.workingValues.zoomFactor,
+      vy / this.workingValues.zoomFactor,
+      friction,
+      preventInterruption,
+    );
   }
 
   /**
@@ -189,12 +213,7 @@ export class ViewPortCamera {
 
     // We don't know how to deal with this when an animation is in progress so
     // we either cancel it or run it to completion.
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        this.copyValues(this.newAnimation.targetValues, this.workingValues);
-      }
-      this.newAnimation = undefined;
-    }
+    this.stopCurrentAnimation(StopAnimationKind.FORCE);
 
     // This is intended to handle the case where we first get our container dimensions
     const wasZeroWidthHeightCenter =
@@ -223,12 +242,8 @@ export class ViewPortCamera {
     newZoomFactor?: ZoomFactor,
     animationOptions?: ViewPortCameraAnimationOptions,
   ): void {
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        return;
-      } else {
-        this.newAnimation = undefined;
-      }
+    if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
+      return;
     }
 
     const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
@@ -255,28 +270,15 @@ export class ViewPortCamera {
   public setBounds(bounds: ViewPortBounds) {
     // We don't know how to deal with this when an animation is in progress so
     // we either cancel it or run it to completion.
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        this.copyValues(this.newAnimation.targetValues, this.workingValues);
-      }
-      this.newAnimation = undefined;
-    }
-
+    this.stopCurrentAnimation(StopAnimationKind.FORCE);
     this.derivedBounds = { ...bounds };
-
     this.dealWithBoundsChanges();
   }
 
   public setBoundsToContainer() {
     // We don't know how to deal with this when an animation is in progress so
     // we either cancel it or run it to completion.
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        this.copyValues(this.newAnimation.targetValues, this.workingValues);
-      }
-      this.newAnimation = undefined;
-    }
-
+    this.stopCurrentAnimation(StopAnimationKind.FORCE);
     this.derivedBounds = {
       x: [0, this.workingValues.containerWidth],
       y: [0, this.workingValues.containerHeight],
@@ -292,16 +294,11 @@ export class ViewPortCamera {
     newZoomFactor?: ZoomFactor,
     animationOptions?: ViewPortCameraAnimationOptions,
   ): void {
-    if (this.newAnimation) {
-      if (this.newAnimation.preventInterruption) {
-        return;
-      } else {
-        this.newAnimation = undefined;
-      }
+    if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
+      return;
     }
 
     const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
-
     if (newZoomFactor) {
       ViewPortMath.updateZoom(updateTarget, this.derivedBounds, newZoomFactor);
     }
@@ -314,7 +311,7 @@ export class ViewPortCamera {
     }
   }
 
-  private applyCurrentAnimation(percent: number) {
+  private advanceCurrentAnimation(percent: number) {
     if (!this.newAnimation) {
       return;
     }
@@ -434,7 +431,7 @@ export class ViewPortCamera {
       }
       const completionPercent =
         (time - this.newAnimation.startingTimeMilliseconds) / this.newAnimation.durationMilliseconds;
-      this.applyCurrentAnimation(completionPercent);
+      this.advanceCurrentAnimation(completionPercent);
       if (completionPercent < 1) {
         if (!this.animationFrameId) {
           this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
@@ -448,13 +445,6 @@ export class ViewPortCamera {
 
     this.onUpdated?.();
   };
-
-  private scheduleAnimation() {
-    this.isAnimating = true;
-    if (!this.animationFrameId) {
-      this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
-    }
-  }
 
   private scheduleNewAnimation(targetValues: ViewPortCameraValues, animationOptions: ViewPortCameraAnimationOptions) {
     invariant(!this.newAnimation, 'Cannot schedule animation while another animation is still in progress.');
@@ -484,5 +474,19 @@ export class ViewPortCamera {
     if (!this.animationFrameId) {
       this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
     }
+  }
+
+  private stopCurrentAnimation(stopKind: StopAnimationKind) {
+    if (this.newAnimation) {
+      if (this.newAnimation.preventInterruption) {
+        if (stopKind === StopAnimationKind.FORCE) {
+          this.copyValues(this.newAnimation.targetValues, this.workingValues);
+        } else {
+          return false;
+        }
+      }
+      this.newAnimation = undefined;
+    }
+    return true;
   }
 }
