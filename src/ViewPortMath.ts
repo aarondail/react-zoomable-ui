@@ -6,6 +6,7 @@ export const ViewPortMath = {
   deriveActualZoomBounds(
     { containerWidth, containerHeight }: ViewPortCameraValues,
     bounds: ViewPortBounds,
+    defaultZoomBounds: readonly [number, number],
   ): Pick<ViewPortBounds, 'zoom'> {
     let min;
     let max;
@@ -25,7 +26,14 @@ export const ViewPortMath = {
         max = bounds.zoom[1];
       }
     }
-    return { zoom: min === undefined && max === undefined ? undefined : [min, max] };
+    if (min === undefined) {
+      if (max === undefined) {
+        return { zoom: defaultZoomBounds };
+      }
+      return { zoom: [defaultZoomBounds[0], max] };
+    } else {
+      return { zoom: [min, max ?? defaultZoomBounds[1]] };
+    }
   },
 
   centerFitArea(

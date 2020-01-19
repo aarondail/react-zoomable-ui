@@ -3,6 +3,8 @@ import { transitionNumber } from './utils';
 import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, ZoomFactor } from './ViewPort';
 import { ViewPortMath } from './ViewPortMath';
 
+const DEFAULT_BOUNDS: readonly [number, number] = [0.001, 100];
+
 export interface ViewPortCameraValues {
   // tslint:disable: readonly-keyword
   containerWidth: ClientPixelUnit;
@@ -71,7 +73,7 @@ export class ViewPortCamera {
     };
 
     // Semi-sane default bounds...
-    this.derivedBounds = { zoom: [0.001, 100] };
+    this.derivedBounds = { zoom: DEFAULT_BOUNDS };
   }
 
   public centerFitAreaIntoView(
@@ -353,7 +355,7 @@ export class ViewPortCamera {
   private dealWithBoundsChanges = () => {
     this.derivedBounds = {
       ...this.derivedBounds,
-      ...ViewPortMath.deriveActualZoomBounds(this.workingValues, this.derivedBounds),
+      ...ViewPortMath.deriveActualZoomBounds(this.workingValues, this.derivedBounds, DEFAULT_BOUNDS),
     };
     ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
     this.scheduleHardUpdate();

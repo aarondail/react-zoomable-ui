@@ -462,6 +462,9 @@ export class ViewPort {
   };
 
   private handleWheel = (e: WheelEvent) => {
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleWheel`);
+    }
     e.preventDefault();
     let scale = 1;
     switch (e.deltaMode) {
@@ -476,10 +479,8 @@ export class ViewPort {
     const pointerContainerX = e.clientX - clientBoundingRect.left;
     const pointerContainerY = e.clientY - clientBoundingRect.top;
 
-    // This is line number of pixels changed...
     const dy = e.deltaY * scale;
-    // Adjust it a bit so that it is a delta from zoom
-    const dZoom = (this.containerHeight * this.zoomFactor) / (this.containerHeight + dy * 2) - this.zoomFactor;
+    const dZoom = ((-1 * dy) / this.containerHeight) * this.zoomFactor;
 
     // Vertical scroll is doing to be interpreted by us as changing z
     this.camera.moveByInClientSpace(0, 0, dZoom, pointerContainerX, pointerContainerY);
