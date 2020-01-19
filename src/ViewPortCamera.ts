@@ -156,8 +156,6 @@ export class ViewPortCamera {
     }
 
     const finalFriction = Math.min(Math.abs(friction), 0.99);
-    console.log({ vx, vy, friction });
-
     const updateTarget = { ...this.workingValues };
 
     // Figure out roughly how many animation frames we need, where we decrease
@@ -176,7 +174,6 @@ export class ViewPortCamera {
       animationFramesNeeded++;
     }
 
-    console.log({ dx, dy });
     ViewPortMath.updateBy(updateTarget, this.derivedBounds, dx, dy, 0);
 
     const animationOptions = {

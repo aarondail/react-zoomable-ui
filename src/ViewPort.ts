@@ -42,7 +42,7 @@ export interface ViewPortOptions {
    * motion.
    */
   readonly onPressCancel?: (e: MouseEvent | TouchEvent) => void;
-  // readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
+  readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
   readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
 }
 
@@ -102,6 +102,11 @@ export class ViewPort {
     this.containerHeight = 0;
     this.isCurrentPressBeingHandledAsNonPan = false;
 
+    // Bind methods JIC
+    // tslint:disable-next-line: unnecessary-bind
+    this.setBounds = this.setBounds.bind(this);
+    this.updateContainerSize = this.updateContainerSize.bind(this);
+
     // Set the div's styles
     this.containerDiv.style.overflow = 'hidden';
     this.containerDiv.style.padding = '0';
@@ -159,11 +164,6 @@ export class ViewPort {
     this.hammer.on('pinchmove', this.handleHammerPinchMove);
     this.hammer.on('pinchend', this.handleHammerPinchEnd);
     this.hammer.on('pinchcancel', this.handleHammerPinchCancel);
-
-    // Bind methods JIC
-    // tslint:disable-next-line: unnecessary-bind
-    this.setBounds = this.setBounds.bind(this);
-    this.updateContainerSize = this.updateContainerSize.bind(this);
   }
 
   public destroy(): void {
@@ -396,10 +396,14 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleMouseMove (isCurrentPressCaptured: ${this.isCurrentPressBeingHandledAsNonPan})`);
     }
-    if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressMove) {
-      if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
-        this.isCurrentPressBeingHandledAsNonPan = false;
+    if (this.isCurrentPressBeingHandledAsNonPan) {
+      if (this.options?.onPressMove) {
+        if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
+          this.isCurrentPressBeingHandledAsNonPan = false;
+        }
       }
+    } else if (e.buttons === 0) {
+      this.options?.onHover?.(e, this.getPressCoordinatesFromEvent(e));
     }
   };
 

@@ -4,7 +4,7 @@ import { ElementSizeChangePoller } from './ElementSizeChangePoller';
 import { getInteractableIdMostApplicableToElement, InteractableComponent } from './Interactable';
 import { NoPanArea } from './NoPanArea';
 import { Pressable } from './Pressable';
-import { PressHandlingOptions, PressInterpreter } from './PressInterpreter';
+import { DecidePressHandlingCallback, PressHandlingOptions, PressInterpreter } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { browserIsAndroid, generateRandomId, Writeable } from './utils';
 import { PressEventCoordinates, ViewPort } from './ViewPort';
@@ -26,6 +26,10 @@ export interface SpaceProps {
 
   readonly onCreate?: (viewPort: ViewPort) => void;
   readonly onUpdated?: (viewPort: ViewPort) => void;
+
+  readonly onDecideHowToHandlePress?: DecidePressHandlingCallback;
+  readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
+  readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
 }
 
 interface SpaceState {
@@ -165,6 +169,13 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
   ): PressHandlingOptions | undefined => {
+    if (this.props.onDecideHowToHandlePress) {
+      const result = this.props.onDecideHowToHandlePress(e, coordinates);
+      if (result) {
+        return result;
+      }
+    }
+
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
@@ -195,6 +206,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     if (this.containerDivRef) {
       (this as Writeable<Space>).viewPort = new ViewPort(this.containerDivRef, {
         debugEvents: this.props.debugEvents,
+        onHover: this.handleHover,
         onPressContextMenu: this.handlePressContextMenu,
         onUpdated: this.handleViewPortUpdated,
         ...this.pressInterpreter.pressHandlers,
@@ -241,7 +253,18 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     }
   };
 
+  private handleHover = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    if (this.props.onHover) {
+      this.props.onHover(e, coordinates);
+    }
+  };
+
   private handlePressContextMenu = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    if (this.props.onPressContextMenu) {
+      this.props.onPressContextMenu(e, coordinates);
+      e.preventDefault();
+    }
+
     // We have to prevent default this in a few cases on Android because it can
     // interfere w/ panning
     if (browserIsAndroid) {

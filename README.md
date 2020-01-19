@@ -1,4 +1,4 @@
-## ZOOMABLE UI
+# ZOOMABLE UI
 
 Components:
 
@@ -7,7 +7,33 @@ Components:
 - The elements can trigger a press, drag on the area, or long-press and become draggable.
 - Draggable and droppable objects
 
-## Notes that need to be added to somewhere later to understand
+# FEATURES
+
+- Take any React component or HTML elements and make them zoomable and panable. Mouse and touch supported.
+- Special consideration for HTML elements like buttons and links that shouldn't be panned.
+- Define the boundary of the zoomable space.
+- Progomatically set or animate the visible part of the zoomable space (i.e. zoom in, pan to the right, etc)
+- Create a zoomable or pannable area that is much larger than the physical screen space.
+- WOrks full screen or not.
+- ALlows customization of interation events, like press, and hover and right lcick
+- Special pressable components that can be used for more complicated interactions than regular HTML elements (e.g. long press, or press but turn into pan if there is horizontal/vertical movement)
+- Building blocks for building drag and drop
+- React is optional
+
+Demos now:
+/ (incomplete) General demo
+/ ^^ (html and links)
+
+- Boundary x 2
+- Camera control
+- Full screen vs. Not
+
+* Events
+  / Press events
+* Drag and drop
+* React optional
+
+# Notes that need to be added to somewhere later to understand
 
 ## Cavets
 
