@@ -1,5 +1,5 @@
 export * from './NoPanArea';
-export * from './Pressable';
+export { Pressable, PressableProps } from './Pressable';
 export * from './PressInterpreter';
 export * from './Space';
 export * from './SpaceContext';

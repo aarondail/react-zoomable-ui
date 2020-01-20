@@ -1,38 +1,42 @@
 import * as React from 'react';
 
 import { InteractableIdAttributeName } from './Interactable';
-import { PressHandlingOptions } from './PressInterpreter';
+import { PressEventCoordinatesWithDeltas, PressHandlingOptions } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { generateRandomId } from './utils';
+import { PressEventCoordinates } from './ViewPort';
 
 const DEFAULT_LONG_TAP_THRESHOLD_MS: number = 500;
+
+export const PRESSABLE_CSS_CLASS_NAME = `react-zoomable-ui-pressable`;
 
 export interface PressableProps {
   readonly className?: string;
   readonly potentialTapClassName?: string;
   readonly potentialLongTapClassName?: string;
-  // readonly capturePanClassName?: string;
+  readonly capturePanClassName?: string;
   // readonly disabledClassName?: string;
   readonly style?: React.CSSProperties;
   readonly potentialTapStyle?: React.CSSProperties;
   readonly potentialLongTapStyle?: React.CSSProperties;
-  // readonly capturePanStyle?: React.CSSProperties;
+  readonly capturePanStyle?: React.CSSProperties;
   // readonly disabledStyle?: React.CSSProperties;
 
   // readonly disabled?: boolean;
-  // readonly capturePanOn?: undefined | 'press' | 'longPress';
+  readonly capturePanOn?: undefined | 'press' | 'longPress';
   readonly longTapThresholdMs?: number;
 
   readonly onTap?: () => void;
   readonly onLongTap?: () => void;
-  // readonly onCapturePanStart?: () => void;
-  // readonly onCapturePanMove?: () => void;
-  // readonly onCapturePanEnd?: () => void;
+  readonly onCapturePanStart?: (coordinates: PressEventCoordinates) => void;
+  readonly onCapturePanMove?: (coordinates: PressEventCoordinatesWithDeltas) => void;
+  readonly onCapturePanEnd?: (coordinates: PressEventCoordinatesWithDeltas) => void;
+  readonly onCapturePanCancelled?: () => void;
   // readonly onPressContextMenu?: () => void;
 }
 
 interface PressableState {
-  readonly interactionState: undefined | 'POTENTIAL_TAP' | 'POTENTIAL_LONG_TAP'; // | 'CAPTURED';
+  readonly interactionState: undefined | 'POTENTIAL_TAP' | 'POTENTIAL_LONG_TAP' | 'CAPTURED';
 }
 
 export class Pressable extends React.PureComponent<PressableProps, PressableState> {
@@ -41,7 +45,7 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
   public readonly id = generateRandomId();
   public readonly state: PressableState = { interactionState: undefined };
 
-  private divRef: React.RefObject<HTMLDivElement> = React.createRef();
+  public readonly divRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   public componentDidMount() {
     this.context.registerInteractable(this);
@@ -61,27 +65,41 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
       onPotentialLongTap: this.handlePotentialLongTap,
       onLongTap: this.handleLongTap,
       onTapAbandoned: this.handleTapAbandoned,
+      capturePressThresholdMs:
+        this.props.capturePanOn === 'press'
+          ? 0
+          : this.props.capturePanOn === 'longPress'
+          ? this.props.longTapThresholdMs ?? DEFAULT_LONG_TAP_THRESHOLD_MS
+          : undefined,
+      onCapturePressStart: this.handleCapturePressStart,
+      onCapturePressMove: this.handleCapturePressMove,
+      onCapturePressEnd: this.handleCapturePressEnd,
+      onCapturePressCancelled: this.handleCapturePressCancelled,
     };
   }
 
   public render() {
     const {
       className,
-      potentialTapClassName: pressClassName,
-      potentialLongTapClassName: longPressClassName,
-      // capturePanClassName,
+      potentialTapClassName,
+      potentialLongTapClassName,
+      capturePanClassName,
       // disabledClassName,
       style,
       potentialTapStyle: pressStyle,
       potentialLongTapStyle: longPressStyle,
-      // capturePanStyle,
+      capturePanStyle,
       // disabledStyle,
 
       // disabled,
-      // capturePanOn,
+      capturePanOn,
       longTapThresholdMs,
       onTap,
       onLongTap,
+      onCapturePanStart,
+      onCapturePanMove,
+      onCapturePanEnd,
+      onCapturePanCancelled,
       ...divProps
     } = this.props;
     return (
@@ -99,7 +117,7 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
 
   private determineClassName = () => {
     const { className } = this.props;
-    let result = `react-zoomable-ui-pressable`;
+    let result = PRESSABLE_CSS_CLASS_NAME;
     if (className) {
       result += ' ';
       result += className;
@@ -115,6 +133,11 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
         result += ' ';
         result += this.props.potentialLongTapClassName;
       }
+    } else if (this.state.interactionState === 'CAPTURED') {
+      if (this.props.capturePanClassName) {
+        result += ' ';
+        result += this.props.capturePanClassName;
+      }
     }
     return result;
   };
@@ -129,8 +152,31 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
       if (this.props.potentialLongTapStyle) {
         return { ...(style || {}), ...this.props.potentialLongTapStyle };
       }
+    } else if (this.state.interactionState === 'CAPTURED') {
+      if (this.props.capturePanStyle) {
+        return { ...(style || {}), ...this.props.capturePanStyle };
+      }
     }
     return style;
+  };
+
+  private handleCapturePressStart = (coordinates: PressEventCoordinates) => {
+    this.setState({ interactionState: 'CAPTURED' });
+    this.props.onCapturePanStart?.(coordinates);
+  };
+
+  private handleCapturePressMove = (coordinates: PressEventCoordinatesWithDeltas) => {
+    this.props.onCapturePanMove?.(coordinates);
+  };
+
+  private handleCapturePressEnd = (coordinates: PressEventCoordinatesWithDeltas) => {
+    this.setState({ interactionState: undefined });
+    this.props.onCapturePanEnd?.(coordinates);
+  };
+
+  private handleCapturePressCancelled = () => {
+    this.setState({ interactionState: undefined });
+    this.props.onCapturePanCancelled?.();
   };
 
   private handleTapAbandoned = () => {

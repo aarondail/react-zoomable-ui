@@ -195,6 +195,36 @@ export class ViewPort {
     (this.camera as ViewPortCamera).setBounds(bounds);
   }
 
+  public translateClientXYCoordinatesToVirtualSpace(
+    x: ClientPixelUnit,
+    y: ClientPixelUnit,
+  ): { readonly x: VirtualSpacePixelUnit; readonly y: VirtualSpacePixelUnit } {
+    return {
+      x: x / this.zoomFactor + this.left,
+      y: y / this.zoomFactor + this.top,
+    };
+  }
+
+  public translateClientRectToVirtualSpace(
+    rect: ClientRect,
+  ): {
+    readonly bottom: VirtualSpacePixelUnit;
+    readonly height: VirtualSpacePixelUnit;
+    readonly left: VirtualSpacePixelUnit;
+    readonly right: VirtualSpacePixelUnit;
+    readonly top: VirtualSpacePixelUnit;
+    readonly width: VirtualSpacePixelUnit;
+  } {
+    return {
+      bottom: rect.bottom / this.zoomFactor + this.top,
+      height: rect.height / this.zoomFactor,
+      left: rect.left / this.zoomFactor + this.left,
+      right: rect.right / this.zoomFactor + this.left,
+      top: rect.top / this.zoomFactor + this.top,
+      width: rect.width / this.zoomFactor,
+    };
+  }
+
   /**
    * This should be used when the container div is resized.  By default resizes due
    * to the window itself resizing will be automatically handled, but any other
@@ -217,8 +247,8 @@ export class ViewPort {
       clientX = e.changedTouches[0].clientX;
       clientY = e.changedTouches[0].clientY;
     }
-    const x = clientX * this.zoomFactor + this.left;
-    const y = clientY * this.zoomFactor + this.top;
+    const x = clientX / this.zoomFactor + this.left;
+    const y = clientY / this.zoomFactor + this.top;
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const containerX = clientX - clientBoundingRect.left;
     const containerY = clientY - clientBoundingRect.top;
