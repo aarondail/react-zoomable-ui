@@ -83,7 +83,7 @@ export class ViewPort {
     scale: ZoomFactor;
   };
   private hammer: HammerManager;
-  private isCurrentPressBeingHandledAsNonPan: boolean;
+  private inNonPanMode: boolean;
   private options?: ViewPortOptions;
 
   constructor(containerDiv: HTMLDivElement, options?: ViewPortOptions) {
@@ -100,7 +100,7 @@ export class ViewPort {
     this.zoomFactor = 1;
     this.containerWidth = 0;
     this.containerHeight = 0;
-    this.isCurrentPressBeingHandledAsNonPan = false;
+    this.inNonPanMode = false;
 
     // Bind methods JIC
     // tslint:disable-next-line: unnecessary-bind
@@ -325,7 +325,7 @@ export class ViewPort {
     this.currentHammerGestureState.deltaX = e.deltaX;
     this.currentHammerGestureState.deltaY = e.deltaY;
 
-    if (this.isCurrentPressBeingHandledAsNonPan) {
+    if (this.inNonPanMode) {
       return;
     }
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
@@ -338,14 +338,13 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
-    if (!this.isCurrentPressBeingHandledAsNonPan) {
+    if (!this.inNonPanMode) {
       // Negative one because the direction of the pointer is the opposite of
       // the direction we are moving the viewport. Multiplying by 20 makes it
       // feel more normal.
       this.camera.moveWithDecelerationInClientSpace(-1 * e.velocityX * 20, -1 * e.velocityY * 20);
     }
     this.currentHammerGestureState = undefined;
-    this.isCurrentPressBeingHandledAsNonPan = false;
   };
 
   private handleHammerPanCancel = (e: HammerInput) => {
@@ -394,7 +393,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPinchEnd`);
     }
-    if (!this.isCurrentPressBeingHandledAsNonPan) {
+    if (!this.inNonPanMode) {
       // Negative one because the direction of the pointer is the opposite of
       // the direction we are moving the viewport. Multiplying by 20 makes it
       // feel more normal.
@@ -418,18 +417,18 @@ export class ViewPort {
     if (e.buttons !== 1) {
       return;
     }
-    this.isCurrentPressBeingHandledAsNonPan =
-      this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
+
+    this.inNonPanMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
   };
 
   private handleMouseMove = (e: MouseEvent) => {
     if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleMouseMove (isCurrentPressCaptured: ${this.isCurrentPressBeingHandledAsNonPan})`);
+      console.log(`ViewPort:handleMouseMove (isCurrentPressCaptured: ${this.inNonPanMode})`);
     }
-    if (this.isCurrentPressBeingHandledAsNonPan) {
+    if (this.inNonPanMode) {
       if (this.options?.onPressMove) {
         if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
-          this.isCurrentPressBeingHandledAsNonPan = false;
+          this.inNonPanMode = false;
         }
       }
     } else if (e.buttons === 0) {
@@ -441,24 +440,23 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleMouseUp`);
     }
-    if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressEnd) {
+    if (this.inNonPanMode && this.options?.onPressEnd) {
       this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
     }
-    this.isCurrentPressBeingHandledAsNonPan = false;
   };
 
   private handleTouchStart = (e: TouchEvent) => {
     if (e.touches.length !== 1) {
-      if (this.isCurrentPressBeingHandledAsNonPan) {
-        this.isCurrentPressBeingHandledAsNonPan = false;
+      if (this.inNonPanMode) {
+        this.inNonPanMode = false;
         this.options?.onPressCancel?.(e);
         return;
       }
     }
 
-    this.isCurrentPressBeingHandledAsNonPan =
-      this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
-    if (this.isCurrentPressBeingHandledAsNonPan) {
+    this.inNonPanMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
+
+    if (this.inNonPanMode) {
       e.preventDefault();
     }
   };
@@ -468,9 +466,9 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchMove`);
     }
     if (e.touches.length === 1) {
-      if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressMove) {
+      if (this.inNonPanMode && this.options?.onPressMove) {
         if (this.options?.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
-          this.isCurrentPressBeingHandledAsNonPan = false;
+          this.inNonPanMode = false;
         }
       }
     }
@@ -481,12 +479,8 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchEnd`);
     }
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
-      if (this.isCurrentPressBeingHandledAsNonPan && this.options?.onPressEnd) {
+      if (this.inNonPanMode && this.options?.onPressEnd) {
         this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
-      }
-
-      if (this.isCurrentPressBeingHandledAsNonPan) {
-        this.isCurrentPressBeingHandledAsNonPan = false;
       }
     }
   };
