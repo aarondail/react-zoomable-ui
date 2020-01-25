@@ -93,7 +93,7 @@ export class PressInterpreter {
   private handlePressStart = (
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
-  ): 'CAPTURE' | undefined => {
+  ): 'CAPTURE' | 'IGNORE' | undefined => {
     if (this.options?.debugEvents) {
       console.log(`PressInterpreter:handlePressStart`);
     }
@@ -106,6 +106,11 @@ export class PressInterpreter {
       this.currentPressStartingCoordinates = coordinates;
       this.currentPressLastCoordinates = coordinates;
       this.currentPressLongPressThresholdMet = false;
+
+      if (this.currentConfig.ignorePressEntirely) {
+        return 'IGNORE';
+      }
+
       if (this.currentConfig.capturePressThresholdMs === 0) {
         this.currentConfig.onCapturePressStart?.(coordinates);
         this.currentPressCapturedForHandler = true;

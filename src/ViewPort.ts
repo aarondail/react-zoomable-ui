@@ -39,7 +39,10 @@ export interface ViewPortOptions {
 
   readonly onUpdated?: () => void;
 
-  readonly onPressStart?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'CAPTURE' | undefined;
+  readonly onPressStart?: (
+    e: MouseEvent | TouchEvent,
+    coordinates: PressEventCoordinates,
+  ) => 'CAPTURE' | 'IGNORE' | undefined;
   readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'RELEASE' | undefined;
   readonly onPressEnd?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => void;
   /**
@@ -92,8 +95,8 @@ export class ViewPort {
     scale: ZoomFactor;
   };
   private hammer: HammerManager;
-  private inNonPanMode: boolean;
   private options?: ViewPortOptions;
+  private inNonPanPressHandlingMode: undefined | 'CAPTURE' | 'IGNORE';
 
   constructor(containerDiv: HTMLDivElement, options?: ViewPortOptions) {
     this.containerDiv = containerDiv;
@@ -109,7 +112,7 @@ export class ViewPort {
     this.zoomFactor = 1;
     this.containerWidth = 0;
     this.containerHeight = 0;
-    this.inNonPanMode = false;
+    this.inNonPanPressHandlingMode = undefined;
 
     // Bind methods JIC
     // tslint:disable-next-line: unnecessary-bind
@@ -333,7 +336,7 @@ export class ViewPort {
     this.currentHammerGestureState.deltaX = e.deltaX;
     this.currentHammerGestureState.deltaY = e.deltaY;
 
-    if (this.inNonPanMode) {
+    if (this.inNonPanPressHandlingMode) {
       return;
     }
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
@@ -346,7 +349,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
-    if (!this.inNonPanMode) {
+    if (!this.inNonPanPressHandlingMode) {
       // Negative one because the direction of the pointer is the opposite of
       // the direction we are moving the viewport. Multiplying by 20 makes it
       // feel more normal.
@@ -401,7 +404,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPinchEnd`);
     }
-    if (!this.inNonPanMode) {
+    if (!this.inNonPanPressHandlingMode) {
       // Negative one because the direction of the pointer is the opposite of
       // the direction we are moving the viewport. Multiplying by 20 makes it
       // feel more normal.
@@ -426,17 +429,24 @@ export class ViewPort {
       return;
     }
 
-    this.inNonPanMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
+    this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
+    if (this.inNonPanPressHandlingMode !== 'IGNORE') {
+      // If we aren't in non pan press handling mode or we are, but are
+      // capturing the press, then prevent the browser (specifically Safari)
+      // from interpreting any mouse movement as a text selection (in addition
+      // to a pan).
+      e.preventDefault();
+    }
   };
 
   private handleMouseMove = (e: MouseEvent) => {
     if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleMouseMove (isCurrentPressCaptured: ${this.inNonPanMode})`);
+      console.log(`ViewPort:handleMouseMove (inNonPanPressHandlingMode: ${this.inNonPanPressHandlingMode})`);
     }
-    if (this.inNonPanMode) {
+    if (this.inNonPanPressHandlingMode === 'CAPTURE') {
       if (this.options?.onPressMove) {
         if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
-          this.inNonPanMode = false;
+          this.inNonPanPressHandlingMode = undefined;
         }
       }
     } else if (e.buttons === 0) {
@@ -448,23 +458,26 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleMouseUp`);
     }
-    if (this.inNonPanMode && this.options?.onPressEnd) {
+    if (this.inNonPanPressHandlingMode === 'CAPTURE' && this.options?.onPressEnd) {
       this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
     }
   };
 
   private handleTouchStart = (e: TouchEvent) => {
     if (e.touches.length !== 1) {
-      if (this.inNonPanMode) {
-        this.inNonPanMode = false;
+      if (this.inNonPanPressHandlingMode) {
+        this.inNonPanPressHandlingMode = undefined;
         this.options?.onPressCancel?.(e);
         return;
       }
     }
 
-    this.inNonPanMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e)) === 'CAPTURE';
+    this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
 
-    if (this.inNonPanMode) {
+    if (this.inNonPanPressHandlingMode !== 'IGNORE') {
+      // If we aren't in non pan press handling mode or we are, but are
+      // capturing the press, then prevent the browser from handling the touch
+      // gesture.
       e.preventDefault();
     }
   };
@@ -474,9 +487,9 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchMove`);
     }
     if (e.touches.length === 1) {
-      if (this.inNonPanMode && this.options?.onPressMove) {
+      if (this.inNonPanPressHandlingMode === 'CAPTURE' && this.options?.onPressMove) {
         if (this.options?.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
-          this.inNonPanMode = false;
+          this.inNonPanPressHandlingMode = undefined;
         }
       }
     }
@@ -487,7 +500,7 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchEnd`);
     }
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
-      if (this.inNonPanMode && this.options?.onPressEnd) {
+      if (this.inNonPanPressHandlingMode === 'CAPTURE' && this.options?.onPressEnd) {
         this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
       }
     }
