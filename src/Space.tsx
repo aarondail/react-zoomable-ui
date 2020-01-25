@@ -64,6 +64,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 `;
 
   private containerDivRef?: HTMLDivElement;
+  private currentHoveredPressable?: Pressable;
   private elementSizeChangePoller: ElementSizeChangePoller;
   private readonly interactableRegistry: Map<string, InteractableComponent>;
   private readonly pressInterpreter: PressInterpreter;
@@ -186,7 +187,6 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 
     if (e.type === 'mousedown') {
       const elementTagName = ((e.target && (e.target as any).tagName) || '').toLowerCase();
-      // TODO -->
       if (elementTagName === 'a' || elementTagName === 'button') {
         // Prevent dragging on these elements A. the browsers may interpret the
         // drag end as a click on it and B. desktop Safari (possibly others) has
@@ -259,27 +259,48 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   };
 
   private handleHover = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
+    const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
+    if (interactable && interactable instanceof Pressable && interactable.isInterestedInHover()) {
+      if (interactable !== this.currentHoveredPressable) {
+        this.currentHoveredPressable = interactable;
+        this.currentHoveredPressable.hoverStart();
+      }
+    } else if (this.currentHoveredPressable) {
+      this.currentHoveredPressable.hoverStop();
+      this.currentHoveredPressable = undefined;
+    }
+
     if (this.props.onHover) {
       this.props.onHover(e, coordinates);
     }
   };
 
   private handlePressContextMenu = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
+    const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
+
+    if (interactable && interactable instanceof Pressable && interactable.props.onPressContextMenu) {
+      interactable.props.onPressContextMenu(coordinates);
+      e.preventDefault();
+      return;
+    }
+
     if (this.props.onPressContextMenu) {
       this.props.onPressContextMenu(e, coordinates);
       e.preventDefault();
+      return;
     }
 
     // We have to prevent default this in a few cases on Android because it can
     // interfere w/ panning
     if (browserIsAndroid) {
-      const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
-      const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
       if (interactable && interactable instanceof NoPanArea) {
         // Don't do anything
       } else {
         e.preventDefault();
       }
+      return;
     }
   };
 

@@ -461,6 +461,7 @@ export class ViewPort {
     if (this.inNonPanPressHandlingMode === 'CAPTURE' && this.options?.onPressEnd) {
       this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
     }
+    this.inNonPanPressHandlingMode = undefined;
   };
 
   private handleTouchStart = (e: TouchEvent) => {

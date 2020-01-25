@@ -15,14 +15,16 @@ export interface PressableProps {
   readonly potentialTapClassName?: string;
   readonly potentialLongTapClassName?: string;
   readonly capturePanClassName?: string;
-  // readonly disabledClassName?: string;
+  readonly disabledClassName?: string;
+  readonly hoverClassName?: string;
   readonly style?: React.CSSProperties;
   readonly potentialTapStyle?: React.CSSProperties;
   readonly potentialLongTapStyle?: React.CSSProperties;
   readonly capturePanStyle?: React.CSSProperties;
-  // readonly disabledStyle?: React.CSSProperties;
+  readonly disabledStyle?: React.CSSProperties;
+  readonly hoverStyle?: React.CSSProperties;
 
-  // readonly disabled?: boolean;
+  readonly disabled?: boolean;
   readonly capturePanOn?: undefined | 'press' | 'longPress';
   readonly longTapThresholdMs?: number;
 
@@ -39,21 +41,25 @@ export interface PressableProps {
     pressableUnderlyingElement: HTMLElement,
   ) => void;
   readonly onCapturePanCancelled?: (pressableUnderlyingElement: HTMLElement) => void;
-  // readonly onPressContextMenu?: () => void;
+  /**
+   * Note this is actually called in an event handler in `Space`.
+   */
+  readonly onPressContextMenu?: (coordinates: PressEventCoordinates) => void;
 }
 
 interface PressableState {
   readonly interactionState: undefined | 'POTENTIAL_TAP' | 'POTENTIAL_LONG_TAP' | 'CAPTURED';
+  readonly hoverState: undefined | 'HOVER';
 }
 
 export class Pressable extends React.PureComponent<PressableProps, PressableState> {
   public static contextType = SpaceContext;
   public readonly context!: SpaceContextType;
+  public readonly divRef: React.RefObject<HTMLDivElement> = React.createRef();
   public readonly id = generateRandomId();
-  public readonly state: PressableState = { interactionState: undefined };
+  public readonly state: PressableState = { interactionState: undefined, hoverState: undefined };
 
   private panStartingCoordinates?: PressEventCoordinates;
-  private readonly divRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   public componentDidMount() {
     this.context.registerInteractable(this);
@@ -63,7 +69,11 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
     this.context.unregisterInteractable(this);
   }
 
-  public getPressHandlingConfig(): PressHandlingOptions {
+  public getPressHandlingConfig(): PressHandlingOptions | undefined {
+    if (this.props.disabled) {
+      return undefined;
+    }
+
     return {
       onPotentialTap: this.handlePotentialTap,
       onTap: this.handleTap,
@@ -86,33 +96,21 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
     };
   }
 
-  public render() {
-    const {
-      className,
-      potentialTapClassName,
-      potentialLongTapClassName,
-      capturePanClassName,
-      // disabledClassName,
-      style,
-      potentialTapStyle: pressStyle,
-      potentialLongTapStyle: longPressStyle,
-      capturePanStyle,
-      // disabledStyle,
+  public hoverStart() {
+    this.setState({ hoverState: 'HOVER' });
+  }
 
-      // disabled,
-      capturePanOn,
-      longTapThresholdMs,
-      onTap,
-      onLongTap,
-      onCapturePanStart,
-      onCapturePanMove,
-      onCapturePanEnd,
-      onCapturePanCancelled,
-      ...divProps
-    } = this.props;
+  public hoverStop() {
+    this.setState({ hoverState: undefined });
+  }
+
+  public isInterestedInHover() {
+    return this.props.hoverClassName || this.props.hoverStyle;
+  }
+
+  public render() {
     return (
       <div
-        {...divProps}
         {...{ [InteractableIdAttributeName]: this.id }}
         ref={this.divRef}
         className={this.determineClassName()}
@@ -131,7 +129,12 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
       result += className;
     }
 
-    if (this.state.interactionState === 'POTENTIAL_TAP') {
+    if (this.props.disabled) {
+      if (this.props.disabledClassName) {
+        result += ' ';
+        result += this.props.disabledClassName;
+      }
+    } else if (this.state.interactionState === 'POTENTIAL_TAP') {
       if (this.props.potentialTapClassName) {
         result += ' ';
         result += this.props.potentialTapClassName;
@@ -146,13 +149,22 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
         result += ' ';
         result += this.props.capturePanClassName;
       }
+    } else if (this.state.hoverState === 'HOVER') {
+      if (this.props.hoverClassName) {
+        result += ' ';
+        result += this.props.hoverClassName;
+      }
     }
     return result;
   };
 
   private determineStyle = () => {
     const { style } = this.props;
-    if (this.state.interactionState === 'POTENTIAL_TAP') {
+    if (this.props.disabled) {
+      if (this.props.disabledStyle) {
+        return { ...(style || {}), ...this.props.disabledStyle };
+      }
+    } else if (this.state.interactionState === 'POTENTIAL_TAP') {
       if (this.props.potentialTapStyle) {
         return { ...(style || {}), ...this.props.potentialTapStyle };
       }
@@ -163,6 +175,10 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
     } else if (this.state.interactionState === 'CAPTURED') {
       if (this.props.capturePanStyle) {
         return { ...(style || {}), ...this.props.capturePanStyle };
+      }
+    } else if (this.state.hoverState === 'HOVER') {
+      if (this.props.hoverStyle) {
+        return { ...(style || {}), ...this.props.hoverStyle };
       }
     }
     return style;
