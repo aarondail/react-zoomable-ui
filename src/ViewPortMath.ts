@@ -59,6 +59,22 @@ export const ViewPortMath = {
     ViewPortMath.updateTopLeft(values, bounds, cx - values.width / 2, cy - values.height / 2);
   },
 
+  centerFitHorizontalArea(
+    values: ViewPortCameraValues,
+    bounds: ViewPortBounds,
+    left: VirtualSpacePixelUnit,
+    width: VirtualSpacePixelUnit,
+    additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
+  ): void {
+    const centerX = left + width / 2;
+    let newZoomFactor = values.containerWidth / width;
+    newZoomFactor = clamp(newZoomFactor, additionalBounds?.zoom);
+    newZoomFactor = clamp(newZoomFactor, bounds.zoom);
+
+    ViewPortMath.updateTopLeft(values, bounds, centerX - values.width / newZoomFactor / 2, values.top);
+    ViewPortMath.updateZoom(values, bounds, newZoomFactor);
+  },
+
   updateBounds(values: ViewPortCameraValues, bounds: ViewPortBounds) {
     values.zoomFactor = clamp(values.zoomFactor, bounds.zoom);
     const oldVirtualSpaceVisibleSpaceWidth = values.width;

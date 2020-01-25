@@ -100,6 +100,26 @@ export class ViewPortCamera {
     }
   }
 
+  public centerFitHorizontalAreaIntoView(
+    left: VirtualSpacePixelUnit,
+    width: VirtualSpacePixelUnit,
+    additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
+    animationOptions?: ViewPortCameraAnimationOptions,
+  ): void {
+    if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
+      return;
+    }
+
+    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
+    ViewPortMath.centerFitHorizontalArea(updateTarget, this.derivedBounds, left, width, additionalBounds);
+
+    if (!animationOptions) {
+      this.scheduleHardUpdate();
+    } else {
+      this.scheduleAnimation(updateTarget, animationOptions);
+    }
+  }
+
   public destroy() {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
