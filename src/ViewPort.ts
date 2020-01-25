@@ -10,6 +10,15 @@ export type VirtualSpacePixelUnit = number;
 // 2 means 2x zoomed in, 0.5 means 2x zoomed out.
 export type ZoomFactor = number;
 
+export interface VirtualSpaceRect {
+  readonly bottom: VirtualSpacePixelUnit;
+  readonly height: VirtualSpacePixelUnit;
+  readonly left: VirtualSpacePixelUnit;
+  readonly right: VirtualSpacePixelUnit;
+  readonly top: VirtualSpacePixelUnit;
+  readonly width: VirtualSpacePixelUnit;
+}
+
 export interface PressEventCoordinates {
   readonly clientX: ClientPixelUnit;
   readonly clientY: ClientPixelUnit;
@@ -106,6 +115,8 @@ export class ViewPort {
     // tslint:disable-next-line: unnecessary-bind
     this.setBounds = this.setBounds.bind(this);
     this.updateContainerSize = this.updateContainerSize.bind(this);
+    this.translateClientXYCoordinatesToVirtualSpace = this.translateClientXYCoordinatesToVirtualSpace.bind(this);
+    this.translateClientRectToVirtualSpace = this.translateClientRectToVirtualSpace.bind(this);
 
     // Set the div's styles
     this.containerDiv.style.overflow = 'hidden';
@@ -205,24 +216,21 @@ export class ViewPort {
     };
   }
 
-  public translateClientRectToVirtualSpace(
-    rect: ClientRect,
-  ): {
-    readonly bottom: VirtualSpacePixelUnit;
-    readonly height: VirtualSpacePixelUnit;
-    readonly left: VirtualSpacePixelUnit;
-    readonly right: VirtualSpacePixelUnit;
-    readonly top: VirtualSpacePixelUnit;
-    readonly width: VirtualSpacePixelUnit;
-  } {
-    return {
-      bottom: rect.bottom / this.zoomFactor + this.top,
-      height: rect.height / this.zoomFactor,
-      left: rect.left / this.zoomFactor + this.left,
-      right: rect.right / this.zoomFactor + this.left,
-      top: rect.top / this.zoomFactor + this.top,
-      width: rect.width / this.zoomFactor,
-    };
+  public translateClientRectToVirtualSpace(rectOrElement: ClientRect | HTMLElement): VirtualSpaceRect {
+    if (!(rectOrElement as any).getBoundingClientRect) {
+      const rect = rectOrElement as ClientRect;
+      return {
+        bottom: rect.bottom / this.zoomFactor + this.top,
+        height: rect.height / this.zoomFactor,
+        left: rect.left / this.zoomFactor + this.left,
+        right: rect.right / this.zoomFactor + this.left,
+        top: rect.top / this.zoomFactor + this.top,
+        width: rect.width / this.zoomFactor,
+      };
+    } else {
+      const element = rectOrElement as HTMLElement;
+      return this.translateClientRectToVirtualSpace(element.getBoundingClientRect());
+    }
   }
 
   /**

@@ -28,10 +28,17 @@ export interface PressableProps {
 
   readonly onTap?: () => void;
   readonly onLongTap?: () => void;
-  readonly onCapturePanStart?: (coordinates: PressEventCoordinates) => void;
-  readonly onCapturePanMove?: (coordinates: PressEventCoordinatesWithDeltas) => void;
-  readonly onCapturePanEnd?: (coordinates: PressEventCoordinatesWithDeltas) => void;
-  readonly onCapturePanCancelled?: () => void;
+  readonly onCapturePanStart?: (coordinates: PressEventCoordinates, pressableUnderlyingElement: HTMLElement) => void;
+  readonly onCapturePanMove?: (
+    coordinates: PressEventCoordinatesWithDeltas,
+    pressableUnderlyingElement: HTMLElement,
+    startingCoordinates: PressEventCoordinates,
+  ) => void;
+  readonly onCapturePanEnd?: (
+    coordinates: PressEventCoordinatesWithDeltas,
+    pressableUnderlyingElement: HTMLElement,
+  ) => void;
+  readonly onCapturePanCancelled?: (pressableUnderlyingElement: HTMLElement) => void;
   // readonly onPressContextMenu?: () => void;
 }
 
@@ -45,7 +52,8 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
   public readonly id = generateRandomId();
   public readonly state: PressableState = { interactionState: undefined };
 
-  public readonly divRef: React.RefObject<HTMLDivElement> = React.createRef();
+  private panStartingCoordinates?: PressEventCoordinates;
+  private readonly divRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   public componentDidMount() {
     this.context.registerInteractable(this);
@@ -162,21 +170,32 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
 
   private handleCapturePressStart = (coordinates: PressEventCoordinates) => {
     this.setState({ interactionState: 'CAPTURED' });
-    this.props.onCapturePanStart?.(coordinates);
+    this.panStartingCoordinates = coordinates;
+    if (this.divRef.current) {
+      this.props.onCapturePanStart?.(coordinates, this.divRef.current);
+    }
   };
 
   private handleCapturePressMove = (coordinates: PressEventCoordinatesWithDeltas) => {
-    this.props.onCapturePanMove?.(coordinates);
+    if (this.divRef.current && this.panStartingCoordinates) {
+      this.props.onCapturePanMove?.(coordinates, this.divRef.current, this.panStartingCoordinates);
+    }
   };
 
   private handleCapturePressEnd = (coordinates: PressEventCoordinatesWithDeltas) => {
     this.setState({ interactionState: undefined });
-    this.props.onCapturePanEnd?.(coordinates);
+    this.panStartingCoordinates = undefined;
+    if (this.divRef.current) {
+      this.props.onCapturePanEnd?.(coordinates, this.divRef.current);
+    }
   };
 
   private handleCapturePressCancelled = () => {
     this.setState({ interactionState: undefined });
-    this.props.onCapturePanCancelled?.();
+    this.panStartingCoordinates = undefined;
+    if (this.divRef.current) {
+      this.props.onCapturePanCancelled?.(this.divRef.current);
+    }
   };
 
   private handleTapAbandoned = () => {
