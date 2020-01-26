@@ -42,8 +42,8 @@ export interface ViewPortOptions {
   readonly onPressStart?: (
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
-  ) => 'CAPTURE' | 'IGNORE' | undefined;
-  readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'RELEASE' | undefined;
+  ) => 'capture' | 'ignore' | undefined;
+  readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'release' | undefined;
   readonly onPressEnd?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => void;
   /**
    * After a press starts there are some cases where it can be canceled rather
@@ -96,7 +96,7 @@ export class ViewPort {
   };
   private hammer: HammerManager;
   private options?: ViewPortOptions;
-  private inNonPanPressHandlingMode: undefined | 'CAPTURE' | 'IGNORE';
+  private inNonPanPressHandlingMode: undefined | 'capture' | 'ignore';
 
   constructor(containerDiv: HTMLDivElement, options?: ViewPortOptions) {
     this.containerDiv = containerDiv;
@@ -244,6 +244,7 @@ export class ViewPort {
    */
   public updateContainerSize() {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
+    console.log(clientBoundingRect);
     const { width, height } = clientBoundingRect;
     this.camera.handleContainerSizeChanged(width, height);
   }
@@ -430,7 +431,7 @@ export class ViewPort {
     }
 
     this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
-    if (this.inNonPanPressHandlingMode !== 'IGNORE') {
+    if (this.inNonPanPressHandlingMode !== 'ignore') {
       // If we aren't in non pan press handling mode or we are, but are
       // capturing the press, then prevent the browser (specifically Safari)
       // from interpreting any mouse movement as a text selection (in addition
@@ -443,9 +444,9 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleMouseMove (inNonPanPressHandlingMode: ${this.inNonPanPressHandlingMode})`);
     }
-    if (this.inNonPanPressHandlingMode === 'CAPTURE') {
+    if (this.inNonPanPressHandlingMode === 'capture') {
       if (this.options?.onPressMove) {
-        if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
+        if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'release') {
           this.inNonPanPressHandlingMode = undefined;
         }
       }
@@ -458,7 +459,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleMouseUp`);
     }
-    if (this.inNonPanPressHandlingMode === 'CAPTURE' && this.options?.onPressEnd) {
+    if (this.inNonPanPressHandlingMode === 'capture' && this.options?.onPressEnd) {
       this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
     }
     this.inNonPanPressHandlingMode = undefined;
@@ -475,7 +476,7 @@ export class ViewPort {
 
     this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
 
-    if (this.inNonPanPressHandlingMode !== 'IGNORE') {
+    if (this.inNonPanPressHandlingMode !== 'ignore') {
       // If we aren't in non pan press handling mode or we are, but are
       // capturing the press, then prevent the browser from handling the touch
       // gesture.
@@ -488,8 +489,8 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchMove`);
     }
     if (e.touches.length === 1) {
-      if (this.inNonPanPressHandlingMode === 'CAPTURE' && this.options?.onPressMove) {
-        if (this.options?.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'RELEASE') {
+      if (this.inNonPanPressHandlingMode === 'capture' && this.options?.onPressMove) {
+        if (this.options?.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'release') {
           this.inNonPanPressHandlingMode = undefined;
         }
       }
@@ -501,7 +502,7 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchEnd`);
     }
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
-      if (this.inNonPanPressHandlingMode === 'CAPTURE' && this.options?.onPressEnd) {
+      if (this.inNonPanPressHandlingMode === 'capture' && this.options?.onPressEnd) {
         this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
       }
     }

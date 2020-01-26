@@ -93,7 +93,7 @@ export class PressInterpreter {
   private handlePressStart = (
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
-  ): 'CAPTURE' | 'IGNORE' | undefined => {
+  ): 'capture' | 'ignore' | undefined => {
     if (this.options?.debugEvents) {
       console.log(`PressInterpreter:handlePressStart`);
     }
@@ -108,7 +108,7 @@ export class PressInterpreter {
       this.currentPressLongPressThresholdMet = false;
 
       if (this.currentConfig.ignorePressEntirely) {
-        return 'IGNORE';
+        return 'ignore';
       }
 
       if (this.currentConfig.capturePressThresholdMs === 0) {
@@ -128,12 +128,12 @@ export class PressInterpreter {
           this.longPressTimerId = setTimeout(this.handleLongPressThresholdMet, this.currentConfig.longTapThresholdMs);
         }
       }
-      return 'CAPTURE';
+      return 'capture';
     }
     return undefined;
   };
 
-  private handlePressMove = (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates): 'RELEASE' | undefined => {
+  private handlePressMove = (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates): 'release' | undefined => {
     if (this.options?.debugEvents) {
       console.log(`PressInterpreter:handlePressMove`);
     }
@@ -169,7 +169,7 @@ export class PressInterpreter {
     if (xDelta > maxDeltaAllowed || yDelta > maxDeltaAllowed) {
       this.currentConfig.onTapAbandoned?.();
       this.reset();
-      return 'RELEASE';
+      return 'release';
     }
 
     return undefined;

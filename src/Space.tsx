@@ -15,11 +15,6 @@ export interface SpaceProps {
   readonly debugEvents?: boolean;
   readonly style?: React.CSSProperties;
   readonly sizeContainerToContent?: boolean;
-  /**
-   * Only read during mounting. Subsequent changes have to be done via methods
-   * on the view port's `camera` property.
-   */
-  readonly boundCameraToContainer?: boolean;
   readonly contentDivClassName?: string;
   readonly contentDivStyle?: React.CSSProperties;
   readonly pollForElementResizing?: boolean;
@@ -54,7 +49,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 .${this.rootDivUniqueClassName} > .react-zoomable-ui-content-div {
   margin: 0; padding: 0; 
   transform-origin: 0% 0%;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
 }
 
@@ -221,9 +216,6 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
         if (!this.viewPort) {
           return;
         }
-        if (this.props.boundCameraToContainer) {
-          this.viewPort.camera.setBoundsToContainer();
-        }
         this.props.onCreate?.(this.viewPort);
       };
 
@@ -261,13 +253,13 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   private handleHover = (e: MouseEvent, coordinates: PressEventCoordinates) => {
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
-    if (interactable && interactable instanceof Pressable && interactable.isInterestedInHover()) {
+    if (interactable && interactable instanceof Pressable) {
       if (interactable !== this.currentHoveredPressable) {
         this.currentHoveredPressable = interactable;
-        this.currentHoveredPressable.hoverStart();
+        this.currentHoveredPressable.setHovered(true);
       }
     } else if (this.currentHoveredPressable) {
-      this.currentHoveredPressable.hoverStop();
+      this.currentHoveredPressable.setHovered(false);
       this.currentHoveredPressable = undefined;
     }
 
