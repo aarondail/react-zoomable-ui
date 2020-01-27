@@ -244,7 +244,6 @@ export class ViewPort {
    */
   public updateContainerSize() {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
-    console.log(clientBoundingRect);
     const { width, height } = clientBoundingRect;
     this.camera.handleContainerSizeChanged(width, height);
   }

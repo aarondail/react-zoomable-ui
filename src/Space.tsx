@@ -11,6 +11,7 @@ import { PressEventCoordinates, ViewPort } from './ViewPort';
 
 // tslint:disable-next-line: no-empty-interface
 export interface SpaceProps {
+  readonly id?: string;
   readonly className?: string;
   readonly debugEvents?: boolean;
   readonly style?: React.CSSProperties;
@@ -51,6 +52,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   transform-origin: 0% 0%;
   min-height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 .${this.rootDivUniqueClassName} .${PRESSABLE_CSS_CLASS_NAME} {
@@ -93,6 +95,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     return (
       <div
         ref={this.setContainerDivRefAndCreateViewPort}
+        id={this.props.id}
         className={`react-zoomable-ui-container-div ${this.rootDivUniqueClassName} ${this.props.className || ''}`}
         style={this.props.style}
       >

@@ -5,6 +5,7 @@ import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { generateRandomId } from './utils';
 
 export interface NoPanAreaProps {
+  readonly id?: string;
   readonly className?: string;
   readonly style?: React.CSSProperties;
 }
@@ -45,6 +46,7 @@ div.${context.rootDivUniqueClassName} div.${this.uniqueClassName} {
       <React.Fragment>
         <style>{this.constantStyles}</style>
         <div
+          id={this.props.id}
           {...{ [InteractableIdAttributeName]: this.id }}
           className={this.determineClassName()}
           style={style}

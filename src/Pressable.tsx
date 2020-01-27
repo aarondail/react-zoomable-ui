@@ -11,6 +11,7 @@ const DEFAULT_LONG_TAP_THRESHOLD_MS: number = 500;
 export const PRESSABLE_CSS_CLASS_NAME = `react-zoomable-ui-pressable`;
 
 export interface PressableProps {
+  readonly id?: string;
   readonly children?: React.ReactNode | ((state: PressableState) => React.ReactNode);
   readonly className?: string;
   readonly potentialTapClassName?: string;
@@ -96,6 +97,7 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
     return (
       <div
         {...{ [InteractableIdAttributeName]: this.id }}
+        id={this.props.id}
         ref={this.divRef}
         className={this.determineClassName()}
         style={this.determineStyle()}
