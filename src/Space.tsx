@@ -46,6 +46,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 .${this.rootDivUniqueClassName} {
   position: absolute;
   top: 0; bottom: 0; left: 0; right: 0;
+  cursor: default;
 }
 
 .${this.rootDivUniqueClassName} > .react-zoomable-ui-content-div {

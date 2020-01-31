@@ -430,11 +430,8 @@ export class ViewPort {
     }
 
     this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
-    if (this.inNonPanPressHandlingMode !== 'ignore') {
-      // If we aren't in non pan press handling mode or we are, but are
-      // capturing the press, then prevent the browser (specifically Safari)
-      // from interpreting any mouse movement as a text selection (in addition
-      // to a pan).
+
+    if (this.inNonPanPressHandlingMode === 'capture') {
       e.preventDefault();
     }
   };
@@ -475,10 +472,7 @@ export class ViewPort {
 
     this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
 
-    if (this.inNonPanPressHandlingMode !== 'ignore') {
-      // If we aren't in non pan press handling mode or we are, but are
-      // capturing the press, then prevent the browser from handling the touch
-      // gesture.
+    if (this.inNonPanPressHandlingMode === 'capture') {
       e.preventDefault();
     }
   };
