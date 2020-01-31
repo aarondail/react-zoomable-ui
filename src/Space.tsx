@@ -9,13 +9,11 @@ import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { browserIsAndroid, generateRandomId, Writeable } from './utils';
 import { PressEventCoordinates, ViewPort } from './ViewPort';
 
-// tslint:disable-next-line: no-empty-interface
 export interface SpaceProps {
   readonly id?: string;
   readonly className?: string;
   readonly debugEvents?: boolean;
   readonly style?: React.CSSProperties;
-  readonly sizeContainerToContent?: boolean;
   readonly contentDivClassName?: string;
   readonly contentDivStyle?: React.CSSProperties;
   readonly pollForElementResizing?: boolean;
@@ -33,6 +31,10 @@ interface SpaceState {
   readonly transformStyle?: React.CSSProperties;
 }
 
+/**
+ * This component is (by default) absolute positioned to fill its parent, so
+ * you should place it in a container with `position: relative`.
+ */
 export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   // This is not really readonly but we want to make it appear that way for code
   // using this library
@@ -40,19 +42,17 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 
   private readonly rootDivUniqueClassName = `react-zoomable-ui-${generateRandomId()}`;
 
-  private readonly constantStyleForFullSizeContainer = `
+  private readonly constantStyles = `
 .${this.rootDivUniqueClassName} {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
 }
-`;
-  private readonly constantStyleForContentDiv = `
+
 .${this.rootDivUniqueClassName} > .react-zoomable-ui-content-div {
   margin: 0; padding: 0; 
   transform-origin: 0% 0%;
   min-height: 100%;
   width: 100%;
-  overflow: hidden;
 }
 
 .${this.rootDivUniqueClassName} .${PRESSABLE_CSS_CLASS_NAME} {
@@ -99,8 +99,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
         className={`react-zoomable-ui-container-div ${this.rootDivUniqueClassName} ${this.props.className || ''}`}
         style={this.props.style}
       >
-        {!this.props.sizeContainerToContent && <style>{this.constantStyleForFullSizeContainer}</style>}
-        <style>{this.constantStyleForContentDiv}</style>
+        <style>{this.constantStyles}</style>
         {this.state.contextValue && (
           <SpaceContext.Provider value={this.state.contextValue}>
             <div
@@ -202,57 +201,6 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     return undefined;
   };
 
-  private setContainerDivRefAndCreateViewPort = (ref: any) => {
-    this.destroyViewPort();
-    this.containerDivRef = ref;
-
-    if (this.containerDivRef) {
-      (this as Writeable<Space>).viewPort = new ViewPort(this.containerDivRef, {
-        debugEvents: this.props.debugEvents,
-        onHover: this.handleHover,
-        onPressContextMenu: this.handlePressContextMenu,
-        onUpdated: this.handleViewPortUpdated,
-        ...this.pressInterpreter.pressHandlers,
-      });
-
-      const moreViewPortSetup = () => {
-        if (!this.viewPort) {
-          return;
-        }
-        this.props.onCreate?.(this.viewPort);
-      };
-
-      if (this.props.sizeContainerToContent) {
-        // Have to setImmediate in some cases because the div may not be at its
-        // final size yet (and thus, getBoundingClientRect will return the wrong
-        // size).
-        setImmediate(() => {
-          this.viewPort?.updateContainerSize();
-          moreViewPortSetup();
-        });
-      } else {
-        moreViewPortSetup();
-      }
-
-      this.containerDivRef.addEventListener('dragstart', this.handleDragStart);
-
-      // Polling is optional because it is unnecessary if the only way the div's
-      // size will change is with the window itself
-      this.elementSizeChangePoller.update(this.containerDivRef, !!this.props.pollForElementResizing);
-
-      const contextValue: SpaceContextType = {
-        rootDivUniqueClassName: this.rootDivUniqueClassName,
-        registerInteractable: i => this.interactableRegistry.set(i.id, i),
-        unregisterInteractable: i => this.interactableRegistry.delete(i.id),
-        viewPort: this.viewPort!,
-      };
-      this.setState({
-        contextValue,
-        transformStyle: this.createTransformStyle(),
-      });
-    }
-  };
-
   private handleHover = (e: MouseEvent, coordinates: PressEventCoordinates) => {
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
@@ -303,6 +251,41 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     this.setState({ transformStyle: this.createTransformStyle() });
     if (this.viewPort) {
       this.props.onUpdated?.(this.viewPort);
+    }
+  };
+
+  private setContainerDivRefAndCreateViewPort = (ref: any) => {
+    this.destroyViewPort();
+    this.containerDivRef = ref;
+
+    if (this.containerDivRef) {
+      (this as Writeable<Space>).viewPort = new ViewPort(this.containerDivRef, {
+        debugEvents: this.props.debugEvents,
+        onHover: this.handleHover,
+        onPressContextMenu: this.handlePressContextMenu,
+        onUpdated: this.handleViewPortUpdated,
+        ...this.pressInterpreter.pressHandlers,
+      });
+
+      this.props.onCreate?.(this.viewPort!);
+
+      this.containerDivRef.addEventListener('dragstart', this.handleDragStart);
+
+      // Polling is optional because it is unnecessary if the only way the div's
+      // size will change is with the window itself
+      this.elementSizeChangePoller.update(this.containerDivRef, !!this.props.pollForElementResizing);
+
+      const contextValue: SpaceContextType = {
+        rootDivUniqueClassName: this.rootDivUniqueClassName,
+        registerInteractable: i => this.interactableRegistry.set(i.id, i),
+        unregisterInteractable: i => this.interactableRegistry.delete(i.id),
+        viewPort: this.viewPort!,
+      };
+
+      this.setState({
+        contextValue,
+        transformStyle: this.createTransformStyle(),
+      });
     }
   };
 }
