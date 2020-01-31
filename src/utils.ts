@@ -1,4 +1,4 @@
-// export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 
 let idSuffix = 0;
 /**
@@ -12,75 +12,6 @@ export const generateRandomId = () =>
   '_' +
   ++idSuffix;
 
-// export function logElapsedMs<X>(callback: () => X, context: string): X {
-//   const start = new Date();
-//   const result = callback();
-//   const elapsedMs = new Date().getTime() - start.getTime();
-//   console.log(`${context} took ${elapsedMs}ms`);
-//   return result;
-// }
-
-// export async function logElapsedMsAsync<X>(
-//   callback: () => Promise<X>,
-//   context: string,
-// ): Promise<X> {
-//   const start = new Date();
-//   const result = await callback();
-//   const elapsedMs = new Date().getTime() - start.getTime();
-//   console.log(`${context} took ${elapsedMs}ms`);
-//   return result;
-// }
-
-// export function createMap<X>(
-//   array: ReadonlyArray<X>,
-//   keySelector: (element: X) => string,
-// ): Map<string, X>;
-// export function createMap<X extends { readonly id: string }>(
-//   array: ReadonlyArray<X>,
-// ): Map<string, X>;
-// export function createMap<X>(
-//   array: ReadonlyArray<X>,
-//   keySelector?: (element: X) => string,
-// ) {
-//   if (keySelector) {
-//     return new Map(array.map(e => [keySelector(e), e] as any));
-//   }
-//   return new Map(array.map(e => [(e as any).id, e] as any));
-// }
-
-// export function updateMap<K, V>(map: ReadonlyMap<K, V>, key: K, value: V) {
-//   const newMap = new Map(map);
-//   newMap.set(key, value);
-//   return newMap;
-// }
-
-// export function removeFromMap<K, V>(map: ReadonlyMap<K, V>, key: K) {
-//   const newMap = new Map(map);
-//   newMap.delete(key);
-//   return newMap;
-// }
-
-// export function mapMapValuesToArray<K, V, V2>(
-//   map: ReadonlyMap<K, V>,
-//   mapFn: (value: V) => V2,
-// ) {
-//   return Array.from(map.values()).map(mapFn);
-// }
-
-// export function lookup<X>(
-//   ids: ReadonlyArray<string>,
-//   map: ReadonlyMap<string, X>,
-// ): ReadonlyArray<X> {
-//   // tslint:disable-next-line:readonly-array
-//   const result = [];
-//   for (const id of ids) {
-//     if (map.has(id)) {
-//       result.push(map.get(id)!);
-//     }
-//   }
-//   return result;
-// }
-
 export function clamp(value: number, bounds?: readonly [number | undefined, number | undefined]): number {
   if (bounds) {
     const [min, max] = bounds;
@@ -93,27 +24,6 @@ export function clamp(value: number, bounds?: readonly [number | undefined, numb
   }
   return value;
 }
-
-// export function clampFromTo(
-//   from: number,
-//   to: number,
-//   bounds?: readonly [number | undefined, number | undefined],
-// ): number {
-//   if (bounds) {
-//     const [min, max] = bounds;
-//     if (min !== undefined && to < from && to < min) {
-//       return min;
-//     }
-//     if (max !== undefined && to > from && to > max) {
-//       return max;
-//     }
-//   }
-//   return to;
-// }
-
-// export function sleep(ms: number): Promise<{}> {
-//   return new Promise(resolve => setTimeout(resolve, ms));
-// }
 
 export function clampCenterOfLength(
   centerValue: number,
@@ -151,8 +61,6 @@ export function* walkElementHierarchyUp(leafElement: HTMLElement): Iterable<HTML
     e = e.parentElement;
   }
 }
-
-export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 
 export const browserIsAndroid = navigator.userAgent.match(/Android/);
 export const browserIsSafari = navigator.vendor.match(/Apple/);
