@@ -5,3 +5,4 @@ export * from './Space';
 export * from './SpaceContext';
 export * from './ViewPort';
 export { ViewPortCameraAnimationOptions, ViewPortCameraInterface } from './ViewPortCamera';
+export * from './suppressBrowserScrollingAndZooming';
