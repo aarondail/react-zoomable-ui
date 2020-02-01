@@ -22,7 +22,7 @@ export function suppressBrowserScrollingAndZooming(): CancelSuppressBrowserScrol
     e.preventDefault();
   };
 
-  document.addEventListener('wheel', handleWheel);
+  document.addEventListener('wheel', handleWheel, { passive: false });
   document.addEventListener('gesturestart', handleGestureStartForSafari);
   document.addEventListener('gesturechange', handleGestureChangeForSafari);
   document.addEventListener('touchmove', handleTouchMove, { passive: false });
