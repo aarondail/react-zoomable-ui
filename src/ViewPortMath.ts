@@ -66,13 +66,11 @@ export const ViewPortMath = {
     width: VirtualSpacePixelUnit,
     additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
   ): void {
-    const centerX = left + width / 2;
     let newZoomFactor = values.containerWidth / width;
     newZoomFactor = clamp(newZoomFactor, additionalBounds?.zoom);
     newZoomFactor = clamp(newZoomFactor, bounds.zoom);
-
-    ViewPortMath.updateTopLeft(values, bounds, centerX - values.width / newZoomFactor / 2, values.top);
     ViewPortMath.updateZoom(values, bounds, newZoomFactor);
+    ViewPortMath.updateTopLeft(values, bounds, left, values.top);
   },
 
   updateBounds(values: ViewPortCameraValues, bounds: ViewPortBounds) {
@@ -82,7 +80,6 @@ export const ViewPortMath = {
     values.width = values.containerWidth / values.zoomFactor;
     values.height = values.containerHeight / values.zoomFactor;
 
-    // And clamp down on the x and y position of the camera
     values.centerX = clampCenterOfLength(
       values.centerX + (values.width - oldVirtualSpaceVisibleSpaceWidth) / 2,
       values.width,
@@ -112,13 +109,13 @@ export const ViewPortMath = {
     const oldVirtualSpaceVisibleSpaceWidth = values.containerWidth / values.zoomFactor;
     const oldVirtualSpaceVisibleSpaceHeight = values.containerHeight / values.zoomFactor;
 
-    if (dZoom !== undefined && dZoom !== 0) {
-      ViewPortMath.updateZoom(values, bounds, values.zoomFactor + dZoom);
-    }
-
     // Basic pan handling
     const virtualSpaceNewLeft = values.left + dx;
     const virtualSpaceNewTop = values.top + dy;
+
+    if (dZoom !== undefined && dZoom !== 0) {
+      ViewPortMath.updateZoom(values, bounds, values.zoomFactor + dZoom);
+    }
 
     // Zoom BUT keep the view coordinate under the mouse pointer CONSTANT
     const virtualSpaceVisibleWidthDelta = values.width - oldVirtualSpaceVisibleSpaceWidth;
@@ -160,6 +157,8 @@ export const ViewPortMath = {
       values.zoomFactor = clamp(zoomFactor, bounds.zoom);
       values.width = values.containerWidth / values.zoomFactor;
       values.height = values.containerHeight / values.zoomFactor;
+      values.left = values.centerX - values.width / 2;
+      values.top = values.centerY - values.width / 2;
     }
   },
 };
