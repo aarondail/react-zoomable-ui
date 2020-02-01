@@ -377,9 +377,7 @@ export class ViewPortCamera {
       ...this.derivedBounds,
       ...ViewPortMath.deriveActualZoomBounds(this.workingValues, this.derivedBounds, DEFAULT_BOUNDS),
     };
-    console.log({ ...this.workingValues });
     ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
-    console.log({ ...this.workingValues });
     this.scheduleHardUpdate();
   };
 
