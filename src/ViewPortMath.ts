@@ -69,8 +69,9 @@ export const ViewPortMath = {
     let newZoomFactor = values.containerWidth / width;
     newZoomFactor = clamp(newZoomFactor, additionalBounds?.zoom);
     newZoomFactor = clamp(newZoomFactor, bounds.zoom);
+    const top = values.top;
     ViewPortMath.updateZoom(values, bounds, newZoomFactor);
-    ViewPortMath.updateTopLeft(values, bounds, left, values.top);
+    ViewPortMath.updateTopLeft(values, bounds, left, top);
   },
 
   updateBounds(values: ViewPortCameraValues, bounds: ViewPortBounds) {
