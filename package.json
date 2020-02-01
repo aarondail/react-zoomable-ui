@@ -27,7 +27,7 @@
     "ts-invariant": "^0.4.4"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.3.0"
   },
   "devDependencies": {
     "@types/hammerjs": "^2.0.36",
@@ -37,7 +37,7 @@
     "jest": "^24.9.0",
     "lint-staged": ">=8",
     "prettier": "^1.19.1",
-    "react": "^16.0.0",
+    "react": "^16.3.0",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",
     "tslint": "^5.20.1",
