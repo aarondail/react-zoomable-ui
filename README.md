@@ -54,6 +54,10 @@ Unsure about stylus.
 
 ## Notes on Sizing
 
+UPDATE: we now position: absolute and top/left/right/bottom === 0. So set your containig element w/ positoin relative!!! This changes the way to do fixed size divs.
+
+The reason for this is that 1. height: 100% doesnt work in all cases (flex box on Safair) and 2. otherwise the outer div will expand w/ the content, which makes the div much too large, and 3. we can try to fix rthat by setting a height or max-height but trhen we can't properly handle resizes cause the parent div will never get smaller anymore...
+
 1. The Space is designed to take up all available space from its container (i..e it has widht and height 100%). You can override this by passing in style props to change the height and width or passing in a css class to use that changes them (note you may need your css rules to be more specific than usual)
 
 2. Why dont we fit to the size of the contained elements?  
@@ -104,3 +108,7 @@ know about the press when it starts, so we have the same problems as above)
 
 This all ends up meaning its easier to handle presses with our own event
 handlers on the mouse and touch events.
+
+// TODO
+
+### https://stackoverflow.com/questions/2989263/disable-auto-zoom-in-input-text-tag-safari-on-iphone
