@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ElementSizeChangePoller } from './ElementSizeChangePoller';
 import { getInteractableIdMostApplicableToElement, InteractableComponent } from './Interactable';
 import { NoPanArea } from './NoPanArea';
-import { Pressable, PRESSABLE_CSS_CLASS_NAME } from './Pressable';
+import { Pressable } from './Pressable';
 import { DecidePressHandlingCallback, PressHandlingOptions, PressInterpreter } from './PressInterpreter';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { browserIsAndroid, generateRandomId, Writeable } from './utils';
@@ -54,10 +54,6 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   transform-origin: 0% 0%;
   min-height: 100%;
   width: 100%;
-}
-
-.${this.rootDivUniqueClassName} .${PRESSABLE_CSS_CLASS_NAME} {
-  cursor: default;
 }
 `;
 

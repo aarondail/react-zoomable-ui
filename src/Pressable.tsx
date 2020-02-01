@@ -8,8 +8,6 @@ import { PressEventCoordinates } from './ViewPort';
 
 const DEFAULT_LONG_TAP_THRESHOLD_MS: number = 500;
 
-export const PRESSABLE_CSS_CLASS_NAME = `react-zoomable-ui-pressable`;
-
 export interface PressableProps {
   readonly id?: string;
   readonly children?: React.ReactNode | ((state: PressableState) => React.ReactNode);
@@ -113,7 +111,7 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
 
   private determineClassName = () => {
     const { className } = this.props;
-    let result = PRESSABLE_CSS_CLASS_NAME;
+    let result = 'react-zoomable-ui-pressable';
     if (className) {
       result += ' ';
       result += className;
