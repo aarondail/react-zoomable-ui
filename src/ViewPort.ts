@@ -237,10 +237,13 @@ export class ViewPort {
   }
 
   /**
-   * This should be used when the container div is resized.  By default resizes due
+   * This should be used when the div is resized.  By default resizes due
    * to the window itself resizing will be automatically handled, but any other
    * resizes won't be handled (since there isn't a good way to get notified when
    * the div resizes.
+   *
+   * If you are getting acess to the `ViewPort` via [[Space]] or [[SpaceContext]] you should not call this method directly and should
+   * instead call the [[Space.updateSize]] method.
    */
   public updateContainerSize() {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();

@@ -10,20 +10,70 @@ import { browserIsAndroid, generateRandomId, Writeable } from './utils';
 import { PressEventCoordinates, ViewPort } from './ViewPort';
 
 export interface SpaceProps {
+  /**
+   * Optional id to use on the outer `div` that the [[Space]] renders.
+   */
   readonly id?: string;
+  /**
+   * Optional CSS class to use on the outer `div` that the [[Space]] renders.
+   */
   readonly className?: string;
+  /** @internalapi */
   readonly debugEvents?: boolean;
+  /**
+   * Optional styles to set on the outer `div` that the [[Space]] renders.
+   */
   readonly style?: React.CSSProperties;
+  /**
+   * Optional CSS class to use on the inner `div` that the [[Space]] renders.
+   */
   readonly contentDivClassName?: string;
+  /**
+   * Optional styles to set on the inner `div` that the [[Space]] renders.
+   */
   readonly contentDivStyle?: React.CSSProperties;
+  /**
+   * If set, the `Space` will poll every 500ms for changes to its parent element's size. This only has to be used if the
+   * parent element can resize for reasons other than the window resizing, and if the [[updateSize]] is not used.
+   */
   readonly pollForElementResizing?: boolean;
 
+  /**
+   * Called when the `Space` first creates the outer `div` and sets up the
+   * [[ViewPort]], but before the inner `div` and the `Space's children have
+   * been first rendered. This can be used, for example, to make the
+   * [[ViewPort]] focus on a certain portion of the virtual space.
+   */
   readonly onCreate?: (viewPort: ViewPort) => void;
+  /**
+   * Called whenever the [[ViewPort]] is updated.
+   */
   readonly onUpdated?: (viewPort: ViewPort) => void;
 
+  /**
+   * Optional callback to be called when a press is initiated in the space.
+   * Generally you should prefer to use [[Pressable]] to handle presses, but
+   * this can be used as a lower level alternative. The result of the callback
+   * is a [[PressHandlingOptions]] (or `undefined`) that describes how the
+   * press should be handled.
+   *
+   * If the callback returns a [[PressHandlingOptions]] it will take precedence
+   * over [[Pressable]] and [[NoPanArea]] components (even if the press was on
+   * one of those).
+   */
   readonly onDecideHowToHandlePress?: DecidePressHandlingCallback;
+  /**
+   * Called when a mouse hover event happens anywhere in the [[Space]].
+   */
   readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
-  readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
+  /**
+   * Called when a right click event happens anywhere in the [[Space]].
+   *
+   * @returns Whether to prevent (`true`) a [[Pressable]] from also handling
+   * this event (if it was also the target).
+   *
+   */
+  readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void | boolean | undefined;
 }
 
 interface SpaceState {
@@ -32,10 +82,130 @@ interface SpaceState {
 }
 
 /**
- * This component is (by default) absolute positioned to fill its parent, so
- * you should place it in a container with `position: relative`.
+ * This component makes its children zoomable and pan-able.
+ *
+ * ## Examples
+ *
+ * Taking over the entire window:
+ *
+ * ```css
+ * // ...and any other elements between the body and the Space...
+ * html, body {
+ *   height: 100%;
+ *   width: 100%;
+ * }
+ * ```
+ * &nbsp;
+ * ```javascript
+ * return (
+ *   <div style={{height: '100%', position: 'relative'}}>
+ *     <Space>
+ *      <h1>Example</h1>
+ *      <span>You can pan and zoom this text</span>
+ *     </Space>
+ *   </div>
+ * );
+ * ```
+ *
+ * Showing an image in a fixed size area:
+ *
+ * ```javascript
+ * const imageWidth = 1280;
+ * const imageHeight = 960;
+ *
+ * return (
+ *   <div style={{ width: 300, height: 300, position: "relative" }}>
+ *     <Space
+ *       style={{ border: "solid 1px black" }}
+ *       onCreate={viewPort => {
+ *         viewPort.setBounds({ x: [0, imageWidth], y: [0, imageHeight] });
+ *         viewPort.camera.centerFitAreaIntoView({
+ *           left: 0,
+ *           top: 0,
+ *           width: imageWidth,
+ *           height: imageHeight
+ *         });
+ *       }}
+ *     >
+ *       <img src="mountain.png" width={imageWidth} height={imageHeight} alt="A Mountain" />
+ *     </Zoomable.Space>
+ *   </div>
+ * );
+ * ```
+ *
+ * ## How it works
+ *
+ * The `Space` component renders its children wrapped in two `div`s, an outer
+ * one and an inner one. The inner `div` is moved and scaled using CSS
+ * transforms inside the outer `div`.
+ *
+ * This is done by using a [[ViewPort]] instance, which decides what portion of
+ * the inner `div` (and its children) to display inside the bounds of the outer
+ * `div`. The [[ViewPort]] creates a virtual coordinate space for the inner
+ * `div` to be placed in, and the CSS transforms (mentioned above) translate
+ * the visible portion of the virtual coordinate space into the space occupied
+ * by the outer `div`.
+ *
+ * The [[ViewPort]] also does the lower-level work of handling zooming and
+ * panning, provides access to the [[ViewPortCamera]] for changing what portion
+ * of the inner `div` / the virtual coordinate space is visible, and provides
+ * other functionality like setting the boundaries of the virtual coordinate
+ * space.
+ *
+ * Components inside a `Space`, at any depth, may use the [[SpaceContext]] to
+ * get access to the [[ViewPort]]. It can also be accessed via the [[viewPort]]
+ * property on the `Space` itself.
+ *
+ * ## Sizing
+ *
+ * The outer `div` rendered by the `Space` component is *absolutely positioned*
+ * to take up all available space from its parent element. This can be
+ * overridden (with your own CSS rules or styles) but if you don't do that you
+ * probably should make sure its parent element has `position: relative` in its
+ * styles. One exception to that would be if you intend for the `Space` to
+ * cover the entire page, in which case it doesn't matter.
+ *
+ * Also, note that by default the parent element will not get sized based on
+ * its `Space` child. This means that if the parent's size would be based on
+ * its children (e.g. its a simple `<div>` with no specific styling), it may
+ * end up with a height of 0. In which case the Space will also have a height
+ * of 0. You can give the parent element a fixed size or use Flexbox, `height:
+ * 100%`, or any other means to make the parent take up space on its own.
+ *
+ * For sizing to work well, `Space` probably should be the only child of its
+ * parent element.
+ *
+ * For more details [Sizing](../docs/Sizing.md).
+ *
+ * ## Resizing
+ *
+ * `Space` will not automatically detect when the parent element resizes in all
+ * cases. Window resizes will be detected, but if there are other cases where
+ * resizing happens, the `Space` must be either manually told about it via a
+ * call to the [[updateSize]] method, or by setting the
+ * [[pollForElementResizing]] prop to true.
+ *
+ * If this is not done the dimensions of the `ViewPort` may be off, and certain
+ * behavior like zooming may behave oddly.
+ *
+ * Though, just to say it again, if the only time the parent element resizes is
+ * when the window itself resizes, it will detect that automatically.
+ *
+ * ## Props
+ *
+ * See [[SpaceProps]].
  */
 export class Space extends React.PureComponent<SpaceProps, SpaceState> {
+  /**
+   * Describes what portion of the virtual coordinate space is visible inside
+   * the `Space`, and, among other things, provides access to the
+   * [[ViewPortCamera]] which can change that.
+   *
+   * This is not created until after the component has been mounted, so use the
+   * [[onCreate]] prop if you need to manipulate it before the children of the
+   * `Space` are first rendered. The [[onUpdate]] prop can be used to listen
+   * for changes.
+   */
   // This is not really readonly but we want to make it appear that way for code
   // using this library
   public readonly viewPort?: ViewPort;
@@ -71,19 +241,21 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     this.pressInterpreter = new PressInterpreter(this.handleDecideHowToHandlePress, { debugEvents: props.debugEvents });
     // This won't actually start polling until we give it an element, and tell
     // it to start polling...
-    this.elementSizeChangePoller = new ElementSizeChangePoller(this.updateContainerSize);
+    this.elementSizeChangePoller = new ElementSizeChangePoller(this.updateSize);
   }
 
+  /** @internalapi */
   public componentDidUpdate(prevProps: SpaceProps) {
     if (this.props.pollForElementResizing !== prevProps.pollForElementResizing) {
       this.elementSizeChangePoller.update(this.containerDivRef, !!this.props.pollForElementResizing);
     }
   }
 
+  /** @internalapi */
   public componentWillUnmount() {
     this.destroyViewPort();
   }
-
+  /** @internalapi */
   public render() {
     let transformedDivStyle = this.state.transformStyle;
     if (this.props.contentDivStyle) {
@@ -111,7 +283,11 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     );
   }
 
-  public updateContainerSize = () => {
+  /**
+   * This should be called in some cases to tell the `Space` that its parent
+   * element has resized. See the section on [[Sizing]] above for more info.
+   */
+  public updateSize = () => {
     if (this.viewPort) {
       this.viewPort.updateContainerSize();
     }
@@ -217,17 +393,19 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   };
 
   private handlePressContextMenu = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    if (this.props.onPressContextMenu) {
+      const result = this.props.onPressContextMenu(e, coordinates);
+      e.preventDefault();
+      if (result) {
+        return;
+      }
+    }
+
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
     if (interactable && interactable instanceof Pressable && interactable.props.onPressContextMenu) {
       interactable.props.onPressContextMenu(coordinates);
-      e.preventDefault();
-      return;
-    }
-
-    if (this.props.onPressContextMenu) {
-      this.props.onPressContextMenu(e, coordinates);
       e.preventDefault();
       return;
     }

@@ -48,6 +48,9 @@
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-immutable": "^6.0.1",
+    "typedoc": "^0.16.9",
+    "typedoc-plugin-internal-external": "^2.1.1",
+    "typedoc-plugin-no-inherit": "^1.1.10",
     "typescript": "^3.7.2"
   },
   "prettier": {

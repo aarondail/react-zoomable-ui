@@ -1,13 +1,16 @@
 {
   "cSpell.words": [
+    "Flexbox",
     "Interactable",
     "Pressable",
+    "Scrollable",
     "Unmount",
     "Zoomable",
     "div's",
     "gesturechange",
     "gestureend",
     "gesturestart",
+    "internalapi",
     "pancancel",
     "panend",
     "panmove",

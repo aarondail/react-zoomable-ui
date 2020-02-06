@@ -4,11 +4,33 @@ Make your HTML elements and [React](https://reactjs.com) components zoomable, an
 
 ## Features
 
-- Make your whole page zoomable or just part of it.
-- Tested against all modern browsers, including mobile Safari and mobile Chrome... except for IE/Edge (TODO).
-- Has basic interactive components that can distinguish easily between panning, tapping, and long-tapping. These can also be used to implement more advanced interactions like dragging.
+- Make your whole page zoomable and pan-able, or just part of it.
+- The zoomable space can be as large as you want, or bounded (x, y, and/or zoom).
+- Has events for different interactions, letting you control how the library responds to mouse clicks and touches.
+- Includes basic components that can distinguish, in a nuanced way, between panning, tapping, and long-tapping. These can also be used to implement more advanced interactions like dragging.
 - Has TypeScript types.
+- Supports animations.
 - Technically can be used w/o React.
+
+## Browser Support
+
+Tested and works on:
+
+- Desktop Chrome, Firefox, Safari.
+- Mobile Chrome, and Mobile Safari.
+- Tested w/ a mouse, but not touch, on pre-Chrome Edge.
+
+Not tested on, but ideally should work:
+
+- post-Chrome edge, mouse and touch
+- pre-Chrome dge, touch
+
+Not supported:
+
+- IE 11 and below
+- Anything else not mentioned
+
+Please send me issues if you run into problems.
 
 ## Examples
 
@@ -24,6 +46,7 @@ body,
 #root {
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 #root {
   position: relative;
@@ -77,25 +100,12 @@ function ZoomableImage() {
     </div>
 ```
 
-## Installation
-
-react-zoomable-ui requires React 16.3 or later.
-
-```
-npm install --save react-zoomable-ui
-```
-
-```
-yarn add react-zoomable-ui
-```
-
 ## Documentation
 
 - [Guide](docs/Guide.md)
-- [Sizing](docs/Sizing.md)
 - [API](docs/API.md)
 - [Usage without React](docs/UsageWithoutReact.md)
-- [Known Problems](docs/KnownProblems.md)
+- [Known Issues](docs/KnownIssues.md)
 
 ## License
 
