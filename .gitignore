@@ -2,7 +2,6 @@
 build
 coverage
 dist
-docs
 
 # Dependency directories
 node_modules
