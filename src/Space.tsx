@@ -25,13 +25,15 @@ export interface SpaceProps {
    */
   readonly style?: React.CSSProperties;
   /**
-   * Optional CSS class to use on the inner `div` that the [[Space]] renders.
+   * Optional CSS class to use on the inner `div` that the [[Space]] scales and
+   * transforms.
    */
-  readonly contentDivClassName?: string;
+  readonly innerDivClassName?: string;
   /**
-   * Optional styles to set on the inner `div` that the [[Space]] renders.
+   * Optional styles class to use on the inner `div` that the [[Space]] scales
+   * and transforms.
    */
-  readonly contentDivStyle?: React.CSSProperties;
+  readonly innerDivStyle?: React.CSSProperties;
   /**
    * If set, the `Space` will poll every 500ms for changes to its parent element's size. This only has to be used if the
    * parent element can resize for reasons other than the window resizing, and if the [[updateSize]] is not used.
@@ -219,7 +221,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   cursor: default;
 }
 
-.${this.rootDivUniqueClassName} > .react-zoomable-ui-content-div {
+.${this.rootDivUniqueClassName} > .react-zoomable-ui-inner-div {
   margin: 0; padding: 0; 
   transform-origin: 0% 0%;
   min-height: 100%;
@@ -227,7 +229,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 }
 `;
 
-  private containerDivRef?: HTMLDivElement;
+  private outerDivRef?: HTMLDivElement;
   private currentHoveredPressable?: Pressable;
   private elementSizeChangePoller: ElementSizeChangePoller;
   private readonly interactableRegistry: Map<string, InteractableComponent>;
@@ -247,7 +249,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   /** @internalapi */
   public componentDidUpdate(prevProps: SpaceProps) {
     if (this.props.pollForElementResizing !== prevProps.pollForElementResizing) {
-      this.elementSizeChangePoller.update(this.containerDivRef, !!this.props.pollForElementResizing);
+      this.elementSizeChangePoller.update(this.outerDivRef, !!this.props.pollForElementResizing);
     }
   }
 
@@ -258,21 +260,21 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   /** @internalapi */
   public render() {
     let transformedDivStyle = this.state.transformStyle;
-    if (this.props.contentDivStyle) {
-      transformedDivStyle = { ...transformedDivStyle, ...this.props.contentDivStyle };
+    if (this.props.innerDivStyle) {
+      transformedDivStyle = { ...transformedDivStyle, ...this.props.innerDivStyle };
     }
     return (
       <div
-        ref={this.setContainerDivRefAndCreateViewPort}
+        ref={this.setOuterDivRefAndCreateViewPort}
         id={this.props.id}
-        className={`react-zoomable-ui-container-div ${this.rootDivUniqueClassName} ${this.props.className || ''}`}
+        className={`react-zoomable-ui-outer-div ${this.rootDivUniqueClassName} ${this.props.className || ''}`}
         style={this.props.style}
       >
         <style>{this.constantStyles}</style>
         {this.state.contextValue && (
           <SpaceContext.Provider value={this.state.contextValue}>
             <div
-              className={`react-zoomable-ui-content-div ${this.props.contentDivClassName || ''}`}
+              className={`react-zoomable-ui-inner-div ${this.props.innerDivClassName || ''}`}
               style={transformedDivStyle}
             >
               {this.props.children}
@@ -309,8 +311,8 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
       (this as Writeable<Space>).viewPort = undefined;
     }
 
-    if (this.containerDivRef) {
-      this.containerDivRef.removeEventListener('dragstart', this.handleDragStart);
+    if (this.outerDivRef) {
+      this.outerDivRef.removeEventListener('dragstart', this.handleDragStart);
     }
 
     this.elementSizeChangePoller?.reset();
@@ -429,12 +431,12 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     }
   };
 
-  private setContainerDivRefAndCreateViewPort = (ref: any) => {
+  private setOuterDivRefAndCreateViewPort = (ref: any) => {
     this.destroyViewPort();
-    this.containerDivRef = ref;
+    this.outerDivRef = ref;
 
-    if (this.containerDivRef) {
-      (this as Writeable<Space>).viewPort = new ViewPort(this.containerDivRef, {
+    if (this.outerDivRef) {
+      (this as Writeable<Space>).viewPort = new ViewPort(this.outerDivRef, {
         debugEvents: this.props.debugEvents,
         onHover: this.handleHover,
         onPressContextMenu: this.handlePressContextMenu,
@@ -444,11 +446,11 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 
       this.props.onCreate?.(this.viewPort!);
 
-      this.containerDivRef.addEventListener('dragstart', this.handleDragStart);
+      this.outerDivRef.addEventListener('dragstart', this.handleDragStart);
 
       // Polling is optional because it is unnecessary if the only way the div's
       // size will change is with the window itself
-      this.elementSizeChangePoller.update(this.containerDivRef, !!this.props.pollForElementResizing);
+      this.elementSizeChangePoller.update(this.outerDivRef, !!this.props.pollForElementResizing);
 
       const contextValue: SpaceContextType = {
         rootDivUniqueClassName: this.rootDivUniqueClassName,

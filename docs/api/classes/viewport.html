@@ -1,0 +1,524 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ViewPort | react-zoomable-ui</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">react-zoomable-ui</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="viewport.html">ViewPort</a>
+				</li>
+			</ul>
+			<h1>Class ViewPort</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The ViewPort represents a &quot;view&quot; into a virtual space, that is not
+							tied to the available screen space or HTML elements. Because of this, it is
+						infinite, but it also uses its own &quot;units&quot; (virtual space pixels).</p>
+					</div>
+					<p>You can think of the view port as describing what rectangular portion of the
+						virtual space (from top left to bottom right) should be visible inside the
+					bounds of containing HTML element where the virtual space is being rendered.</p>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">ViewPort</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="viewport.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#camera" class="tsd-kind-icon">camera</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#centerx" class="tsd-kind-icon">centerX</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#centery" class="tsd-kind-icon">centerY</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#containerheight" class="tsd-kind-icon">container<wbr>Height</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#containerwidth" class="tsd-kind-icon">container<wbr>Width</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#height" class="tsd-kind-icon">height</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#left" class="tsd-kind-icon">left</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#top" class="tsd-kind-icon">top</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#width" class="tsd-kind-icon">width</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="viewport.html#zoomfactor" class="tsd-kind-icon">zoom<wbr>Factor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="viewport.html#destroy" class="tsd-kind-icon">destroy</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="viewport.html#setbounds" class="tsd-kind-icon">set<wbr>Bounds</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="viewport.html#translateclientrecttovirtualspace" class="tsd-kind-icon">translate<wbr>Client<wbr>Rect<wbr>ToVirtual<wbr>Space</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="viewport.html#translateclientxycoordinatestovirtualspace" class="tsd-kind-icon">translate<wbr>ClientXYCoordinates<wbr>ToVirtual<wbr>Space</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="viewport.html#updatecontainersize" class="tsd-kind-icon">update<wbr>Container<wbr>Size</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>View<wbr>Port<span class="tsd-signature-symbol">(</span>containerDiv<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLDivElement</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/viewportoptions.html" class="tsd-signature-type">ViewPortOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="viewport.html" class="tsd-signature-type">ViewPort</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L99">src/ViewPort.ts:99</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>containerDiv: <span class="tsd-signature-type">HTMLDivElement</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/viewportoptions.html" class="tsd-signature-type">ViewPortOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="viewport.html" class="tsd-signature-type">ViewPort</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="camera" class="tsd-anchor"></a>
+					<h3>camera</h3>
+					<div class="tsd-signature tsd-kind-icon">camera<span class="tsd-signature-symbol">:</span> <a href="../globals.html#viewportcamerainterface" class="tsd-signature-type">ViewPortCameraInterface</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L84">src/ViewPort.ts:84</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="centerx" class="tsd-anchor"></a>
+					<h3>centerX</h3>
+					<div class="tsd-signature tsd-kind-icon">centerX<span class="tsd-signature-symbol">:</span> <a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L76">src/ViewPort.ts:76</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="centery" class="tsd-anchor"></a>
+					<h3>centerY</h3>
+					<div class="tsd-signature tsd-kind-icon">centerY<span class="tsd-signature-symbol">:</span> <a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L77">src/ViewPort.ts:77</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="containerheight" class="tsd-anchor"></a>
+					<h3>container<wbr>Height</h3>
+					<div class="tsd-signature tsd-kind-icon">container<wbr>Height<span class="tsd-signature-symbol">:</span> <a href="../globals.html#clientpixelunit" class="tsd-signature-type">ClientPixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L75">src/ViewPort.ts:75</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="containerwidth" class="tsd-anchor"></a>
+					<h3>container<wbr>Width</h3>
+					<div class="tsd-signature tsd-kind-icon">container<wbr>Width<span class="tsd-signature-symbol">:</span> <a href="../globals.html#clientpixelunit" class="tsd-signature-type">ClientPixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L74">src/ViewPort.ts:74</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="height" class="tsd-anchor"></a>
+					<h3>height</h3>
+					<div class="tsd-signature tsd-kind-icon">height<span class="tsd-signature-symbol">:</span> <a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L81">src/ViewPort.ts:81</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="left" class="tsd-anchor"></a>
+					<h3>left</h3>
+					<div class="tsd-signature tsd-kind-icon">left<span class="tsd-signature-symbol">:</span> <a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L78">src/ViewPort.ts:78</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="top" class="tsd-anchor"></a>
+					<h3>top</h3>
+					<div class="tsd-signature tsd-kind-icon">top<span class="tsd-signature-symbol">:</span> <a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L79">src/ViewPort.ts:79</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="width" class="tsd-anchor"></a>
+					<h3>width</h3>
+					<div class="tsd-signature tsd-kind-icon">width<span class="tsd-signature-symbol">:</span> <a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L80">src/ViewPort.ts:80</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="zoomfactor" class="tsd-anchor"></a>
+					<h3>zoom<wbr>Factor</h3>
+					<div class="tsd-signature tsd-kind-icon">zoom<wbr>Factor<span class="tsd-signature-symbol">:</span> <a href="../globals.html#zoomfactor" class="tsd-signature-type">ZoomFactor</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L82">src/ViewPort.ts:82</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="destroy" class="tsd-anchor"></a>
+					<h3>destroy</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">destroy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L183">src/ViewPort.ts:183</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setbounds" class="tsd-anchor"></a>
+					<h3>set<wbr>Bounds</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Bounds<span class="tsd-signature-symbol">(</span>bounds<span class="tsd-signature-symbol">: </span><a href="../interfaces/viewportbounds.html" class="tsd-signature-type">ViewPortBounds</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L206">src/ViewPort.ts:206</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>bounds: <a href="../interfaces/viewportbounds.html" class="tsd-signature-type">ViewPortBounds</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="translateclientrecttovirtualspace" class="tsd-anchor"></a>
+					<h3>translate<wbr>Client<wbr>Rect<wbr>ToVirtual<wbr>Space</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">translate<wbr>Client<wbr>Rect<wbr>ToVirtual<wbr>Space<span class="tsd-signature-symbol">(</span>rectOrElement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ClientRect</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/virtualspacerect.html" class="tsd-signature-type">VirtualSpaceRect</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L222">src/ViewPort.ts:222</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>rectOrElement: <span class="tsd-signature-type">ClientRect</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">HTMLElement</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/virtualspacerect.html" class="tsd-signature-type">VirtualSpaceRect</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="translateclientxycoordinatestovirtualspace" class="tsd-anchor"></a>
+					<h3>translate<wbr>ClientXYCoordinates<wbr>ToVirtual<wbr>Space</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">translate<wbr>ClientXYCoordinates<wbr>ToVirtual<wbr>Space<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><a href="../globals.html#clientpixelunit" class="tsd-signature-type">ClientPixelUnit</a>, y<span class="tsd-signature-symbol">: </span><a href="../globals.html#clientpixelunit" class="tsd-signature-type">ClientPixelUnit</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>x<span class="tsd-signature-symbol">: </span><a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a><span class="tsd-signature-symbol">; </span>y<span class="tsd-signature-symbol">: </span><a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L212">src/ViewPort.ts:212</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <a href="../globals.html#clientpixelunit" class="tsd-signature-type">ClientPixelUnit</a></h5>
+								</li>
+								<li>
+									<h5>y: <a href="../globals.html#clientpixelunit" class="tsd-signature-type">ClientPixelUnit</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>x<span class="tsd-signature-symbol">: </span><a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a><span class="tsd-signature-symbol">; </span>y<span class="tsd-signature-symbol">: </span><a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a><span class="tsd-signature-symbol"> }</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>x<span class="tsd-signature-symbol">: </span><a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>y<span class="tsd-signature-symbol">: </span><a href="../globals.html#virtualspacepixelunit" class="tsd-signature-type">VirtualSpacePixelUnit</a></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="updatecontainersize" class="tsd-anchor"></a>
+					<h3>update<wbr>Container<wbr>Size</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Container<wbr>Size<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aarondail/react-zoomable-ui/blob/006d2cd/src/ViewPort.ts#L248">src/ViewPort.ts:248</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This should be used when the div is resized.  By default resizes due
+										to the window itself resizing will be automatically handled, but any other
+										resizes won&#39;t be handled (since there isn&#39;t a good way to get notified when
+									the div resizes.</p>
+								</div>
+								<p>If you are getting acess to the <code>ViewPort</code> via <a href="space.html">Space</a> or <a href="../globals.html#spacecontext">SpaceContext</a> you should not call this method directly and should
+								instead call the <a href="space.html#updatesize">Space.updateSize</a> method.</p>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
+						<a href="viewport.html" class="tsd-kind-icon">View<wbr>Port</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="viewport.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#camera" class="tsd-kind-icon">camera</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#centerx" class="tsd-kind-icon">centerX</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#centery" class="tsd-kind-icon">centerY</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#containerheight" class="tsd-kind-icon">container<wbr>Height</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#containerwidth" class="tsd-kind-icon">container<wbr>Width</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#height" class="tsd-kind-icon">height</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#left" class="tsd-kind-icon">left</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#top" class="tsd-kind-icon">top</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#width" class="tsd-kind-icon">width</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="viewport.html#zoomfactor" class="tsd-kind-icon">zoom<wbr>Factor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="viewport.html#destroy" class="tsd-kind-icon">destroy</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="viewport.html#setbounds" class="tsd-kind-icon">set<wbr>Bounds</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="viewport.html#translateclientrecttovirtualspace" class="tsd-kind-icon">translate<wbr>Client<wbr>Rect<wbr>ToVirtual<wbr>Space</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="viewport.html#translateclientxycoordinatestovirtualspace" class="tsd-kind-icon">translate<wbr>ClientXYCoordinates<wbr>ToVirtual<wbr>Space</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="viewport.html#updatecontainersize" class="tsd-kind-icon">update<wbr>Container<wbr>Size</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
