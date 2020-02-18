@@ -18,12 +18,12 @@ Tested and works on:
 
 - Desktop Chrome, Firefox, Safari.
 - Mobile Chrome, and Mobile Safari.
-- Tested w/ a mouse, but not touch, on pre-Chrome Edge.
+- Tested w/ a mouse, but not touch, on pre-Chromium Edge.
 
 Not tested on, but ideally should work:
 
-- post-Chrome edge, mouse and touch
-- pre-Chrome dge, touch
+- post-Chromium Edge, mouse and touch
+- pre-Chromium Edge, touch
 
 Not supported:
 
