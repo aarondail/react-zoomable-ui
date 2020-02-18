@@ -1,5 +1,3 @@
-[react-zoomable-ui](../README.md) › [Globals](../globals.md) › [ViewPort](viewport.md)
-
 # Class: ViewPort
 
 The [ViewPort](viewport.md) represents a "view" into a virtual space, that is not
@@ -16,40 +14,11 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 
 - **ViewPort**
 
-## Index
-
-### Constructors
-
-- [constructor](viewport.md#constructor)
-
-### Properties
-
-- [camera](viewport.md#camera)
-- [centerX](viewport.md#centerx)
-- [centerY](viewport.md#centery)
-- [containerHeight](viewport.md#containerheight)
-- [containerWidth](viewport.md#containerwidth)
-- [height](viewport.md#height)
-- [left](viewport.md#left)
-- [top](viewport.md#top)
-- [width](viewport.md#width)
-- [zoomFactor](viewport.md#zoomfactor)
-
-### Methods
-
-- [destroy](viewport.md#destroy)
-- [setBounds](viewport.md#setbounds)
-- [translateClientRectToVirtualSpace](viewport.md#translateclientrecttovirtualspace)
-- [translateClientXYCoordinatesToVirtualSpace](viewport.md#translateclientxycoordinatestovirtualspace)
-- [updateContainerSize](viewport.md#updatecontainersize)
-
 ## Constructors
 
 ### constructor
 
 \+ **new ViewPort**(`containerDiv`: HTMLDivElement, `options?`: [ViewPortOptions](../interfaces/viewportoptions.md)): _[ViewPort](viewport.md)_
-
-_Defined in [src/ViewPort.ts:101](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L101)_
 
 **Parameters:**
 
@@ -66,15 +35,11 @@ _Defined in [src/ViewPort.ts:101](https://github.com/aarondail/react-zoomable-ui
 
 • **camera**: _[ViewPortCameraInterface](../globals.md#viewportcamerainterface)_
 
-_Defined in [src/ViewPort.ts:86](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L86)_
-
 ---
 
 ### centerX
 
 • **centerX**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
-
-_Defined in [src/ViewPort.ts:78](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L78)_
 
 ---
 
@@ -82,15 +47,11 @@ _Defined in [src/ViewPort.ts:78](https://github.com/aarondail/react-zoomable-ui/
 
 • **centerY**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:79](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L79)_
-
 ---
 
 ### containerHeight
 
 • **containerHeight**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
-
-_Defined in [src/ViewPort.ts:77](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L77)_
 
 ---
 
@@ -98,15 +59,11 @@ _Defined in [src/ViewPort.ts:77](https://github.com/aarondail/react-zoomable-ui/
 
 • **containerWidth**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
 
-_Defined in [src/ViewPort.ts:76](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L76)_
-
 ---
 
 ### height
 
 • **height**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
-
-_Defined in [src/ViewPort.ts:83](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L83)_
 
 ---
 
@@ -114,15 +71,11 @@ _Defined in [src/ViewPort.ts:83](https://github.com/aarondail/react-zoomable-ui/
 
 • **left**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:80](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L80)_
-
 ---
 
 ### top
 
 • **top**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
-
-_Defined in [src/ViewPort.ts:81](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L81)_
 
 ---
 
@@ -130,23 +83,17 @@ _Defined in [src/ViewPort.ts:81](https://github.com/aarondail/react-zoomable-ui/
 
 • **width**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:82](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L82)_
-
 ---
 
 ### zoomFactor
 
 • **zoomFactor**: _[ZoomFactor](../globals.md#zoomfactor)_
 
-_Defined in [src/ViewPort.ts:84](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L84)_
-
 ## Methods
 
 ### destroy
 
 ▸ **destroy**(): _void_
-
-_Defined in [src/ViewPort.ts:185](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L185)_
 
 **Returns:** _void_
 
@@ -155,8 +102,6 @@ _Defined in [src/ViewPort.ts:185](https://github.com/aarondail/react-zoomable-ui
 ### setBounds
 
 ▸ **setBounds**(`bounds`: [ViewPortBounds](../interfaces/viewportbounds.md)): _void_
-
-_Defined in [src/ViewPort.ts:208](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L208)_
 
 **Parameters:**
 
@@ -172,8 +117,6 @@ _Defined in [src/ViewPort.ts:208](https://github.com/aarondail/react-zoomable-ui
 
 ▸ **translateClientRectToVirtualSpace**(`rectOrElement`: ClientRect | HTMLElement): _[VirtualSpaceRect](../interfaces/virtualspacerect.md)_
 
-_Defined in [src/ViewPort.ts:224](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L224)_
-
 **Parameters:**
 
 | Name            | Type                          |
@@ -187,8 +130,6 @@ _Defined in [src/ViewPort.ts:224](https://github.com/aarondail/react-zoomable-ui
 ### translateClientXYCoordinatesToVirtualSpace
 
 ▸ **translateClientXYCoordinatesToVirtualSpace**(`x`: [ClientPixelUnit](../globals.md#clientpixelunit), `y`: [ClientPixelUnit](../globals.md#clientpixelunit)): _object_
-
-_Defined in [src/ViewPort.ts:214](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L214)_
 
 **Parameters:**
 
@@ -208,8 +149,6 @@ _Defined in [src/ViewPort.ts:214](https://github.com/aarondail/react-zoomable-ui
 ### updateContainerSize
 
 ▸ **updateContainerSize**(): _void_
-
-_Defined in [src/ViewPort.ts:250](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L250)_
 
 This should be used when the div is resized. By default resizes due
 to the window itself resizing will be automatically handled, but any other

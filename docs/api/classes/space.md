@@ -1,5 +1,3 @@
-[react-zoomable-ui](../README.md) › [Globals](../globals.md) › [Space](space.md)
-
 # Class: Space <**SS**>
 
 This component makes its children zoomable and pan-able.
@@ -21,40 +19,11 @@ See [SpaceProps](../interfaces/spaceprops.md).
 
   ↳ **Space**
 
-## Index
-
-### Constructors
-
-- [constructor](space.md#constructor)
-
-### Properties
-
-- [viewPort](space.md#optional-viewport)
-
-### Methods
-
-- [UNSAFE_componentWillMount](space.md#optional-unsafe_componentwillmount)
-- [UNSAFE_componentWillReceiveProps](space.md#optional-unsafe_componentwillreceiveprops)
-- [UNSAFE_componentWillUpdate](space.md#optional-unsafe_componentwillupdate)
-- [componentDidCatch](space.md#optional-componentdidcatch)
-- [componentDidMount](space.md#optional-componentdidmount)
-- [componentDidUpdate](space.md#componentdidupdate)
-- [componentWillMount](space.md#optional-componentwillmount)
-- [componentWillReceiveProps](space.md#optional-componentwillreceiveprops)
-- [componentWillUnmount](space.md#componentwillunmount)
-- [componentWillUpdate](space.md#optional-componentwillupdate)
-- [getSnapshotBeforeUpdate](space.md#optional-getsnapshotbeforeupdate)
-- [render](space.md#render)
-- [shouldComponentUpdate](space.md#optional-shouldcomponentupdate)
-- [updateSize](space.md#updatesize)
-
 ## Constructors
 
 ### constructor
 
 \+ **new Space**(`props`: [SpaceProps](../interfaces/spaceprops.md)): _[Space](space.md)_
-
-_Defined in [src/Space.tsx:130](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L130)_
 
 **Parameters:**
 
@@ -69,8 +38,6 @@ _Defined in [src/Space.tsx:130](https://github.com/aarondail/react-zoomable-ui/b
 ### `Optional` viewPort
 
 • **viewPort**? : _[ViewPort](viewport.md)_
-
-_Defined in [src/Space.tsx:107](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L107)_
 
 Describes what portion of the virtual coordinate space is visible inside
 the `Space`, and, among other things, provides access to the
@@ -88,8 +55,6 @@ for changes.
 ▸ **UNSAFE_componentWillMount**(): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[UNSAFE_componentWillMount](nopanarea.md#optional-unsafe_componentwillmount)_
-
-Defined in node_modules/@types/react/index.d.ts:658
 
 Called immediately before mounting occurs, and before `Component#render`.
 Avoid introducing any side-effects or subscriptions in this method.
@@ -114,8 +79,6 @@ prevents this from being invoked.
 ▸ **UNSAFE_componentWillReceiveProps**(`nextProps`: Readonly‹[SpaceProps](../interfaces/spaceprops.md)›, `nextContext`: any): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[UNSAFE_componentWillReceiveProps](nopanarea.md#optional-unsafe_componentwillreceiveprops)_
-
-Defined in node_modules/@types/react/index.d.ts:690
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -151,8 +114,6 @@ prevents this from being invoked.
 
 _Inherited from [NoPanArea](nopanarea.md).[UNSAFE_componentWillUpdate](nopanarea.md#optional-unsafe_componentwillupdate)_
 
-Defined in node_modules/@types/react/index.d.ts:718
-
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
 Note: You cannot call `Component#setState` here.
@@ -186,8 +147,6 @@ prevents this from being invoked.
 
 _Inherited from [NoPanArea](nopanarea.md).[componentDidCatch](nopanarea.md#optional-componentdidcatch)_
 
-Defined in node_modules/@types/react/index.d.ts:587
-
 Catches exceptions generated in descendant components. Unhandled exceptions will cause
 the entire component tree to unmount.
 
@@ -208,8 +167,6 @@ the entire component tree to unmount.
 
 _Inherited from [Space](space.md).[componentDidMount](space.md#optional-componentdidmount)_
 
-Defined in node_modules/@types/react/index.d.ts:566
-
 Called immediately after a component is mounted. Setting state here will trigger re-rendering.
 
 **Returns:** _void_
@@ -221,8 +178,6 @@ Called immediately after a component is mounted. Setting state here will trigger
 ▸ **componentDidUpdate**(`prevProps`: [SpaceProps](../interfaces/spaceprops.md)): _void_
 
 _Overrides [NoPanArea](nopanarea.md).[componentDidUpdate](nopanarea.md#optional-componentdidupdate)_
-
-_Defined in [src/Space.tsx:144](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L144)_
 
 **Parameters:**
 
@@ -239,8 +194,6 @@ _Defined in [src/Space.tsx:144](https://github.com/aarondail/react-zoomable-ui/b
 ▸ **componentWillMount**(): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[componentWillMount](nopanarea.md#optional-componentwillmount)_
-
-Defined in node_modules/@types/react/index.d.ts:644
 
 Called immediately before mounting occurs, and before `Component#render`.
 Avoid introducing any side-effects or subscriptions in this method.
@@ -263,8 +216,6 @@ prevents this from being invoked.
 ▸ **componentWillReceiveProps**(`nextProps`: Readonly‹[SpaceProps](../interfaces/spaceprops.md)›, `nextContext`: any): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[componentWillReceiveProps](nopanarea.md#optional-componentwillreceiveprops)_
-
-Defined in node_modules/@types/react/index.d.ts:673
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -298,8 +249,6 @@ prevents this from being invoked.
 
 _Overrides void_
 
-_Defined in [src/Space.tsx:151](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L151)_
-
 **Returns:** _void_
 
 ---
@@ -309,8 +258,6 @@ _Defined in [src/Space.tsx:151](https://github.com/aarondail/react-zoomable-ui/b
 ▸ **componentWillUpdate**(`nextProps`: Readonly‹[SpaceProps](../interfaces/spaceprops.md)›, `nextState`: Readonly‹[SpaceState](../interfaces/spacestate.md)›, `nextContext`: any): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[componentWillUpdate](nopanarea.md#optional-componentwillupdate)_
-
-Defined in node_modules/@types/react/index.d.ts:703
 
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
@@ -343,8 +290,6 @@ prevents this from being invoked.
 
 _Inherited from [NoPanArea](nopanarea.md).[getSnapshotBeforeUpdate](nopanarea.md#optional-getsnapshotbeforeupdate)_
 
-Defined in node_modules/@types/react/index.d.ts:623
-
 Runs before React applies the result of `render` to the document, and
 returns an object to be given to componentDidUpdate. Useful for saving
 things such as scroll position before `render` causes changes to it.
@@ -367,8 +312,6 @@ lifecycle events from running.
 
 ▸ **render**(): _Element‹›_
 
-_Defined in [src/Space.tsx:155](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L155)_
-
 **Returns:** _Element‹›_
 
 ---
@@ -378,8 +321,6 @@ _Defined in [src/Space.tsx:155](https://github.com/aarondail/react-zoomable-ui/b
 ▸ **shouldComponentUpdate**(`nextProps`: Readonly‹[SpaceProps](../interfaces/spaceprops.md)›, `nextState`: Readonly‹[SpaceState](../interfaces/spacestate.md)›, `nextContext`: any): _boolean_
 
 _Inherited from [NoPanArea](nopanarea.md).[shouldComponentUpdate](nopanarea.md#optional-shouldcomponentupdate)_
-
-Defined in node_modules/@types/react/index.d.ts:577
 
 Called to determine whether the change in props and state should trigger a re-render.
 
@@ -405,8 +346,6 @@ and `componentDidUpdate` will not be called.
 ### updateSize
 
 ▸ **updateSize**(): _void_
-
-_Defined in [src/Space.tsx:186](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L186)_
 
 This should be called in some cases to tell the `Space` that its parent
 element has resized. See the section on [[Sizing]] above for more info.

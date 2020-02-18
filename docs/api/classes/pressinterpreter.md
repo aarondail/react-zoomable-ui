@@ -1,5 +1,3 @@
-[react-zoomable-ui](../README.md) › [Globals](../globals.md) › [PressInterpreter](pressinterpreter.md)
-
 # Class: PressInterpreter
 
 If you are using [Space](space.md) then you don't need to use or interact directly with this class. It is used
@@ -18,23 +16,11 @@ the [ViewPort](viewport.md)'s constructors (as part of the `options` parameter).
 
 - **PressInterpreter**
 
-## Index
-
-### Constructors
-
-- [constructor](pressinterpreter.md#constructor)
-
-### Properties
-
-- [pressHandlers](pressinterpreter.md#presshandlers)
-
 ## Constructors
 
 ### constructor
 
 \+ **new PressInterpreter**(`onDecideHowToHandlePress`: [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback)): _[PressInterpreter](pressinterpreter.md)_
-
-_Defined in [src/PressInterpreter.ts:93](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L93)_
 
 **Parameters:**
 
@@ -49,5 +35,3 @@ _Defined in [src/PressInterpreter.ts:93](https://github.com/aarondail/react-zoom
 ### pressHandlers
 
 • **pressHandlers**: _Pick‹[ViewPortOptions](../interfaces/viewportoptions.md), "onPressStart" | "onPressMove" | "onPressEnd" | "onPressCancel"›_
-
-_Defined in [src/PressInterpreter.ts:85](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L85)_

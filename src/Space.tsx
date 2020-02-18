@@ -140,18 +140,16 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     this.elementSizeChangePoller = new ElementSizeChangePoller(this.updateSize);
   }
 
-  /** @internalapi */
   public componentDidUpdate(prevProps: SpaceProps) {
     if (this.props.pollForElementResizing !== prevProps.pollForElementResizing) {
       this.elementSizeChangePoller.update(this.outerDivRef, !!this.props.pollForElementResizing);
     }
   }
 
-  /** @internalapi */
   public componentWillUnmount() {
     this.destroyViewPort();
   }
-  /** @internalapi */
+
   public render() {
     let transformedDivStyle = this.state.transformStyle;
     if (this.props.innerDivStyle) {

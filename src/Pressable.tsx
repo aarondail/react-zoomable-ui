@@ -133,7 +133,8 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
 
   /**
    * Called by the [[Space]] to change the hover state.
-   * @internalapi
+   *
+   * This isn't intended to be called from outside the library.
    */
   public setHovered(hovered: boolean) {
     this.setState({ hovered });

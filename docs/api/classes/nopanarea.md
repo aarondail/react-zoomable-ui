@@ -1,5 +1,3 @@
-[react-zoomable-ui](../README.md) › [Globals](../globals.md) › [NoPanArea](nopanarea.md)
-
 # Class: NoPanArea <**S, SS**>
 
 If you have a part of your `Space` that you do not want to be pan-able for
@@ -26,41 +24,11 @@ See [NoPanAreaProps](../interfaces/nopanareaprops.md).
 
   ↳ **NoPanArea**
 
-## Index
-
-### Constructors
-
-- [constructor](nopanarea.md#constructor)
-
-### Properties
-
-- [context](nopanarea.md#context)
-- [id](nopanarea.md#id)
-- [contextType](nopanarea.md#static-contexttype)
-
-### Methods
-
-- [UNSAFE_componentWillMount](nopanarea.md#optional-unsafe_componentwillmount)
-- [UNSAFE_componentWillReceiveProps](nopanarea.md#optional-unsafe_componentwillreceiveprops)
-- [UNSAFE_componentWillUpdate](nopanarea.md#optional-unsafe_componentwillupdate)
-- [componentDidCatch](nopanarea.md#optional-componentdidcatch)
-- [componentDidMount](nopanarea.md#componentdidmount)
-- [componentDidUpdate](nopanarea.md#optional-componentdidupdate)
-- [componentWillMount](nopanarea.md#optional-componentwillmount)
-- [componentWillReceiveProps](nopanarea.md#optional-componentwillreceiveprops)
-- [componentWillUnmount](nopanarea.md#componentwillunmount)
-- [componentWillUpdate](nopanarea.md#optional-componentwillupdate)
-- [getSnapshotBeforeUpdate](nopanarea.md#optional-getsnapshotbeforeupdate)
-- [render](nopanarea.md#render)
-- [shouldComponentUpdate](nopanarea.md#optional-shouldcomponentupdate)
-
 ## Constructors
 
 ### constructor
 
 \+ **new NoPanArea**(`props`: [NoPanAreaProps](../interfaces/nopanareaprops.md), `context`: [SpaceContextType](../interfaces/spacecontexttype.md)): _[NoPanArea](nopanarea.md)_
-
-_Defined in [src/NoPanArea.tsx:33](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L33)_
 
 **Parameters:**
 
@@ -77,23 +45,17 @@ _Defined in [src/NoPanArea.tsx:33](https://github.com/aarondail/react-zoomable-u
 
 • **context**: _[SpaceContextType](../interfaces/spacecontexttype.md)_
 
-_Defined in [src/NoPanArea.tsx:28](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L28)_
-
 ---
 
 ### id
 
 • **id**: _string_ = generateRandomId()
 
-_Defined in [src/NoPanArea.tsx:29](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L29)_
-
 ---
 
 ### `Static` contextType
 
 ▪ **contextType**: _Context‹[SpaceContextType](../interfaces/spacecontexttype.md)›_ = SpaceContext
-
-_Defined in [src/NoPanArea.tsx:27](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L27)_
 
 ## Methods
 
@@ -102,8 +64,6 @@ _Defined in [src/NoPanArea.tsx:27](https://github.com/aarondail/react-zoomable-u
 ▸ **UNSAFE_componentWillMount**(): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[UNSAFE_componentWillMount](nopanarea.md#optional-unsafe_componentwillmount)_
-
-Defined in node_modules/@types/react/index.d.ts:658
 
 Called immediately before mounting occurs, and before `Component#render`.
 Avoid introducing any side-effects or subscriptions in this method.
@@ -128,8 +88,6 @@ prevents this from being invoked.
 ▸ **UNSAFE_componentWillReceiveProps**(`nextProps`: Readonly‹[NoPanAreaProps](../interfaces/nopanareaprops.md)›, `nextContext`: any): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[UNSAFE_componentWillReceiveProps](nopanarea.md#optional-unsafe_componentwillreceiveprops)_
-
-Defined in node_modules/@types/react/index.d.ts:690
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -165,8 +123,6 @@ prevents this from being invoked.
 
 _Inherited from [NoPanArea](nopanarea.md).[UNSAFE_componentWillUpdate](nopanarea.md#optional-unsafe_componentwillupdate)_
 
-Defined in node_modules/@types/react/index.d.ts:718
-
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
 Note: You cannot call `Component#setState` here.
@@ -200,8 +156,6 @@ prevents this from being invoked.
 
 _Inherited from [NoPanArea](nopanarea.md).[componentDidCatch](nopanarea.md#optional-componentdidcatch)_
 
-Defined in node_modules/@types/react/index.d.ts:587
-
 Catches exceptions generated in descendant components. Unhandled exceptions will cause
 the entire component tree to unmount.
 
@@ -222,8 +176,6 @@ the entire component tree to unmount.
 
 _Overrides [Space](space.md).[componentDidMount](space.md#optional-componentdidmount)_
 
-_Defined in [src/NoPanArea.tsx:48](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L48)_
-
 **Returns:** _void_
 
 ---
@@ -233,8 +185,6 @@ _Defined in [src/NoPanArea.tsx:48](https://github.com/aarondail/react-zoomable-u
 ▸ **componentDidUpdate**(`prevProps`: Readonly‹[NoPanAreaProps](../interfaces/nopanareaprops.md)›, `prevState`: Readonly‹S›, `snapshot?`: SS): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[componentDidUpdate](nopanarea.md#optional-componentdidupdate)_
-
-Defined in node_modules/@types/react/index.d.ts:629
 
 Called immediately after updating occurs. Not called for the initial render.
 
@@ -258,8 +208,6 @@ The snapshot is only present if getSnapshotBeforeUpdate is present and returns n
 
 _Inherited from [NoPanArea](nopanarea.md).[componentWillMount](nopanarea.md#optional-componentwillmount)_
 
-Defined in node_modules/@types/react/index.d.ts:644
-
 Called immediately before mounting occurs, and before `Component#render`.
 Avoid introducing any side-effects or subscriptions in this method.
 
@@ -281,8 +229,6 @@ prevents this from being invoked.
 ▸ **componentWillReceiveProps**(`nextProps`: Readonly‹[NoPanAreaProps](../interfaces/nopanareaprops.md)›, `nextContext`: any): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[componentWillReceiveProps](nopanarea.md#optional-componentwillreceiveprops)_
-
-Defined in node_modules/@types/react/index.d.ts:673
 
 Called when the component may be receiving new props.
 React may call this even if props have not changed, so be sure to compare new and existing
@@ -316,8 +262,6 @@ prevents this from being invoked.
 
 _Overrides void_
 
-_Defined in [src/NoPanArea.tsx:52](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L52)_
-
 **Returns:** _void_
 
 ---
@@ -327,8 +271,6 @@ _Defined in [src/NoPanArea.tsx:52](https://github.com/aarondail/react-zoomable-u
 ▸ **componentWillUpdate**(`nextProps`: Readonly‹[NoPanAreaProps](../interfaces/nopanareaprops.md)›, `nextState`: Readonly‹S›, `nextContext`: any): _void_
 
 _Inherited from [NoPanArea](nopanarea.md).[componentWillUpdate](nopanarea.md#optional-componentwillupdate)_
-
-Defined in node_modules/@types/react/index.d.ts:703
 
 Called immediately before rendering when new props or state is received. Not called for the initial render.
 
@@ -361,8 +303,6 @@ prevents this from being invoked.
 
 _Inherited from [NoPanArea](nopanarea.md).[getSnapshotBeforeUpdate](nopanarea.md#optional-getsnapshotbeforeupdate)_
 
-Defined in node_modules/@types/react/index.d.ts:623
-
 Runs before React applies the result of `render` to the document, and
 returns an object to be given to componentDidUpdate. Useful for saving
 things such as scroll position before `render` causes changes to it.
@@ -385,8 +325,6 @@ lifecycle events from running.
 
 ▸ **render**(): _Element‹›_
 
-_Defined in [src/NoPanArea.tsx:56](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L56)_
-
 **Returns:** _Element‹›_
 
 ---
@@ -396,8 +334,6 @@ _Defined in [src/NoPanArea.tsx:56](https://github.com/aarondail/react-zoomable-u
 ▸ **shouldComponentUpdate**(`nextProps`: Readonly‹[NoPanAreaProps](../interfaces/nopanareaprops.md)›, `nextState`: Readonly‹S›, `nextContext`: any): _boolean_
 
 _Inherited from [NoPanArea](nopanarea.md).[shouldComponentUpdate](nopanarea.md#optional-shouldcomponentupdate)_
-
-Defined in node_modules/@types/react/index.d.ts:577
 
 Called to determine whether the change in props and state should trigger a re-render.
 

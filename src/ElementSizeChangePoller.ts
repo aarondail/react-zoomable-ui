@@ -2,8 +2,6 @@
  * This class simply takes an element, records its size, and then polls it for
  * size changes every 500 ms. If a size change is detected the onSizeChanged
  * callback is called.
- *
- * @internalapi
  */
 export class ElementSizeChangePoller {
   private element?: HTMLDivElement;

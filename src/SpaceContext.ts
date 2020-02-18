@@ -4,12 +4,9 @@ import { InteractableComponent } from './Interactable';
 import { ViewPort } from './ViewPort';
 
 export interface SpaceContextType {
-  /** @internalapi */
   readonly rootDivUniqueClassName: string;
-  /** @internalapi */
   readonly registerInteractable: (interactable: InteractableComponent) => void;
   readonly viewPort: ViewPort;
-  /** @internalapi */
   readonly unregisterInteractable: (interactable: InteractableComponent) => void;
 }
 
