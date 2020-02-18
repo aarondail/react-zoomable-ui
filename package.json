@@ -25,7 +25,8 @@
     "test": "jest",
     "test:w": "jest --watch",
     "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
-    "tslint": "tslint --project ./tsconfig.tslint.json --fix"
+    "tslint": "tslint --project ./tsconfig.tslint.json --fix",
+    "docs": "rm -rf docs/api && typedoc --out docs/api --mode file  --external-aliases external,internalapi && rm docs/api/README.md"
   },
   "dependencies": {
     "hammerjs": "^2.0.8",
@@ -50,6 +51,7 @@
     "tslint-immutable": "^6.0.1",
     "typedoc": "^0.16.9",
     "typedoc-plugin-internal-external": "^2.1.1",
+    "typedoc-plugin-markdown": "^2.2.16",
     "typedoc-plugin-no-inherit": "^1.1.10",
     "typescript": "^3.7.2"
   },
