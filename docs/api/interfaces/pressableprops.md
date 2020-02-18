@@ -41,7 +41,7 @@
 
 • **capturePressClassName**? : _undefined | string_
 
-_Defined in [src/Pressable.tsx:17](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L17)_
+_Defined in [src/Pressable.tsx:17](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L17)_
 
 ---
 
@@ -49,7 +49,7 @@ _Defined in [src/Pressable.tsx:17](https://github.com/aarondail/react-zoomable-u
 
 • **capturePressStyle**? : _React.CSSProperties_
 
-_Defined in [src/Pressable.tsx:23](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L23)_
+_Defined in [src/Pressable.tsx:23](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L23)_
 
 ---
 
@@ -57,7 +57,7 @@ _Defined in [src/Pressable.tsx:23](https://github.com/aarondail/react-zoomable-u
 
 • **capturePressThresholdMs**? : _undefined | number_
 
-_Defined in [src/Pressable.tsx:36](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L36)_
+_Defined in [src/Pressable.tsx:36](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L36)_
 
 This is more of an advanced option. If set, this will be the number of
 milliseconds until the [Pressable](../classes/pressable.md) captures a press gesture. Once it is
@@ -72,7 +72,7 @@ The default is undefined (so presses won't be captured)
 
 • **children**? : _React.ReactNode | function_
 
-_Defined in [src/Pressable.tsx:13](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L13)_
+_Defined in [src/Pressable.tsx:13](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L13)_
 
 ---
 
@@ -80,7 +80,7 @@ _Defined in [src/Pressable.tsx:13](https://github.com/aarondail/react-zoomable-u
 
 • **className**? : _undefined | string_
 
-_Defined in [src/Pressable.tsx:14](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L14)_
+_Defined in [src/Pressable.tsx:14](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L14)_
 
 ---
 
@@ -88,7 +88,7 @@ _Defined in [src/Pressable.tsx:14](https://github.com/aarondail/react-zoomable-u
 
 • **disabled**? : _undefined | false | true_
 
-_Defined in [src/Pressable.tsx:27](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L27)_
+_Defined in [src/Pressable.tsx:27](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L27)_
 
 ---
 
@@ -96,7 +96,7 @@ _Defined in [src/Pressable.tsx:27](https://github.com/aarondail/react-zoomable-u
 
 • **disabledClassName**? : _undefined | string_
 
-_Defined in [src/Pressable.tsx:18](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L18)_
+_Defined in [src/Pressable.tsx:18](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L18)_
 
 ---
 
@@ -104,7 +104,7 @@ _Defined in [src/Pressable.tsx:18](https://github.com/aarondail/react-zoomable-u
 
 • **disabledStyle**? : _React.CSSProperties_
 
-_Defined in [src/Pressable.tsx:24](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L24)_
+_Defined in [src/Pressable.tsx:24](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L24)_
 
 ---
 
@@ -112,7 +112,7 @@ _Defined in [src/Pressable.tsx:24](https://github.com/aarondail/react-zoomable-u
 
 • **hoverClassName**? : _undefined | string_
 
-_Defined in [src/Pressable.tsx:19](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L19)_
+_Defined in [src/Pressable.tsx:19](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L19)_
 
 ---
 
@@ -120,7 +120,7 @@ _Defined in [src/Pressable.tsx:19](https://github.com/aarondail/react-zoomable-u
 
 • **hoverStyle**? : _React.CSSProperties_
 
-_Defined in [src/Pressable.tsx:25](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L25)_
+_Defined in [src/Pressable.tsx:25](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L25)_
 
 ---
 
@@ -128,7 +128,7 @@ _Defined in [src/Pressable.tsx:25](https://github.com/aarondail/react-zoomable-u
 
 • **id**? : _undefined | string_
 
-_Defined in [src/Pressable.tsx:12](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L12)_
+_Defined in [src/Pressable.tsx:12](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L12)_
 
 ---
 
@@ -136,7 +136,7 @@ _Defined in [src/Pressable.tsx:12](https://github.com/aarondail/react-zoomable-u
 
 • **longTapThresholdMs**? : _undefined | number_
 
-_Defined in [src/Pressable.tsx:42](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L42)_
+_Defined in [src/Pressable.tsx:42](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L42)_
 
 If a press is released after this threshold, it will be considered a long
 tap. The default is undefined if there is no `onLongTap` prop, or 500
@@ -148,7 +148,7 @@ milliseconds if there is.
 
 • **onCapturePressCancelled**? : _undefined | function_
 
-_Defined in [src/Pressable.tsx:56](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L56)_
+_Defined in [src/Pressable.tsx:56](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L56)_
 
 ---
 
@@ -156,7 +156,7 @@ _Defined in [src/Pressable.tsx:56](https://github.com/aarondail/react-zoomable-u
 
 • **onCapturePressEnd**? : _undefined | function_
 
-_Defined in [src/Pressable.tsx:52](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L52)_
+_Defined in [src/Pressable.tsx:52](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L52)_
 
 ---
 
@@ -164,7 +164,7 @@ _Defined in [src/Pressable.tsx:52](https://github.com/aarondail/react-zoomable-u
 
 • **onCapturePressMove**? : _undefined | function_
 
-_Defined in [src/Pressable.tsx:47](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L47)_
+_Defined in [src/Pressable.tsx:47](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L47)_
 
 ---
 
@@ -172,7 +172,7 @@ _Defined in [src/Pressable.tsx:47](https://github.com/aarondail/react-zoomable-u
 
 • **onCapturePressStart**? : _undefined | function_
 
-_Defined in [src/Pressable.tsx:46](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L46)_
+_Defined in [src/Pressable.tsx:46](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L46)_
 
 ---
 
@@ -180,7 +180,7 @@ _Defined in [src/Pressable.tsx:46](https://github.com/aarondail/react-zoomable-u
 
 • **onLongTap**? : _undefined | function_
 
-_Defined in [src/Pressable.tsx:45](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L45)_
+_Defined in [src/Pressable.tsx:45](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L45)_
 
 ---
 
@@ -188,7 +188,7 @@ _Defined in [src/Pressable.tsx:45](https://github.com/aarondail/react-zoomable-u
 
 • **onPressContextMenu**? : _undefined | function_
 
-_Defined in [src/Pressable.tsx:60](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L60)_
+_Defined in [src/Pressable.tsx:60](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L60)_
 
 Called on a right click.
 
@@ -198,7 +198,7 @@ Called on a right click.
 
 • **onTap**? : _undefined | function_
 
-_Defined in [src/Pressable.tsx:44](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L44)_
+_Defined in [src/Pressable.tsx:44](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L44)_
 
 ---
 
@@ -206,7 +206,7 @@ _Defined in [src/Pressable.tsx:44](https://github.com/aarondail/react-zoomable-u
 
 • **potentialLongTapClassName**? : _undefined | string_
 
-_Defined in [src/Pressable.tsx:16](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L16)_
+_Defined in [src/Pressable.tsx:16](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L16)_
 
 ---
 
@@ -214,7 +214,7 @@ _Defined in [src/Pressable.tsx:16](https://github.com/aarondail/react-zoomable-u
 
 • **potentialLongTapStyle**? : _React.CSSProperties_
 
-_Defined in [src/Pressable.tsx:22](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L22)_
+_Defined in [src/Pressable.tsx:22](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L22)_
 
 ---
 
@@ -222,7 +222,7 @@ _Defined in [src/Pressable.tsx:22](https://github.com/aarondail/react-zoomable-u
 
 • **potentialTapClassName**? : _undefined | string_
 
-_Defined in [src/Pressable.tsx:15](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L15)_
+_Defined in [src/Pressable.tsx:15](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L15)_
 
 ---
 
@@ -230,7 +230,7 @@ _Defined in [src/Pressable.tsx:15](https://github.com/aarondail/react-zoomable-u
 
 • **potentialTapStyle**? : _React.CSSProperties_
 
-_Defined in [src/Pressable.tsx:21](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L21)_
+_Defined in [src/Pressable.tsx:21](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L21)_
 
 ---
 
@@ -238,4 +238,4 @@ _Defined in [src/Pressable.tsx:21](https://github.com/aarondail/react-zoomable-u
 
 • **style**? : _React.CSSProperties_
 
-_Defined in [src/Pressable.tsx:20](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L20)_
+_Defined in [src/Pressable.tsx:20](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L20)_

@@ -20,7 +20,7 @@
 
 • **className**? : _undefined | string_
 
-_Defined in [src/NoPanArea.tsx:9](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L9)_
+_Defined in [src/NoPanArea.tsx:9](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L9)_
 
 ---
 
@@ -28,7 +28,7 @@ _Defined in [src/NoPanArea.tsx:9](https://github.com/aarondail/react-zoomable-ui
 
 • **id**? : _undefined | string_
 
-_Defined in [src/NoPanArea.tsx:8](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L8)_
+_Defined in [src/NoPanArea.tsx:8](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L8)_
 
 ---
 
@@ -36,4 +36,4 @@ _Defined in [src/NoPanArea.tsx:8](https://github.com/aarondail/react-zoomable-ui
 
 • **style**? : _React.CSSProperties_
 
-_Defined in [src/NoPanArea.tsx:10](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L10)_
+_Defined in [src/NoPanArea.tsx:10](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L10)_

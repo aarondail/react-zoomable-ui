@@ -26,7 +26,7 @@
 
 • **centerX**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:15](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L15)_
+_Defined in [src/ViewPortCamera.ts:15](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L15)_
 
 ---
 
@@ -34,7 +34,7 @@ _Defined in [src/ViewPortCamera.ts:15](https://github.com/aarondail/react-zoomab
 
 • **centerY**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:16](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L16)_
+_Defined in [src/ViewPortCamera.ts:16](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L16)_
 
 ---
 
@@ -42,7 +42,7 @@ _Defined in [src/ViewPortCamera.ts:16](https://github.com/aarondail/react-zoomab
 
 • **containerHeight**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:14](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L14)_
+_Defined in [src/ViewPortCamera.ts:14](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L14)_
 
 ---
 
@@ -50,7 +50,7 @@ _Defined in [src/ViewPortCamera.ts:14](https://github.com/aarondail/react-zoomab
 
 • **containerWidth**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:13](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L13)_
+_Defined in [src/ViewPortCamera.ts:13](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L13)_
 
 ---
 
@@ -58,7 +58,7 @@ _Defined in [src/ViewPortCamera.ts:13](https://github.com/aarondail/react-zoomab
 
 • **height**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:20](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L20)_
+_Defined in [src/ViewPortCamera.ts:20](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L20)_
 
 ---
 
@@ -66,7 +66,7 @@ _Defined in [src/ViewPortCamera.ts:20](https://github.com/aarondail/react-zoomab
 
 • **left**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:17](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L17)_
+_Defined in [src/ViewPortCamera.ts:17](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L17)_
 
 ---
 
@@ -74,7 +74,7 @@ _Defined in [src/ViewPortCamera.ts:17](https://github.com/aarondail/react-zoomab
 
 • **top**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:18](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L18)_
+_Defined in [src/ViewPortCamera.ts:18](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L18)_
 
 ---
 
@@ -82,7 +82,7 @@ _Defined in [src/ViewPortCamera.ts:18](https://github.com/aarondail/react-zoomab
 
 • **width**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPortCamera.ts:19](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L19)_
+_Defined in [src/ViewPortCamera.ts:19](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L19)_
 
 ---
 
@@ -90,4 +90,4 @@ _Defined in [src/ViewPortCamera.ts:19](https://github.com/aarondail/react-zoomab
 
 • **zoomFactor**: _[ZoomFactor](../globals.md#zoomfactor)_
 
-_Defined in [src/ViewPortCamera.ts:21](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L21)_
+_Defined in [src/ViewPortCamera.ts:21](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L21)_

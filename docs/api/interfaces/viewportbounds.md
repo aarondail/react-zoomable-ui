@@ -20,7 +20,7 @@
 
 • **x**? : _keyof [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
 
-_Defined in [src/ViewPort.ts:32](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L32)_
+_Defined in [src/ViewPort.ts:32](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L32)_
 
 ---
 
@@ -28,7 +28,7 @@ _Defined in [src/ViewPort.ts:32](https://github.com/aarondail/react-zoomable-ui/
 
 • **y**? : _keyof [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
 
-_Defined in [src/ViewPort.ts:33](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L33)_
+_Defined in [src/ViewPort.ts:33](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L33)_
 
 ---
 
@@ -36,4 +36,4 @@ _Defined in [src/ViewPort.ts:33](https://github.com/aarondail/react-zoomable-ui/
 
 • **zoom**? : _keyof [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
 
-_Defined in [src/ViewPort.ts:34](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L34)_
+_Defined in [src/ViewPort.ts:34](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L34)_

@@ -25,7 +25,7 @@
 
 • **debugEvents**? : _undefined | false | true_
 
-_Defined in [src/ViewPort.ts:38](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L38)_
+_Defined in [src/ViewPort.ts:38](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L38)_
 
 ---
 
@@ -33,7 +33,7 @@ _Defined in [src/ViewPort.ts:38](https://github.com/aarondail/react-zoomable-ui/
 
 • **onHover**? : _undefined | function_
 
-_Defined in [src/ViewPort.ts:57](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L57)_
+_Defined in [src/ViewPort.ts:57](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L57)_
 
 ---
 
@@ -41,7 +41,7 @@ _Defined in [src/ViewPort.ts:57](https://github.com/aarondail/react-zoomable-ui/
 
 • **onPressCancel**? : _undefined | function_
 
-_Defined in [src/ViewPort.ts:56](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L56)_
+_Defined in [src/ViewPort.ts:56](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L56)_
 
 After a press starts there are some cases where it can be canceled rather
 than ended. For example when on finger starts touching the screen that
@@ -56,7 +56,7 @@ motion.
 
 • **onPressContextMenu**? : _undefined | function_
 
-_Defined in [src/ViewPort.ts:58](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L58)_
+_Defined in [src/ViewPort.ts:58](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L58)_
 
 ---
 
@@ -64,7 +64,7 @@ _Defined in [src/ViewPort.ts:58](https://github.com/aarondail/react-zoomable-ui/
 
 • **onPressEnd**? : _undefined | function_
 
-_Defined in [src/ViewPort.ts:47](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L47)_
+_Defined in [src/ViewPort.ts:47](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L47)_
 
 ---
 
@@ -72,7 +72,7 @@ _Defined in [src/ViewPort.ts:47](https://github.com/aarondail/react-zoomable-ui/
 
 • **onPressMove**? : _undefined | function_
 
-_Defined in [src/ViewPort.ts:46](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L46)_
+_Defined in [src/ViewPort.ts:46](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L46)_
 
 ---
 
@@ -80,7 +80,7 @@ _Defined in [src/ViewPort.ts:46](https://github.com/aarondail/react-zoomable-ui/
 
 • **onPressStart**? : _undefined | function_
 
-_Defined in [src/ViewPort.ts:42](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L42)_
+_Defined in [src/ViewPort.ts:42](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L42)_
 
 ---
 
@@ -88,4 +88,4 @@ _Defined in [src/ViewPort.ts:42](https://github.com/aarondail/react-zoomable-ui/
 
 • **onUpdated**? : _undefined | function_
 
-_Defined in [src/ViewPort.ts:40](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L40)_
+_Defined in [src/ViewPort.ts:40](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L40)_

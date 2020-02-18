@@ -29,13 +29,6 @@ See [SpaceProps](../interfaces/spaceprops.md).
 
 ### Properties
 
-- [constantStyles](space.md#private-constantstyles)
-- [currentHoveredPressable](space.md#private-optional-currenthoveredpressable)
-- [elementSizeChangePoller](space.md#private-elementsizechangepoller)
-- [interactableRegistry](space.md#private-interactableregistry)
-- [outerDivRef](space.md#private-optional-outerdivref)
-- [pressInterpreter](space.md#private-pressinterpreter)
-- [rootDivUniqueClassName](space.md#private-rootdivuniqueclassname)
 - [viewPort](space.md#optional-viewport)
 
 ### Methods
@@ -50,16 +43,8 @@ See [SpaceProps](../interfaces/spaceprops.md).
 - [componentWillReceiveProps](space.md#optional-componentwillreceiveprops)
 - [componentWillUnmount](space.md#componentwillunmount)
 - [componentWillUpdate](space.md#optional-componentwillupdate)
-- [createTransformStyle](space.md#private-createtransformstyle)
-- [destroyViewPort](space.md#private-destroyviewport)
 - [getSnapshotBeforeUpdate](space.md#optional-getsnapshotbeforeupdate)
-- [handleDecideHowToHandlePress](space.md#private-handledecidehowtohandlepress)
-- [handleDragStart](space.md#private-handledragstart)
-- [handleHover](space.md#private-handlehover)
-- [handlePressContextMenu](space.md#private-handlepresscontextmenu)
-- [handleViewPortUpdated](space.md#private-handleviewportupdated)
 - [render](space.md#render)
-- [setOuterDivRefAndCreateViewPort](space.md#private-setouterdivrefandcreateviewport)
 - [shouldComponentUpdate](space.md#optional-shouldcomponentupdate)
 - [updateSize](space.md#updatesize)
 
@@ -69,7 +54,7 @@ See [SpaceProps](../interfaces/spaceprops.md).
 
 \+ **new Space**(`props`: [SpaceProps](../interfaces/spaceprops.md)): _[Space](space.md)_
 
-_Defined in [src/Space.tsx:130](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L130)_
+_Defined in [src/Space.tsx:130](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L130)_
 
 **Parameters:**
 
@@ -81,80 +66,11 @@ _Defined in [src/Space.tsx:130](https://github.com/aarondail/react-zoomable-ui/b
 
 ## Properties
 
-### `Private` constantStyles
-
-• **constantStyles**: _string_ = `
-.\${this.rootDivUniqueClassName} {
-position: absolute;
-top: 0; bottom: 0; left: 0; right: 0;
-cursor: default;
-}
-
-.\${this.rootDivUniqueClassName} > .react-zoomable-ui-inner-div {
-margin: 0; padding: 0;
-transform-origin: 0% 0%;
-min-height: 100%;
-width: 100%;
-}
-`
-
-_Defined in [src/Space.tsx:111](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L111)_
-
----
-
-### `Private` `Optional` currentHoveredPressable
-
-• **currentHoveredPressable**? : _[Pressable](pressable.md)_
-
-_Defined in [src/Space.tsx:127](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L127)_
-
----
-
-### `Private` elementSizeChangePoller
-
-• **elementSizeChangePoller**: _[ElementSizeChangePoller](elementsizechangepoller.md)_
-
-_Defined in [src/Space.tsx:128](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L128)_
-
----
-
-### `Private` interactableRegistry
-
-• **interactableRegistry**: _Map‹string, [InteractableComponent](../globals.md#interactablecomponent)›_
-
-_Defined in [src/Space.tsx:129](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L129)_
-
----
-
-### `Private` `Optional` outerDivRef
-
-• **outerDivRef**? : _HTMLDivElement_
-
-_Defined in [src/Space.tsx:126](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L126)_
-
----
-
-### `Private` pressInterpreter
-
-• **pressInterpreter**: _[PressInterpreter](pressinterpreter.md)_
-
-_Defined in [src/Space.tsx:130](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L130)_
-
----
-
-### `Private` rootDivUniqueClassName
-
-• **rootDivUniqueClassName**: _string_ = `react-zoomable-ui-${generateRandomId()}`
-
-_Defined in [src/Space.tsx:109](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L109)_
-
----
-
 ### `Optional` viewPort
 
 • **viewPort**? : _[ViewPort](viewport.md)_
 
-_Defined in [src/Space.tsx:107](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L107)_
+_Defined in [src/Space.tsx:107](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L107)_
 
 Describes what portion of the virtual coordinate space is visible inside
 the `Space`, and, among other things, provides access to the
@@ -306,7 +222,7 @@ Called immediately after a component is mounted. Setting state here will trigger
 
 _Overrides [NoPanArea](nopanarea.md).[componentDidUpdate](nopanarea.md#optional-componentdidupdate)_
 
-_Defined in [src/Space.tsx:144](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L144)_
+_Defined in [src/Space.tsx:144](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L144)_
 
 **Parameters:**
 
@@ -382,7 +298,7 @@ prevents this from being invoked.
 
 _Overrides void_
 
-_Defined in [src/Space.tsx:151](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L151)_
+_Defined in [src/Space.tsx:151](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L151)_
 
 **Returns:** _void_
 
@@ -421,26 +337,6 @@ prevents this from being invoked.
 
 ---
 
-### `Private` createTransformStyle
-
-▸ **createTransformStyle**(): _undefined | object_
-
-_Defined in [src/Space.tsx:192](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L192)_
-
-**Returns:** _undefined | object_
-
----
-
-### `Private` destroyViewPort
-
-▸ **destroyViewPort**(): _void_
-
-_Defined in [src/Space.tsx:202](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L202)_
-
-**Returns:** _void_
-
----
-
 ### `Optional` getSnapshotBeforeUpdate
 
 ▸ **getSnapshotBeforeUpdate**(`prevProps`: Readonly‹[SpaceProps](../interfaces/spaceprops.md)›, `prevState`: Readonly‹[SpaceState](../interfaces/spacestate.md)›): _SS | null_
@@ -467,106 +363,13 @@ lifecycle events from running.
 
 ---
 
-### `Private` handleDecideHowToHandlePress
-
-▸ **handleDecideHowToHandlePress**(`e`: MouseEvent | TouchEvent, `coordinates`: [PressEventCoordinates](../interfaces/presseventcoordinates.md)): _[PressHandlingOptions](../interfaces/presshandlingoptions.md) | undefined_
-
-_Defined in [src/Space.tsx:240](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L240)_
-
-**Parameters:**
-
-| Name          | Type                                                            |
-| ------------- | --------------------------------------------------------------- |
-| `e`           | MouseEvent &#124; TouchEvent                                    |
-| `coordinates` | [PressEventCoordinates](../interfaces/presseventcoordinates.md) |
-
-**Returns:** _[PressHandlingOptions](../interfaces/presshandlingoptions.md) | undefined_
-
----
-
-### `Private` handleDragStart
-
-▸ **handleDragStart**(`e`: DragEvent): _void_
-
-_Defined in [src/Space.tsx:215](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L215)_
-
-**Parameters:**
-
-| Name | Type      |
-| ---- | --------- |
-| `e`  | DragEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHover
-
-▸ **handleHover**(`e`: MouseEvent, `coordinates`: [PressEventCoordinates](../interfaces/presseventcoordinates.md)): _void_
-
-_Defined in [src/Space.tsx:273](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L273)_
-
-**Parameters:**
-
-| Name          | Type                                                            |
-| ------------- | --------------------------------------------------------------- |
-| `e`           | MouseEvent                                                      |
-| `coordinates` | [PressEventCoordinates](../interfaces/presseventcoordinates.md) |
-
-**Returns:** _void_
-
----
-
-### `Private` handlePressContextMenu
-
-▸ **handlePressContextMenu**(`e`: MouseEvent, `coordinates`: [PressEventCoordinates](../interfaces/presseventcoordinates.md)): _void_
-
-_Defined in [src/Space.tsx:291](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L291)_
-
-**Parameters:**
-
-| Name          | Type                                                            |
-| ------------- | --------------------------------------------------------------- |
-| `e`           | MouseEvent                                                      |
-| `coordinates` | [PressEventCoordinates](../interfaces/presseventcoordinates.md) |
-
-**Returns:** _void_
-
----
-
-### `Private` handleViewPortUpdated
-
-▸ **handleViewPortUpdated**(): _void_
-
-_Defined in [src/Space.tsx:321](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L321)_
-
-**Returns:** _void_
-
----
-
 ### render
 
 ▸ **render**(): _Element‹›_
 
-_Defined in [src/Space.tsx:155](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L155)_
+_Defined in [src/Space.tsx:155](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L155)_
 
 **Returns:** _Element‹›_
-
----
-
-### `Private` setOuterDivRefAndCreateViewPort
-
-▸ **setOuterDivRefAndCreateViewPort**(`ref`: any): _void_
-
-_Defined in [src/Space.tsx:328](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L328)_
-
-**Parameters:**
-
-| Name  | Type |
-| ----- | ---- |
-| `ref` | any  |
-
-**Returns:** _void_
 
 ---
 
@@ -603,7 +406,7 @@ and `componentDidUpdate` will not be called.
 
 ▸ **updateSize**(): _void_
 
-_Defined in [src/Space.tsx:186](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L186)_
+_Defined in [src/Space.tsx:186](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L186)_
 
 This should be called in some cases to tell the `Space` that its parent
 element has resized. See the section on [[Sizing]] above for more info.

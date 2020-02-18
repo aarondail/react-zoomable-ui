@@ -31,7 +31,6 @@ See [PressableProps](../interfaces/pressableprops.md).
 - [context](pressable.md#context)
 - [divRef](pressable.md#divref)
 - [id](pressable.md#id)
-- [panStartingCoordinates](pressable.md#private-optional-panstartingcoordinates)
 - [contextType](pressable.md#static-contexttype)
 
 ### Methods
@@ -46,19 +45,8 @@ See [PressableProps](../interfaces/pressableprops.md).
 - [componentWillReceiveProps](pressable.md#optional-componentwillreceiveprops)
 - [componentWillUnmount](pressable.md#componentwillunmount)
 - [componentWillUpdate](pressable.md#optional-componentwillupdate)
-- [determineClassName](pressable.md#private-determineclassname)
-- [determineStyle](pressable.md#private-determinestyle)
 - [getPressHandlingConfig](pressable.md#getpresshandlingconfig)
 - [getSnapshotBeforeUpdate](pressable.md#optional-getsnapshotbeforeupdate)
-- [handleCapturePressCancelled](pressable.md#private-handlecapturepresscancelled)
-- [handleCapturePressEnd](pressable.md#private-handlecapturepressend)
-- [handleCapturePressMove](pressable.md#private-handlecapturepressmove)
-- [handleCapturePressStart](pressable.md#private-handlecapturepressstart)
-- [handleLongTap](pressable.md#private-handlelongtap)
-- [handlePotentialLongTap](pressable.md#private-handlepotentiallongtap)
-- [handlePotentialTap](pressable.md#private-handlepotentialtap)
-- [handleTap](pressable.md#private-handletap)
-- [handleTapAbandoned](pressable.md#private-handletapabandoned)
 - [render](pressable.md#render)
 - [setHovered](pressable.md#sethovered)
 - [shouldComponentUpdate](pressable.md#optional-shouldcomponentupdate)
@@ -73,7 +61,7 @@ See [PressableProps](../interfaces/pressableprops.md).
 
 • **context**: _[SpaceContextType](../interfaces/spacecontexttype.md)_
 
-_Defined in [src/Pressable.tsx:83](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L83)_
+_Defined in [src/Pressable.tsx:83](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L83)_
 
 ---
 
@@ -81,7 +69,7 @@ _Defined in [src/Pressable.tsx:83](https://github.com/aarondail/react-zoomable-u
 
 • **divRef**: _RefObject‹HTMLDivElement›_ = React.createRef()
 
-_Defined in [src/Pressable.tsx:84](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L84)_
+_Defined in [src/Pressable.tsx:84](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L84)_
 
 ---
 
@@ -89,15 +77,7 @@ _Defined in [src/Pressable.tsx:84](https://github.com/aarondail/react-zoomable-u
 
 • **id**: _string_ = generateRandomId()
 
-_Defined in [src/Pressable.tsx:85](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L85)_
-
----
-
-### `Private` `Optional` panStartingCoordinates
-
-• **panStartingCoordinates**? : _[PressEventCoordinates](../interfaces/presseventcoordinates.md)_
-
-_Defined in [src/Pressable.tsx:88](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L88)_
+_Defined in [src/Pressable.tsx:85](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L85)_
 
 ---
 
@@ -105,7 +85,7 @@ _Defined in [src/Pressable.tsx:88](https://github.com/aarondail/react-zoomable-u
 
 ▪ **contextType**: _Context‹[SpaceContextType](../interfaces/spacecontexttype.md)›_ = SpaceContext
 
-_Defined in [src/Pressable.tsx:82](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L82)_
+_Defined in [src/Pressable.tsx:82](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L82)_
 
 ## Methods
 
@@ -234,7 +214,7 @@ the entire component tree to unmount.
 
 _Overrides [Space](space.md).[componentDidMount](space.md#optional-componentdidmount)_
 
-_Defined in [src/Pressable.tsx:90](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L90)_
+_Defined in [src/Pressable.tsx:90](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L90)_
 
 **Returns:** _void_
 
@@ -328,7 +308,7 @@ prevents this from being invoked.
 
 _Overrides void_
 
-_Defined in [src/Pressable.tsx:94](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L94)_
+_Defined in [src/Pressable.tsx:94](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L94)_
 
 **Returns:** _void_
 
@@ -367,31 +347,11 @@ prevents this from being invoked.
 
 ---
 
-### `Private` determineClassName
-
-▸ **determineClassName**(): _string_
-
-_Defined in [src/Pressable.tsx:142](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L142)_
-
-**Returns:** _string_
-
----
-
-### `Private` determineStyle
-
-▸ **determineStyle**(): _undefined | CSSProperties‹›_
-
-_Defined in [src/Pressable.tsx:179](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L179)_
-
-**Returns:** _undefined | CSSProperties‹›_
-
----
-
 ### getPressHandlingConfig
 
 ▸ **getPressHandlingConfig**(): _[PressHandlingOptions](../interfaces/presshandlingoptions.md) | undefined_
 
-_Defined in [src/Pressable.tsx:98](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L98)_
+_Defined in [src/Pressable.tsx:98](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L98)_
 
 **Returns:** _[PressHandlingOptions](../interfaces/presshandlingoptions.md) | undefined_
 
@@ -423,119 +383,11 @@ lifecycle events from running.
 
 ---
 
-### `Private` handleCapturePressCancelled
-
-▸ **handleCapturePressCancelled**(): _void_
-
-_Defined in [src/Pressable.tsx:227](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L227)_
-
-**Returns:** _void_
-
----
-
-### `Private` handleCapturePressEnd
-
-▸ **handleCapturePressEnd**(`coordinates`: [PressEventCoordinatesWithDeltas](../interfaces/presseventcoordinateswithdeltas.md)): _void_
-
-_Defined in [src/Pressable.tsx:219](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L219)_
-
-**Parameters:**
-
-| Name          | Type                                                                                |
-| ------------- | ----------------------------------------------------------------------------------- |
-| `coordinates` | [PressEventCoordinatesWithDeltas](../interfaces/presseventcoordinateswithdeltas.md) |
-
-**Returns:** _void_
-
----
-
-### `Private` handleCapturePressMove
-
-▸ **handleCapturePressMove**(`coordinates`: [PressEventCoordinatesWithDeltas](../interfaces/presseventcoordinateswithdeltas.md)): _void_
-
-_Defined in [src/Pressable.tsx:213](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L213)_
-
-**Parameters:**
-
-| Name          | Type                                                                                |
-| ------------- | ----------------------------------------------------------------------------------- |
-| `coordinates` | [PressEventCoordinatesWithDeltas](../interfaces/presseventcoordinateswithdeltas.md) |
-
-**Returns:** _void_
-
----
-
-### `Private` handleCapturePressStart
-
-▸ **handleCapturePressStart**(`coordinates`: [PressEventCoordinates](../interfaces/presseventcoordinates.md)): _void_
-
-_Defined in [src/Pressable.tsx:205](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L205)_
-
-**Parameters:**
-
-| Name          | Type                                                            |
-| ------------- | --------------------------------------------------------------- |
-| `coordinates` | [PressEventCoordinates](../interfaces/presseventcoordinates.md) |
-
-**Returns:** _void_
-
----
-
-### `Private` handleLongTap
-
-▸ **handleLongTap**(): _void_
-
-_Defined in [src/Pressable.tsx:239](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L239)_
-
-**Returns:** _void_
-
----
-
-### `Private` handlePotentialLongTap
-
-▸ **handlePotentialLongTap**(): _void_
-
-_Defined in [src/Pressable.tsx:244](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L244)_
-
-**Returns:** _void_
-
----
-
-### `Private` handlePotentialTap
-
-▸ **handlePotentialTap**(): _void_
-
-_Defined in [src/Pressable.tsx:248](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L248)_
-
-**Returns:** _void_
-
----
-
-### `Private` handleTap
-
-▸ **handleTap**(): _void_
-
-_Defined in [src/Pressable.tsx:252](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L252)_
-
-**Returns:** _void_
-
----
-
-### `Private` handleTapAbandoned
-
-▸ **handleTapAbandoned**(): _void_
-
-_Defined in [src/Pressable.tsx:235](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L235)_
-
-**Returns:** _void_
-
----
-
 ### render
 
 ▸ **render**(): _Element‹›_
 
-_Defined in [src/Pressable.tsx:120](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L120)_
+_Defined in [src/Pressable.tsx:120](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L120)_
 
 **Returns:** _Element‹›_
 
@@ -545,7 +397,7 @@ _Defined in [src/Pressable.tsx:120](https://github.com/aarondail/react-zoomable-
 
 ▸ **setHovered**(`hovered`: boolean): _void_
 
-_Defined in [src/Pressable.tsx:138](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L138)_
+_Defined in [src/Pressable.tsx:138](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L138)_
 
 Called by the [Space](space.md) to change the hover state.
 
@@ -592,16 +444,16 @@ and `componentDidUpdate` will not be called.
 
 ### ▪ **state**: _object_
 
-_Defined in [src/Pressable.tsx:86](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L86)_
+_Defined in [src/Pressable.tsx:86](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L86)_
 
 ### hovered
 
 • **hovered**: _false_ = false
 
-_Defined in [src/Pressable.tsx:86](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L86)_
+_Defined in [src/Pressable.tsx:86](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L86)_
 
 ### interaction
 
 • **interaction**: _undefined_ = undefined
 
-_Defined in [src/Pressable.tsx:86](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L86)_
+_Defined in [src/Pressable.tsx:86](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L86)_

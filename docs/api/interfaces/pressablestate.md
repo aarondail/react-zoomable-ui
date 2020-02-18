@@ -19,7 +19,7 @@
 
 • **hovered**: _boolean_
 
-_Defined in [src/Pressable.tsx:65](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L65)_
+_Defined in [src/Pressable.tsx:65](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L65)_
 
 ---
 
@@ -27,4 +27,4 @@ _Defined in [src/Pressable.tsx:65](https://github.com/aarondail/react-zoomable-u
 
 • **interaction**: _undefined | "potential-tap" | "potential-long-tap" | "press-captured"_
 
-_Defined in [src/Pressable.tsx:64](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L64)_
+_Defined in [src/Pressable.tsx:64](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L64)_

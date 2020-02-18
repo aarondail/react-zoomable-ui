@@ -23,7 +23,7 @@
 
 • **bottom**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:14](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L14)_
+_Defined in [src/ViewPort.ts:14](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L14)_
 
 ---
 
@@ -31,7 +31,7 @@ _Defined in [src/ViewPort.ts:14](https://github.com/aarondail/react-zoomable-ui/
 
 • **height**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:15](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L15)_
+_Defined in [src/ViewPort.ts:15](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L15)_
 
 ---
 
@@ -39,7 +39,7 @@ _Defined in [src/ViewPort.ts:15](https://github.com/aarondail/react-zoomable-ui/
 
 • **left**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:16](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L16)_
+_Defined in [src/ViewPort.ts:16](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L16)_
 
 ---
 
@@ -47,7 +47,7 @@ _Defined in [src/ViewPort.ts:16](https://github.com/aarondail/react-zoomable-ui/
 
 • **right**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:17](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L17)_
+_Defined in [src/ViewPort.ts:17](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L17)_
 
 ---
 
@@ -55,7 +55,7 @@ _Defined in [src/ViewPort.ts:17](https://github.com/aarondail/react-zoomable-ui/
 
 • **top**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:18](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L18)_
+_Defined in [src/ViewPort.ts:18](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L18)_
 
 ---
 
@@ -63,4 +63,4 @@ _Defined in [src/ViewPort.ts:18](https://github.com/aarondail/react-zoomable-ui/
 
 • **width**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:19](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L19)_
+_Defined in [src/ViewPort.ts:19](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L19)_

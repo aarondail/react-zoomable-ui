@@ -34,11 +34,8 @@ See [NoPanAreaProps](../interfaces/nopanareaprops.md).
 
 ### Properties
 
-- [constantStyles](nopanarea.md#private-constantstyles)
 - [context](nopanarea.md#context)
-- [divRef](nopanarea.md#private-divref)
 - [id](nopanarea.md#id)
-- [uniqueClassName](nopanarea.md#private-uniqueclassname)
 - [contextType](nopanarea.md#static-contexttype)
 
 ### Methods
@@ -53,7 +50,6 @@ See [NoPanAreaProps](../interfaces/nopanareaprops.md).
 - [componentWillReceiveProps](nopanarea.md#optional-componentwillreceiveprops)
 - [componentWillUnmount](nopanarea.md#componentwillunmount)
 - [componentWillUpdate](nopanarea.md#optional-componentwillupdate)
-- [determineClassName](nopanarea.md#private-determineclassname)
 - [getSnapshotBeforeUpdate](nopanarea.md#optional-getsnapshotbeforeupdate)
 - [render](nopanarea.md#render)
 - [shouldComponentUpdate](nopanarea.md#optional-shouldcomponentupdate)
@@ -64,7 +60,7 @@ See [NoPanAreaProps](../interfaces/nopanareaprops.md).
 
 \+ **new NoPanArea**(`props`: [NoPanAreaProps](../interfaces/nopanareaprops.md), `context`: [SpaceContextType](../interfaces/spacecontexttype.md)): _[NoPanArea](nopanarea.md)_
 
-_Defined in [src/NoPanArea.tsx:33](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L33)_
+_Defined in [src/NoPanArea.tsx:33](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L33)_
 
 **Parameters:**
 
@@ -77,27 +73,11 @@ _Defined in [src/NoPanArea.tsx:33](https://github.com/aarondail/react-zoomable-u
 
 ## Properties
 
-### `Private` constantStyles
-
-• **constantStyles**: _string_
-
-_Defined in [src/NoPanArea.tsx:31](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L31)_
-
----
-
 ### context
 
 • **context**: _[SpaceContextType](../interfaces/spacecontexttype.md)_
 
-_Defined in [src/NoPanArea.tsx:28](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L28)_
-
----
-
-### `Private` divRef
-
-• **divRef**: _RefObject‹HTMLDivElement›_ = React.createRef()
-
-_Defined in [src/NoPanArea.tsx:32](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L32)_
+_Defined in [src/NoPanArea.tsx:28](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L28)_
 
 ---
 
@@ -105,15 +85,7 @@ _Defined in [src/NoPanArea.tsx:32](https://github.com/aarondail/react-zoomable-u
 
 • **id**: _string_ = generateRandomId()
 
-_Defined in [src/NoPanArea.tsx:29](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L29)_
-
----
-
-### `Private` uniqueClassName
-
-• **uniqueClassName**: _string_ = `react-zoomable-ui-no-pan-area-${this.id}`
-
-_Defined in [src/NoPanArea.tsx:33](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L33)_
+_Defined in [src/NoPanArea.tsx:29](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L29)_
 
 ---
 
@@ -121,7 +93,7 @@ _Defined in [src/NoPanArea.tsx:33](https://github.com/aarondail/react-zoomable-u
 
 ▪ **contextType**: _Context‹[SpaceContextType](../interfaces/spacecontexttype.md)›_ = SpaceContext
 
-_Defined in [src/NoPanArea.tsx:27](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L27)_
+_Defined in [src/NoPanArea.tsx:27](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L27)_
 
 ## Methods
 
@@ -250,7 +222,7 @@ the entire component tree to unmount.
 
 _Overrides [Space](space.md).[componentDidMount](space.md#optional-componentdidmount)_
 
-_Defined in [src/NoPanArea.tsx:48](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L48)_
+_Defined in [src/NoPanArea.tsx:48](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L48)_
 
 **Returns:** _void_
 
@@ -344,7 +316,7 @@ prevents this from being invoked.
 
 _Overrides void_
 
-_Defined in [src/NoPanArea.tsx:52](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L52)_
+_Defined in [src/NoPanArea.tsx:52](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L52)_
 
 **Returns:** _void_
 
@@ -383,16 +355,6 @@ prevents this from being invoked.
 
 ---
 
-### `Private` determineClassName
-
-▸ **determineClassName**(): _string_
-
-_Defined in [src/NoPanArea.tsx:74](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L74)_
-
-**Returns:** _string_
-
----
-
 ### `Optional` getSnapshotBeforeUpdate
 
 ▸ **getSnapshotBeforeUpdate**(`prevProps`: Readonly‹[NoPanAreaProps](../interfaces/nopanareaprops.md)›, `prevState`: Readonly‹S›): _SS | null_
@@ -423,7 +385,7 @@ lifecycle events from running.
 
 ▸ **render**(): _Element‹›_
 
-_Defined in [src/NoPanArea.tsx:56](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/NoPanArea.tsx#L56)_
+_Defined in [src/NoPanArea.tsx:56](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/NoPanArea.tsx#L56)_
 
 **Returns:** _Element‹›_
 

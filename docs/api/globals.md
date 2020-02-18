@@ -81,7 +81,7 @@
 
 Ƭ **CancelSuppressZoomingCallback**: _function_
 
-_Defined in [src/suppressBrowserZooming.ts:1](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/suppressBrowserZooming.ts#L1)_
+_Defined in [src/suppressBrowserZooming.ts:1](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/suppressBrowserZooming.ts#L1)_
 
 #### Type declaration:
 
@@ -93,7 +93,7 @@ _Defined in [src/suppressBrowserZooming.ts:1](https://github.com/aarondail/react
 
 Ƭ **ClientPixelUnit**: _number_
 
-_Defined in [src/ViewPort.ts:7](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L7)_
+_Defined in [src/ViewPort.ts:7](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L7)_
 
 ---
 
@@ -101,7 +101,7 @@ _Defined in [src/ViewPort.ts:7](https://github.com/aarondail/react-zoomable-ui/b
 
 Ƭ **DecidePressHandlingCallback**: _function_
 
-_Defined in [src/PressInterpreter.ts:28](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L28)_
+_Defined in [src/PressInterpreter.ts:28](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L28)_
 
 This type of callback is given to the [PressInterpreter](classes/pressinterpreter.md) and takes one of
 the underlying events that starts a "press" as far as the library is
@@ -127,7 +127,7 @@ start event), and returns an [PressHandlingOptions](interfaces/presshandlingopti
 
 Ƭ **InteractableComponent**: _[Pressable](classes/pressable.md) | [NoPanArea](classes/nopanarea.md)_
 
-_Defined in [src/Interactable.ts:8](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Interactable.ts#L8)_
+_Defined in [src/Interactable.ts:8](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Interactable.ts#L8)_
 
 A type that describes either [Pressable](classes/pressable.md) or [{NoPanArea}]. That is it.
 
@@ -137,7 +137,7 @@ A type that describes either [Pressable](classes/pressable.md) or [{NoPanArea}].
 
 Ƭ **ViewPortCameraInterface**: _Omit‹[ViewPortCamera](classes/viewportcamera.md), "setBounds"›_
 
-_Defined in [src/ViewPortCamera.ts:54](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L54)_
+_Defined in [src/ViewPortCamera.ts:54](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L54)_
 
 This is the public interface to library users of the Camera. We basically
 just want ot hide the `setBounds` method so its only called inside this
@@ -149,7 +149,7 @@ library.
 
 Ƭ **VirtualSpacePixelUnit**: _number_
 
-_Defined in [src/ViewPort.ts:9](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L9)_
+_Defined in [src/ViewPort.ts:9](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L9)_
 
 ---
 
@@ -157,7 +157,7 @@ _Defined in [src/ViewPort.ts:9](https://github.com/aarondail/react-zoomable-ui/b
 
 Ƭ **Writeable**: _object_
 
-_Defined in [src/utils.ts:1](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L1)_
+_Defined in [src/utils.ts:1](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L1)_
 
 #### Type declaration:
 
@@ -167,7 +167,7 @@ _Defined in [src/utils.ts:1](https://github.com/aarondail/react-zoomable-ui/blob
 
 Ƭ **ZoomFactor**: _number_
 
-_Defined in [src/ViewPort.ts:11](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L11)_
+_Defined in [src/ViewPort.ts:11](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L11)_
 
 ## Variables
 
@@ -175,7 +175,7 @@ _Defined in [src/ViewPort.ts:11](https://github.com/aarondail/react-zoomable-ui/
 
 • **DEFAULT_BOUNDS**: _keyof [number, number]_ = [0.001, 100]
 
-_Defined in [src/ViewPortCamera.ts:6](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L6)_
+_Defined in [src/ViewPortCamera.ts:6](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L6)_
 
 ---
 
@@ -183,7 +183,7 @@ _Defined in [src/ViewPortCamera.ts:6](https://github.com/aarondail/react-zoomabl
 
 • **DEFAULT_LONG_TAP_THRESHOLD_MS**: _number_ = 500
 
-_Defined in [src/Pressable.tsx:9](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Pressable.tsx#L9)_
+_Defined in [src/Pressable.tsx:9](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Pressable.tsx#L9)_
 
 ---
 
@@ -191,7 +191,7 @@ _Defined in [src/Pressable.tsx:9](https://github.com/aarondail/react-zoomable-ui
 
 • **InteractableIdAttributeName**: _"x-react-zoomable-ui-interactable-id"_ = "x-react-zoomable-ui-interactable-id"
 
-_Defined in [src/Interactable.ts:10](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Interactable.ts#L10)_
+_Defined in [src/Interactable.ts:10](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Interactable.ts#L10)_
 
 ---
 
@@ -199,7 +199,7 @@ _Defined in [src/Interactable.ts:10](https://github.com/aarondail/react-zoomable
 
 • **POTENTIAL_TAP_BOUNDS_DEFAULT**: _[ClientPixelUnit](globals.md#clientpixelunit)_ = 8
 
-_Defined in [src/PressInterpreter.ts:18](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L18)_
+_Defined in [src/PressInterpreter.ts:18](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L18)_
 
 This is the number of client (screen) pixels that a press can move before it
 is not considered a tap.
@@ -210,7 +210,7 @@ is not considered a tap.
 
 • **SpaceContext**: _Context‹[SpaceContextType](interfaces/spacecontexttype.md)›_ = React.createContext<SpaceContextType>(undefined as any)
 
-_Defined in [src/SpaceContext.ts:20](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/SpaceContext.ts#L20)_
+_Defined in [src/SpaceContext.ts:20](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/SpaceContext.ts#L20)_
 
 This React context can be used within a [Space](classes/space.md) to get access
 to the [ViewPort](classes/viewport.md).
@@ -221,7 +221,7 @@ to the [ViewPort](classes/viewport.md).
 
 • **browserIsAndroid**: _null | RegExpMatchArray‹›_ = navigator.userAgent.match(/Android/)
 
-_Defined in [src/utils.ts:65](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L65)_
+_Defined in [src/utils.ts:65](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L65)_
 
 ---
 
@@ -229,7 +229,7 @@ _Defined in [src/utils.ts:65](https://github.com/aarondail/react-zoomable-ui/blo
 
 • **browserIsSafari**: _null | RegExpMatchArray‹›_ = navigator.vendor.match(/Apple/)
 
-_Defined in [src/utils.ts:66](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L66)_
+_Defined in [src/utils.ts:66](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L66)_
 
 ---
 
@@ -237,7 +237,7 @@ _Defined in [src/utils.ts:66](https://github.com/aarondail/react-zoomable-ui/blo
 
 • **browserIsSafariDesktop**: _null | false | true_ = browserIsSafari && typeof Touch === 'undefined'
 
-_Defined in [src/utils.ts:67](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L67)_
+_Defined in [src/utils.ts:67](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L67)_
 
 ---
 
@@ -245,7 +245,7 @@ _Defined in [src/utils.ts:67](https://github.com/aarondail/react-zoomable-ui/blo
 
 • **idSuffix**: _number_ = 0
 
-_Defined in [src/utils.ts:3](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L3)_
+_Defined in [src/utils.ts:3](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L3)_
 
 ## Functions
 
@@ -253,7 +253,7 @@ _Defined in [src/utils.ts:3](https://github.com/aarondail/react-zoomable-ui/blob
 
 ▸ **clamp**(`value`: number, `bounds?`: keyof [number | undefined, number | undefined]): _number_
 
-_Defined in [src/utils.ts:15](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L15)_
+_Defined in [src/utils.ts:15](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L15)_
 
 **Parameters:**
 
@@ -270,7 +270,7 @@ _Defined in [src/utils.ts:15](https://github.com/aarondail/react-zoomable-ui/blo
 
 ▸ **clampCenterOfLength**(`centerValue`: number, `length`: number, `bounds?`: keyof [number | undefined, number | undefined]): _number_
 
-_Defined in [src/utils.ts:28](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L28)_
+_Defined in [src/utils.ts:28](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L28)_
 
 **Parameters:**
 
@@ -288,7 +288,7 @@ _Defined in [src/utils.ts:28](https://github.com/aarondail/react-zoomable-ui/blo
 
 ▸ **generateRandomId**(): _string_
 
-_Defined in [src/utils.ts:8](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L8)_
+_Defined in [src/utils.ts:8](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L8)_
 
 This id should be safe to use as a class name. So don't use any special
 characters that CSS might get confused by.
@@ -301,7 +301,7 @@ characters that CSS might get confused by.
 
 ▸ **getInteractableIdMostApplicableToElement**(`element`: HTMLElement, `outerContainerClassName?`: undefined | string): _string | undefined_
 
-_Defined in [src/Interactable.ts:17](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Interactable.ts#L17)_
+_Defined in [src/Interactable.ts:17](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Interactable.ts#L17)_
 
 Helper function that returns the nearest ancestor element to the passed
 element that is an interactable (either [Pressable](classes/pressable.md) or [NoPanArea](classes/nopanarea.md)), or
@@ -322,7 +322,7 @@ the element itself if it is interactable.
 
 ▸ **isMouseEvent**(`e`: MouseEvent | TouchEvent): _e is MouseEvent_
 
-_Defined in [src/utils.ts:69](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L69)_
+_Defined in [src/utils.ts:69](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L69)_
 
 **Parameters:**
 
@@ -338,7 +338,7 @@ _Defined in [src/utils.ts:69](https://github.com/aarondail/react-zoomable-ui/blo
 
 ▸ **rectContainsPoint**(`clientRect`: ClientRect, `x`: number, `y`: number): _boolean_
 
-_Defined in [src/utils.ts:49](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L49)_
+_Defined in [src/utils.ts:49](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L49)_
 
 **Parameters:**
 
@@ -356,7 +356,7 @@ _Defined in [src/utils.ts:49](https://github.com/aarondail/react-zoomable-ui/blo
 
 ▸ **suppressBrowserZooming**(): _[CancelSuppressZoomingCallback](globals.md#cancelsuppresszoomingcallback)_
 
-_Defined in [src/suppressBrowserZooming.ts:10](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/suppressBrowserZooming.ts#L10)_
+_Defined in [src/suppressBrowserZooming.ts:10](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/suppressBrowserZooming.ts#L10)_
 
 This is not used by the [ViewPort](classes/viewport.md), but if you have HTML elements around the
 [ViewPort](classes/viewport.md) you may want to suppress zooming or panning on the whole page. This
@@ -372,7 +372,7 @@ A callback which will stop the suppression.
 
 ▸ **transitionNumber**(`start`: number, `end`: number, `percent`: number): _number_
 
-_Defined in [src/utils.ts:53](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L53)_
+_Defined in [src/utils.ts:53](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L53)_
 
 **Parameters:**
 
@@ -390,7 +390,7 @@ _Defined in [src/utils.ts:53](https://github.com/aarondail/react-zoomable-ui/blo
 
 ▸ **walkElementHierarchyUp**(`leafElement`: HTMLElement): _Iterable‹HTMLElement›_
 
-_Defined in [src/utils.ts:57](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/utils.ts#L57)_
+_Defined in [src/utils.ts:57](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/utils.ts#L57)_
 
 **Parameters:**
 
@@ -406,13 +406,13 @@ _Defined in [src/utils.ts:57](https://github.com/aarondail/react-zoomable-ui/blo
 
 ### ▪ **ViewPortMath**: _object_
 
-_Defined in [src/ViewPortMath.ts:5](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L5)_
+_Defined in [src/ViewPortMath.ts:5](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L5)_
 
 ### centerFitArea
 
 ▸ **centerFitArea**(`values`: [ViewPortCameraValues](interfaces/viewportcameravalues.md), `bounds`: [ViewPortBounds](interfaces/viewportbounds.md), `area`: object, `additionalBounds?`: Pick‹[ViewPortBounds](interfaces/viewportbounds.md), "zoom"›): _void_
 
-_Defined in [src/ViewPortMath.ts:39](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L39)_
+_Defined in [src/ViewPortMath.ts:39](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L39)_
 
 **Parameters:**
 
@@ -437,7 +437,7 @@ _Defined in [src/ViewPortMath.ts:39](https://github.com/aarondail/react-zoomable
 
 ▸ **centerFitHorizontalArea**(`values`: [ViewPortCameraValues](interfaces/viewportcameravalues.md), `bounds`: [ViewPortBounds](interfaces/viewportbounds.md), `left`: [VirtualSpacePixelUnit](globals.md#virtualspacepixelunit), `width`: [VirtualSpacePixelUnit](globals.md#virtualspacepixelunit), `additionalBounds?`: Pick‹[ViewPortBounds](interfaces/viewportbounds.md), "zoom"›): _void_
 
-_Defined in [src/ViewPortMath.ts:62](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L62)_
+_Defined in [src/ViewPortMath.ts:62](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L62)_
 
 **Parameters:**
 
@@ -455,7 +455,7 @@ _Defined in [src/ViewPortMath.ts:62](https://github.com/aarondail/react-zoomable
 
 ▸ **deriveActualZoomBounds**(`__namedParameters`: object, `bounds`: [ViewPortBounds](interfaces/viewportbounds.md), `defaultZoomBounds`: keyof [number, number]): _Pick‹[ViewPortBounds](interfaces/viewportbounds.md), "zoom"›_
 
-_Defined in [src/ViewPortMath.ts:6](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L6)_
+_Defined in [src/ViewPortMath.ts:6](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L6)_
 
 **Parameters:**
 
@@ -476,7 +476,7 @@ _Defined in [src/ViewPortMath.ts:6](https://github.com/aarondail/react-zoomable-
 
 ▸ **updateBounds**(`values`: [ViewPortCameraValues](interfaces/viewportcameravalues.md), `bounds`: [ViewPortBounds](interfaces/viewportbounds.md)): _void_
 
-_Defined in [src/ViewPortMath.ts:77](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L77)_
+_Defined in [src/ViewPortMath.ts:77](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L77)_
 
 **Parameters:**
 
@@ -491,7 +491,7 @@ _Defined in [src/ViewPortMath.ts:77](https://github.com/aarondail/react-zoomable
 
 ▸ **updateBy**(`values`: [ViewPortCameraValues](interfaces/viewportcameravalues.md), `bounds`: [ViewPortBounds](interfaces/viewportbounds.md), `dx`: [VirtualSpacePixelUnit](globals.md#virtualspacepixelunit), `dy`: [VirtualSpacePixelUnit](globals.md#virtualspacepixelunit), `dZoom?`: [ZoomFactor](globals.md#zoomfactor), `anchorContainerX?`: [ClientPixelUnit](globals.md#clientpixelunit), `anchorContainerY?`: [ClientPixelUnit](globals.md#clientpixelunit)): _void_
 
-_Defined in [src/ViewPortMath.ts:99](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L99)_
+_Defined in [src/ViewPortMath.ts:99](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L99)_
 
 **Parameters:**
 
@@ -511,7 +511,7 @@ _Defined in [src/ViewPortMath.ts:99](https://github.com/aarondail/react-zoomable
 
 ▸ **updateTopLeft**(`values`: [ViewPortCameraValues](interfaces/viewportcameravalues.md), `bounds`: [ViewPortBounds](interfaces/viewportbounds.md), `x`: [VirtualSpacePixelUnit](globals.md#virtualspacepixelunit), `y`: [VirtualSpacePixelUnit](globals.md#virtualspacepixelunit)): _void_
 
-_Defined in [src/ViewPortMath.ts:144](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L144)_
+_Defined in [src/ViewPortMath.ts:144](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L144)_
 
 **Parameters:**
 
@@ -528,7 +528,7 @@ _Defined in [src/ViewPortMath.ts:144](https://github.com/aarondail/react-zoomabl
 
 ▸ **updateZoom**(`values`: [ViewPortCameraValues](interfaces/viewportcameravalues.md), `bounds`: [ViewPortBounds](interfaces/viewportbounds.md), `zoomFactor`: [ZoomFactor](globals.md#zoomfactor)): _void_
 
-_Defined in [src/ViewPortMath.ts:156](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortMath.ts#L156)_
+_Defined in [src/ViewPortMath.ts:156](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortMath.ts#L156)_
 
 **Parameters:**
 

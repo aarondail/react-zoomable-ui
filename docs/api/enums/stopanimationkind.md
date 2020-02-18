@@ -15,7 +15,7 @@
 
 • **FORCE**: = "FORCE"
 
-_Defined in [src/ViewPortCamera.ts:45](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L45)_
+_Defined in [src/ViewPortCamera.ts:45](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L45)_
 
 ---
 
@@ -23,4 +23,4 @@ _Defined in [src/ViewPortCamera.ts:45](https://github.com/aarondail/react-zoomab
 
 • **INTERRUPT**: = "INTERRUPT"
 
-_Defined in [src/ViewPortCamera.ts:46](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPortCamera.ts#L46)_
+_Defined in [src/ViewPortCamera.ts:46](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPortCamera.ts#L46)_

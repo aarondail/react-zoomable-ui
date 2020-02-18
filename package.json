@@ -26,7 +26,7 @@
     "test:w": "jest --watch",
     "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
     "tslint": "tslint --project ./tsconfig.tslint.json --fix",
-    "docs": "rm -rf docs/api && typedoc --out docs/api --mode file  --external-aliases external,internalapi && rm docs/api/README.md",
+    "docs": "rm -rf docs/api && typedoc --out docs/api --mode file  --external-aliases external,internalapi --excludeExternals --excludeNotExported --excludePrivate --excludeProtected && rm docs/api/README.md",
     "prerelease": "yarn clean && yarn build && yarn test && yarn tslint && yarn docs"
   },
   "dependencies": {

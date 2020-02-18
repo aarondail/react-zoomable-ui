@@ -27,16 +27,10 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 - [camera](viewport.md#camera)
 - [centerX](viewport.md#centerx)
 - [centerY](viewport.md#centery)
-- [containerDiv](viewport.md#private-containerdiv)
 - [containerHeight](viewport.md#containerheight)
 - [containerWidth](viewport.md#containerwidth)
-- [currentDesktopSafariGestureState](viewport.md#private-optional-currentdesktopsafarigesturestate)
-- [currentHammerGestureState](viewport.md#private-optional-currenthammergesturestate)
-- [hammer](viewport.md#private-hammer)
 - [height](viewport.md#height)
-- [inNonPanPressHandlingMode](viewport.md#private-innonpanpresshandlingmode)
 - [left](viewport.md#left)
-- [options](viewport.md#private-optional-options)
 - [top](viewport.md#top)
 - [width](viewport.md#width)
 - [zoomFactor](viewport.md#zoomfactor)
@@ -44,26 +38,6 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 ### Methods
 
 - [destroy](viewport.md#destroy)
-- [getPressCoordinatesFromEvent](viewport.md#private-getpresscoordinatesfromevent)
-- [handleContextMenu](viewport.md#private-handlecontextmenu)
-- [handleGestureChangeForDesktopSafari](viewport.md#private-handlegesturechangefordesktopsafari)
-- [handleGestureEndForDesktopSafari](viewport.md#private-handlegestureendfordesktopsafari)
-- [handleGestureStartForDesktopSafari](viewport.md#private-handlegesturestartfordesktopsafari)
-- [handleHammerPanCancel](viewport.md#private-handlehammerpancancel)
-- [handleHammerPanEnd](viewport.md#private-handlehammerpanend)
-- [handleHammerPanMove](viewport.md#private-handlehammerpanmove)
-- [handleHammerPanStart](viewport.md#private-handlehammerpanstart)
-- [handleHammerPinchCancel](viewport.md#private-handlehammerpinchcancel)
-- [handleHammerPinchEnd](viewport.md#private-handlehammerpinchend)
-- [handleHammerPinchMove](viewport.md#private-handlehammerpinchmove)
-- [handleHammerPinchStart](viewport.md#private-handlehammerpinchstart)
-- [handleMouseDown](viewport.md#private-handlemousedown)
-- [handleMouseMove](viewport.md#private-handlemousemove)
-- [handleMouseUp](viewport.md#private-handlemouseup)
-- [handleTouchEnd](viewport.md#private-handletouchend)
-- [handleTouchMove](viewport.md#private-handletouchmove)
-- [handleTouchStart](viewport.md#private-handletouchstart)
-- [handleWheel](viewport.md#private-handlewheel)
 - [setBounds](viewport.md#setbounds)
 - [translateClientRectToVirtualSpace](viewport.md#translateclientrecttovirtualspace)
 - [translateClientXYCoordinatesToVirtualSpace](viewport.md#translateclientxycoordinatestovirtualspace)
@@ -75,7 +49,7 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 
 \+ **new ViewPort**(`containerDiv`: HTMLDivElement, `options?`: [ViewPortOptions](../interfaces/viewportoptions.md)): _[ViewPort](viewport.md)_
 
-_Defined in [src/ViewPort.ts:101](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L101)_
+_Defined in [src/ViewPort.ts:101](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L101)_
 
 **Parameters:**
 
@@ -92,7 +66,7 @@ _Defined in [src/ViewPort.ts:101](https://github.com/aarondail/react-zoomable-ui
 
 • **camera**: _[ViewPortCameraInterface](../globals.md#viewportcamerainterface)_
 
-_Defined in [src/ViewPort.ts:86](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L86)_
+_Defined in [src/ViewPort.ts:86](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L86)_
 
 ---
 
@@ -100,7 +74,7 @@ _Defined in [src/ViewPort.ts:86](https://github.com/aarondail/react-zoomable-ui/
 
 • **centerX**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:78](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L78)_
+_Defined in [src/ViewPort.ts:78](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L78)_
 
 ---
 
@@ -108,15 +82,7 @@ _Defined in [src/ViewPort.ts:78](https://github.com/aarondail/react-zoomable-ui/
 
 • **centerY**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:79](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L79)_
-
----
-
-### `Private` containerDiv
-
-• **containerDiv**: _HTMLElement_
-
-_Defined in [src/ViewPort.ts:88](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L88)_
+_Defined in [src/ViewPort.ts:79](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L79)_
 
 ---
 
@@ -124,7 +90,7 @@ _Defined in [src/ViewPort.ts:88](https://github.com/aarondail/react-zoomable-ui/
 
 • **containerHeight**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
 
-_Defined in [src/ViewPort.ts:77](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L77)_
+_Defined in [src/ViewPort.ts:77](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L77)_
 
 ---
 
@@ -132,31 +98,7 @@ _Defined in [src/ViewPort.ts:77](https://github.com/aarondail/react-zoomable-ui/
 
 • **containerWidth**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
 
-_Defined in [src/ViewPort.ts:76](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L76)_
-
----
-
-### `Private` `Optional` currentDesktopSafariGestureState
-
-• **currentDesktopSafariGestureState**? : _undefined | object_
-
-_Defined in [src/ViewPort.ts:94](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L94)_
-
----
-
-### `Private` `Optional` currentHammerGestureState
-
-• **currentHammerGestureState**? : _undefined | object_
-
-_Defined in [src/ViewPort.ts:89](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L89)_
-
----
-
-### `Private` hammer
-
-• **hammer**: _HammerManager_
-
-_Defined in [src/ViewPort.ts:99](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L99)_
+_Defined in [src/ViewPort.ts:76](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L76)_
 
 ---
 
@@ -164,15 +106,7 @@ _Defined in [src/ViewPort.ts:99](https://github.com/aarondail/react-zoomable-ui/
 
 • **height**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:83](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L83)_
-
----
-
-### `Private` inNonPanPressHandlingMode
-
-• **inNonPanPressHandlingMode**: _undefined | "capture" | "ignore"_
-
-_Defined in [src/ViewPort.ts:101](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L101)_
+_Defined in [src/ViewPort.ts:83](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L83)_
 
 ---
 
@@ -180,15 +114,7 @@ _Defined in [src/ViewPort.ts:101](https://github.com/aarondail/react-zoomable-ui
 
 • **left**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:80](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L80)_
-
----
-
-### `Private` `Optional` options
-
-• **options**? : _[ViewPortOptions](../interfaces/viewportoptions.md)_
-
-_Defined in [src/ViewPort.ts:100](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L100)_
+_Defined in [src/ViewPort.ts:80](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L80)_
 
 ---
 
@@ -196,7 +122,7 @@ _Defined in [src/ViewPort.ts:100](https://github.com/aarondail/react-zoomable-ui
 
 • **top**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:81](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L81)_
+_Defined in [src/ViewPort.ts:81](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L81)_
 
 ---
 
@@ -204,7 +130,7 @@ _Defined in [src/ViewPort.ts:81](https://github.com/aarondail/react-zoomable-ui/
 
 • **width**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
 
-_Defined in [src/ViewPort.ts:82](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L82)_
+_Defined in [src/ViewPort.ts:82](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L82)_
 
 ---
 
@@ -212,7 +138,7 @@ _Defined in [src/ViewPort.ts:82](https://github.com/aarondail/react-zoomable-ui/
 
 • **zoomFactor**: _[ZoomFactor](../globals.md#zoomfactor)_
 
-_Defined in [src/ViewPort.ts:84](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L84)_
+_Defined in [src/ViewPort.ts:84](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L84)_
 
 ## Methods
 
@@ -220,327 +146,7 @@ _Defined in [src/ViewPort.ts:84](https://github.com/aarondail/react-zoomable-ui/
 
 ▸ **destroy**(): _void_
 
-_Defined in [src/ViewPort.ts:185](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L185)_
-
-**Returns:** _void_
-
----
-
-### `Private` getPressCoordinatesFromEvent
-
-▸ **getPressCoordinatesFromEvent**(`e`: MouseEvent | TouchEvent): _[PressEventCoordinates](../interfaces/presseventcoordinates.md)_
-
-_Defined in [src/ViewPort.ts:256](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L256)_
-
-**Parameters:**
-
-| Name | Type                         |
-| ---- | ---------------------------- |
-| `e`  | MouseEvent &#124; TouchEvent |
-
-**Returns:** _[PressEventCoordinates](../interfaces/presseventcoordinates.md)_
-
----
-
-### `Private` handleContextMenu
-
-▸ **handleContextMenu**(`e`: MouseEvent): _void_
-
-_Defined in [src/ViewPort.ts:274](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L274)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | MouseEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleGestureChangeForDesktopSafari
-
-▸ **handleGestureChangeForDesktopSafari**(`e`: any): _void_
-
-_Defined in [src/ViewPort.ts:294](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L294)_
-
-**Parameters:**
-
-| Name | Type |
-| ---- | ---- |
-| `e`  | any  |
-
-**Returns:** _void_
-
----
-
-### `Private` handleGestureEndForDesktopSafari
-
-▸ **handleGestureEndForDesktopSafari**(`e`: any): _void_
-
-_Defined in [src/ViewPort.ts:311](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L311)_
-
-**Parameters:**
-
-| Name | Type |
-| ---- | ---- |
-| `e`  | any  |
-
-**Returns:** _void_
-
----
-
-### `Private` handleGestureStartForDesktopSafari
-
-▸ **handleGestureStartForDesktopSafari**(`e`: any): _void_
-
-_Defined in [src/ViewPort.ts:281](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L281)_
-
-**Parameters:**
-
-| Name | Type |
-| ---- | ---- |
-| `e`  | any  |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPanCancel
-
-▸ **handleHammerPanCancel**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:366](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L366)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPanEnd
-
-▸ **handleHammerPanEnd**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:353](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L353)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPanMove
-
-▸ **handleHammerPanMove**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:326](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L326)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPanStart
-
-▸ **handleHammerPanStart**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:319](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L319)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPinchCancel
-
-▸ **handleHammerPinchCancel**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:421](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L421)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPinchEnd
-
-▸ **handleHammerPinchEnd**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:408](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L408)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPinchMove
-
-▸ **handleHammerPinchMove**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:380](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L380)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleHammerPinchStart
-
-▸ **handleHammerPinchStart**(`e`: HammerInput): _void_
-
-_Defined in [src/ViewPort.ts:373](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L373)_
-
-**Parameters:**
-
-| Name | Type        |
-| ---- | ----------- |
-| `e`  | HammerInput |
-
-**Returns:** _void_
-
----
-
-### `Private` handleMouseDown
-
-▸ **handleMouseDown**(`e`: MouseEvent): _void_
-
-_Defined in [src/ViewPort.ts:428](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L428)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | MouseEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleMouseMove
-
-▸ **handleMouseMove**(`e`: MouseEvent): _void_
-
-_Defined in [src/ViewPort.ts:444](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L444)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | MouseEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleMouseUp
-
-▸ **handleMouseUp**(`e`: MouseEvent): _void_
-
-_Defined in [src/ViewPort.ts:459](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L459)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | MouseEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleTouchEnd
-
-▸ **handleTouchEnd**(`e`: TouchEvent): _void_
-
-_Defined in [src/ViewPort.ts:498](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L498)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | TouchEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleTouchMove
-
-▸ **handleTouchMove**(`e`: TouchEvent): _void_
-
-_Defined in [src/ViewPort.ts:485](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L485)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | TouchEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleTouchStart
-
-▸ **handleTouchStart**(`e`: TouchEvent): _void_
-
-_Defined in [src/ViewPort.ts:469](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L469)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | TouchEvent |
-
-**Returns:** _void_
-
----
-
-### `Private` handleWheel
-
-▸ **handleWheel**(`e`: WheelEvent): _void_
-
-_Defined in [src/ViewPort.ts:509](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L509)_
-
-**Parameters:**
-
-| Name | Type       |
-| ---- | ---------- |
-| `e`  | WheelEvent |
+_Defined in [src/ViewPort.ts:185](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L185)_
 
 **Returns:** _void_
 
@@ -550,7 +156,7 @@ _Defined in [src/ViewPort.ts:509](https://github.com/aarondail/react-zoomable-ui
 
 ▸ **setBounds**(`bounds`: [ViewPortBounds](../interfaces/viewportbounds.md)): _void_
 
-_Defined in [src/ViewPort.ts:208](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L208)_
+_Defined in [src/ViewPort.ts:208](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L208)_
 
 **Parameters:**
 
@@ -566,7 +172,7 @@ _Defined in [src/ViewPort.ts:208](https://github.com/aarondail/react-zoomable-ui
 
 ▸ **translateClientRectToVirtualSpace**(`rectOrElement`: ClientRect | HTMLElement): _[VirtualSpaceRect](../interfaces/virtualspacerect.md)_
 
-_Defined in [src/ViewPort.ts:224](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L224)_
+_Defined in [src/ViewPort.ts:224](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L224)_
 
 **Parameters:**
 
@@ -582,7 +188,7 @@ _Defined in [src/ViewPort.ts:224](https://github.com/aarondail/react-zoomable-ui
 
 ▸ **translateClientXYCoordinatesToVirtualSpace**(`x`: [ClientPixelUnit](../globals.md#clientpixelunit), `y`: [ClientPixelUnit](../globals.md#clientpixelunit)): _object_
 
-_Defined in [src/ViewPort.ts:214](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L214)_
+_Defined in [src/ViewPort.ts:214](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L214)_
 
 **Parameters:**
 
@@ -603,7 +209,7 @@ _Defined in [src/ViewPort.ts:214](https://github.com/aarondail/react-zoomable-ui
 
 ▸ **updateContainerSize**(): _void_
 
-_Defined in [src/ViewPort.ts:250](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/ViewPort.ts#L250)_
+_Defined in [src/ViewPort.ts:250](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/ViewPort.ts#L250)_
 
 This should be used when the div is resized. By default resizes due
 to the window itself resizing will be automatically handled, but any other

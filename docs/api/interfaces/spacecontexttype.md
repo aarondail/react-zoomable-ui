@@ -21,7 +21,7 @@
 
 • **registerInteractable**: _function_
 
-_Defined in [src/SpaceContext.ts:10](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/SpaceContext.ts#L10)_
+_Defined in [src/SpaceContext.ts:10](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/SpaceContext.ts#L10)_
 
 #### Type declaration:
 
@@ -39,7 +39,7 @@ _Defined in [src/SpaceContext.ts:10](https://github.com/aarondail/react-zoomable
 
 • **rootDivUniqueClassName**: _string_
 
-_Defined in [src/SpaceContext.ts:8](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/SpaceContext.ts#L8)_
+_Defined in [src/SpaceContext.ts:8](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/SpaceContext.ts#L8)_
 
 ---
 
@@ -47,7 +47,7 @@ _Defined in [src/SpaceContext.ts:8](https://github.com/aarondail/react-zoomable-
 
 • **unregisterInteractable**: _function_
 
-_Defined in [src/SpaceContext.ts:13](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/SpaceContext.ts#L13)_
+_Defined in [src/SpaceContext.ts:13](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/SpaceContext.ts#L13)_
 
 #### Type declaration:
 
@@ -65,4 +65,4 @@ _Defined in [src/SpaceContext.ts:13](https://github.com/aarondail/react-zoomable
 
 • **viewPort**: _[ViewPort](../classes/viewport.md)_
 
-_Defined in [src/SpaceContext.ts:11](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/SpaceContext.ts#L11)_
+_Defined in [src/SpaceContext.ts:11](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/SpaceContext.ts#L11)_

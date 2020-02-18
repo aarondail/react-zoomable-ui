@@ -19,7 +19,7 @@
 
 • **contextValue**? : _[SpaceContextType](spacecontexttype.md)_
 
-_Defined in [src/Space.tsx:80](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L80)_
+_Defined in [src/Space.tsx:80](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L80)_
 
 ---
 
@@ -27,4 +27,4 @@ _Defined in [src/Space.tsx:80](https://github.com/aarondail/react-zoomable-ui/bl
 
 • **transformStyle**? : _React.CSSProperties_
 
-_Defined in [src/Space.tsx:81](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L81)_
+_Defined in [src/Space.tsx:81](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L81)_

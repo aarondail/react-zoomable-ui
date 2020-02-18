@@ -30,7 +30,7 @@
 
 • **capturePressThresholdMs**? : _undefined | number_
 
-_Defined in [src/PressInterpreter.ts:64](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L64)_
+_Defined in [src/PressInterpreter.ts:64](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L64)_
 
 This is more of an advanced option. If set, this will be the number of
 milliseconds until the press gesture is captured. Once it is captured, it
@@ -45,7 +45,7 @@ The default is undefined (so presses won't be captured)
 
 • **ignorePressEntirely**? : _undefined | false | true_
 
-_Defined in [src/PressInterpreter.ts:34](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L34)_
+_Defined in [src/PressInterpreter.ts:34](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L34)_
 
 ---
 
@@ -53,7 +53,7 @@ _Defined in [src/PressInterpreter.ts:34](https://github.com/aarondail/react-zoom
 
 • **longTapThresholdMs**? : _undefined | number_
 
-_Defined in [src/PressInterpreter.ts:50](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L50)_
+_Defined in [src/PressInterpreter.ts:50](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L50)_
 
 If a press is released after this threshold, it will be considered a long
 tap. The default is undefined.
@@ -64,7 +64,7 @@ tap. The default is undefined.
 
 • **onCapturePressCancelled**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:68](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L68)_
+_Defined in [src/PressInterpreter.ts:68](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L68)_
 
 ---
 
@@ -72,7 +72,7 @@ _Defined in [src/PressInterpreter.ts:68](https://github.com/aarondail/react-zoom
 
 • **onCapturePressEnd**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:67](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L67)_
+_Defined in [src/PressInterpreter.ts:67](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L67)_
 
 ---
 
@@ -80,7 +80,7 @@ _Defined in [src/PressInterpreter.ts:67](https://github.com/aarondail/react-zoom
 
 • **onCapturePressMove**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:66](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L66)_
+_Defined in [src/PressInterpreter.ts:66](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L66)_
 
 ---
 
@@ -88,7 +88,7 @@ _Defined in [src/PressInterpreter.ts:66](https://github.com/aarondail/react-zoom
 
 • **onCapturePressStart**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:65](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L65)_
+_Defined in [src/PressInterpreter.ts:65](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L65)_
 
 ---
 
@@ -96,7 +96,7 @@ _Defined in [src/PressInterpreter.ts:65](https://github.com/aarondail/react-zoom
 
 • **onLongTap**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:52](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L52)_
+_Defined in [src/PressInterpreter.ts:52](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L52)_
 
 ---
 
@@ -104,7 +104,7 @@ _Defined in [src/PressInterpreter.ts:52](https://github.com/aarondail/react-zoom
 
 • **onPotentialLongTap**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:51](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L51)_
+_Defined in [src/PressInterpreter.ts:51](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L51)_
 
 ---
 
@@ -112,7 +112,7 @@ _Defined in [src/PressInterpreter.ts:51](https://github.com/aarondail/react-zoom
 
 • **onPotentialTap**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:43](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L43)_
+_Defined in [src/PressInterpreter.ts:43](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L43)_
 
 ---
 
@@ -120,7 +120,7 @@ _Defined in [src/PressInterpreter.ts:43](https://github.com/aarondail/react-zoom
 
 • **onTap**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:44](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L44)_
+_Defined in [src/PressInterpreter.ts:44](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L44)_
 
 ---
 
@@ -128,7 +128,7 @@ _Defined in [src/PressInterpreter.ts:44](https://github.com/aarondail/react-zoom
 
 • **onTapAbandoned**? : _undefined | function_
 
-_Defined in [src/PressInterpreter.ts:54](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L54)_
+_Defined in [src/PressInterpreter.ts:54](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L54)_
 
 ---
 
@@ -136,7 +136,7 @@ _Defined in [src/PressInterpreter.ts:54](https://github.com/aarondail/react-zoom
 
 • **potentialTapBounds**? : _[ClientPixelUnit](../globals.md#clientpixelunit)_
 
-_Defined in [src/PressInterpreter.ts:42](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/PressInterpreter.ts#L42)_
+_Defined in [src/PressInterpreter.ts:42](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/PressInterpreter.ts#L42)_
 
 The area around the initial event in which the pointer can move before the
 press is interpreted as just a pan. It will not be considered a tap or

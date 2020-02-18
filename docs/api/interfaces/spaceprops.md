@@ -28,7 +28,7 @@
 
 • **className**? : _undefined | string_
 
-_Defined in [src/Space.tsx:20](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L20)_
+_Defined in [src/Space.tsx:20](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L20)_
 
 Optional CSS class to use on the outer `div` that the [Space](../classes/space.md) renders.
 
@@ -38,7 +38,7 @@ Optional CSS class to use on the outer `div` that the [Space](../classes/space.m
 
 • **id**? : _undefined | string_
 
-_Defined in [src/Space.tsx:16](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L16)_
+_Defined in [src/Space.tsx:16](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L16)_
 
 Optional id to use on the outer `div` that the [Space](../classes/space.md) renders.
 
@@ -48,7 +48,7 @@ Optional id to use on the outer `div` that the [Space](../classes/space.md) rend
 
 • **innerDivClassName**? : _undefined | string_
 
-_Defined in [src/Space.tsx:29](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L29)_
+_Defined in [src/Space.tsx:29](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L29)_
 
 Optional CSS class to use on the inner `div` that the [Space](../classes/space.md) scales and
 transforms.
@@ -59,7 +59,7 @@ transforms.
 
 • **innerDivStyle**? : _React.CSSProperties_
 
-_Defined in [src/Space.tsx:34](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L34)_
+_Defined in [src/Space.tsx:34](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L34)_
 
 Optional styles class to use on the inner `div` that the [Space](../classes/space.md) scales
 and transforms.
@@ -70,7 +70,7 @@ and transforms.
 
 • **onCreate**? : _undefined | function_
 
-_Defined in [src/Space.tsx:47](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L47)_
+_Defined in [src/Space.tsx:47](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L47)_
 
 Called when the `Space` first creates the outer `div` and sets up the
 [ViewPort](../classes/viewport.md), but before the inner `div` and the `Space's children have
@@ -83,7 +83,7 @@ been first rendered. This can be used, for example, to make the
 
 • **onDecideHowToHandlePress**? : _[DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback)_
 
-_Defined in [src/Space.tsx:64](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L64)_
+_Defined in [src/Space.tsx:64](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L64)_
 
 Optional callback to be called when a press is initiated in the space.
 Generally you should prefer to use [Pressable](../classes/pressable.md) to handle presses, but
@@ -101,7 +101,7 @@ one of those).
 
 • **onHover**? : _undefined | function_
 
-_Defined in [src/Space.tsx:68](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L68)_
+_Defined in [src/Space.tsx:68](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L68)_
 
 Called when a mouse hover event happens anywhere in the [Space](../classes/space.md).
 
@@ -111,7 +111,7 @@ Called when a mouse hover event happens anywhere in the [Space](../classes/space
 
 • **onPressContextMenu**? : _undefined | function_
 
-_Defined in [src/Space.tsx:76](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L76)_
+_Defined in [src/Space.tsx:76](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L76)_
 
 Called when a right click event happens anywhere in the [Space](../classes/space.md).
 
@@ -124,7 +124,7 @@ this event (if it was also the target).
 
 • **onUpdated**? : _undefined | function_
 
-_Defined in [src/Space.tsx:51](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L51)_
+_Defined in [src/Space.tsx:51](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L51)_
 
 Called whenever the [ViewPort](../classes/viewport.md) is updated.
 
@@ -134,7 +134,7 @@ Called whenever the [ViewPort](../classes/viewport.md) is updated.
 
 • **pollForElementResizing**? : _undefined | false | true_
 
-_Defined in [src/Space.tsx:39](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L39)_
+_Defined in [src/Space.tsx:39](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L39)_
 
 If set, the `Space` will poll every 500ms for changes to its parent element's size. This only has to be used if the
 parent element can resize for reasons other than the window resizing, and if the [updateSize](../classes/space.md#updatesize) is not used.
@@ -145,6 +145,6 @@ parent element can resize for reasons other than the window resizing, and if the
 
 • **style**? : _React.CSSProperties_
 
-_Defined in [src/Space.tsx:24](https://github.com/aarondail/react-zoomable-ui/blob/d41a716/src/Space.tsx#L24)_
+_Defined in [src/Space.tsx:24](https://github.com/aarondail/react-zoomable-ui/blob/d840303/src/Space.tsx#L24)_
 
 Optional styles to set on the outer `div` that the [Space](../classes/space.md) renders.
