@@ -59,13 +59,15 @@ export interface ViewPortOptions {
 }
 
 /**
- * The ViewPort represents a "view" into a virtual space, that is not
+ * The [[ViewPort]] represents a "view" into a virtual space, that is not
  * tied to the available screen space or HTML elements. Because of this, it is
  * infinite, but it also uses its own "units" (virtual space pixels).
  *
  * You can think of the view port as describing what rectangular portion of the
  * virtual space (from top left to bottom right) should be visible inside the
  * bounds of containing HTML element where the virtual space is being rendered.
+ *
+ * Please see the (Guide)[../docs/Guide.md] for more details.
  */
 export class ViewPort {
   // While these public properties APPEAR readonly they are in fact NOT. They

@@ -5,6 +5,9 @@ import { ViewPortMath } from './ViewPortMath';
 
 const DEFAULT_BOUNDS: readonly [number, number] = [0.001, 100];
 
+/**
+ * @internalapi
+ */
 export interface ViewPortCameraValues {
   // tslint:disable: readonly-keyword
   containerWidth: ClientPixelUnit;
@@ -57,6 +60,11 @@ export class ViewPortCamera {
   private animation?: ViewPortCameraAnimation;
   private workingValues: ViewPortCameraValues;
 
+  /**
+   * This is only intended to be constructed by the [[ViewPort]].
+   *
+   * @internalapi
+   */
   constructor(private readonly values: ViewPortCameraValues, private readonly onUpdated?: () => void) {
     const { containerWidth, containerHeight, centerX, centerY, left, top, width, height, zoomFactor } = values;
 

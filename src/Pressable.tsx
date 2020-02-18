@@ -25,7 +25,20 @@ export interface PressableProps {
   readonly hoverStyle?: React.CSSProperties;
 
   readonly disabled?: boolean;
+  /**
+   * This is more of an advanced option. If set, this will be the number of
+   * milliseconds until the [[Pressable]] captures a press gesture. Once it is
+   * captured it won't be interpreted as a tap, long tap, or a pan, and the
+   * `onCapturePress*` props will begin to be called.
+   *
+   * The default is undefined (so presses won't be captured)
+   */
   readonly capturePressThresholdMs?: number;
+  /**
+   * If a press is released after this threshold, it will be considered a long
+   * tap. The default is undefined if there is no `onLongTap` prop, or 500
+   * milliseconds if there is.
+   */
   readonly longTapThresholdMs?: number;
 
   readonly onTap?: () => void;
@@ -42,7 +55,7 @@ export interface PressableProps {
   ) => void;
   readonly onCapturePressCancelled?: (pressableUnderlyingElement: HTMLElement) => void;
   /**
-   * Note this is actually called in an event handler in `Space`.
+   * Called on a right click.
    */
   readonly onPressContextMenu?: (coordinates: PressEventCoordinates) => void;
 }
@@ -52,6 +65,19 @@ export interface PressableState {
   readonly hovered: boolean;
 }
 
+/**
+ * Works like a button element except tapping does not prevent or conflict with
+ * panning. It can also recognize long taps, and can even capture the gesture
+ * entirely if you want to implementing something like dragging.
+ *
+ * It does not provide any UI.
+ *
+ * Must only be used inside a [[Space]].
+ *
+ * ## Props
+ *
+ * See [[PressableProps]].
+ */
 export class Pressable extends React.PureComponent<PressableProps, PressableState> {
   public static contextType = SpaceContext;
   public readonly context!: SpaceContextType;
@@ -105,6 +131,10 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
     );
   }
 
+  /**
+   * Called by the [[Space]] to change the hover state.
+   * @internalapi
+   */
   public setHovered(hovered: boolean) {
     this.setState({ hovered });
   }

@@ -14,6 +14,7 @@ This guide will walk you through what you need to know to use React Zoomable UI.
 - [Preventing Browser Scroll Bouncing](Guide.md#PreventingBrowserScrollBouncing)
 - [Interactions and Pressable](Guide.md#InteractionsandPressable)
 - [NoPanArea](Guide.md#NoPanArea)
+- [Known Issues](Guide.md#KnownIssues)
 - [Next Steps](Guide.md#NextSteps)
 
 ## Installation
@@ -53,7 +54,7 @@ function Example() {
 }
 ```
 
-At a high level, how this works is: the `Space` component renders an outer `div` and an inner `div`, and the `Space`'s children get rendered inside the inner `div`. The `Space` listens for mouse and touch (and other) events on the outer `div` (technically its a `ViewPort` doing the listening, but we will talk more about that below), and based on those events it translates (i.e. changes the x,y position) and scales the inner `div`, using CSS transforms. If there was no outer `div`, the inner `div` would just fly around the rest of the page, but the outer `div` is there and basically serves to give the inner `div` a limited area in which to be rendered (by the browser).
+At a high level, how this works is: the `Space` component renders an outer `div` and an inner `div`, and the `Space`'s children get rendered inside the inner `div`. The `Space` listens for mouse and touch (and other) events on the outer `div` (technically its a `ViewPort` doing the listening, but more about that below), and based on those events it translates (i.e. changes the x,y position) and scales the inner `div`, using CSS transforms. If there was no outer `div`, the inner `div` would just fly around the rest of the page, but the outer `div` is there and basically serves to give the inner `div` a limited area in which to be rendered (by the browser).
 
 ## Sizing
 
@@ -182,6 +183,12 @@ If you are using a `ViewPort` without a `Space`, it has its own lower-level set 
 If you have a part of your `Space` that you do not want to be pan-able for some reason you can wrap it with `NoPanArea`. This has limited utility, but might be useful in some cases.
 
 This doesn't affect zooming though.
+
+## Known Issues
+
+### Scrollable area inside the zoomable area:
+
+If you have HTML elements inside a `Space`, don't try to make them scrollable (via `overflow: scroll`). This works ok on some browsers, like Safari but kills panning and zooming performance on others, like `Chrome`.
 
 ## Next Steps
 

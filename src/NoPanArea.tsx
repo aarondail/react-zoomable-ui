@@ -10,6 +10,19 @@ export interface NoPanAreaProps {
   readonly style?: React.CSSProperties;
 }
 
+/**
+ * If you have a part of your `Space` that you do not want to be pan-able for
+ * some reason you can wrap it with `NoPanArea`. This has limited utility, but
+ * might be useful in some cases.
+ *
+ * This doesn't affect zooming though.
+ *
+ * Must only be used inside a [[Space]].
+ *
+ * ## Props
+ *
+ * See [[NoPanAreaProps]].
+ */
 export class NoPanArea extends React.PureComponent<NoPanAreaProps> {
   public static contextType = SpaceContext;
   public readonly context!: SpaceContextType;

@@ -4,5 +4,5 @@ export * from './PressInterpreter';
 export * from './Space';
 export * from './SpaceContext';
 export * from './ViewPort';
-export { ViewPortCameraAnimationOptions, ViewPortCameraInterface } from './ViewPortCamera';
+export { ViewPortCameraAnimationOptions, ViewPortCameraInterface, ViewPortCamera } from './ViewPortCamera';
 export * from './suppressBrowserZooming';

@@ -17,6 +17,14 @@ export interface PressEventCoordinatesWithDeltas extends PressEventCoordinates {
  */
 const POTENTIAL_TAP_BOUNDS_DEFAULT: ClientPixelUnit = 8;
 
+/**
+ * This type of callback is given to the [[PressInterpreter]] and takes one of
+ * the underlying events that starts a "press" as far as the library is
+ * concerned (either a left click mouse down event, or a single finger touch
+ * start event), and returns an [[PressHandlingOptions]] object (or
+ * `undefined`) detailing how the [[PressInterpreter]] should handle the
+ * "press" gesture.
+ */
 export type DecidePressHandlingCallback = (
   e: MouseEvent | TouchEvent,
   coordinates: PressEventCoordinates,
@@ -25,16 +33,34 @@ export type DecidePressHandlingCallback = (
 export interface PressHandlingOptions {
   readonly ignorePressEntirely?: boolean;
 
+  /**
+   * The area around the initial event in which the pointer can move before the
+   * press is interpreted as just a pan. It will not be considered a tap or
+   * long tap after the pointer moves outside that area, and it can't be
+   * captured.
+   */
   readonly potentialTapBounds?: ClientPixelUnit;
   readonly onPotentialTap?: (coordinates: PressEventCoordinates) => void;
   readonly onTap?: (coordinates: PressEventCoordinates) => void;
 
+  /**
+   * If a press is released after this threshold, it will be considered a long
+   * tap. The default is undefined.
+   */
   readonly longTapThresholdMs?: number;
   readonly onPotentialLongTap?: (coordinates: PressEventCoordinates) => void;
   readonly onLongTap?: (coordinates: PressEventCoordinates) => void;
 
   readonly onTapAbandoned?: () => void;
 
+  /**
+   * This is more of an advanced option. If set, this will be the number of
+   * milliseconds until the press gesture is captured. Once it is captured, it
+   * won't be interpreted as a tap, long tap, or pan, and the `onCapturePress*`
+   * props will begin to be called.
+   *
+   * The default is undefined (so presses won't be captured)
+   */
   readonly capturePressThresholdMs?: number;
   readonly onCapturePressStart?: (coordinates: PressEventCoordinates) => void;
   readonly onCapturePressMove?: (coordinates: PressEventCoordinatesWithDeltas) => void;
@@ -42,10 +68,19 @@ export interface PressHandlingOptions {
   readonly onCapturePressCancelled?: () => void;
 }
 
-export interface PressInterpreterOptions {
-  readonly debugEvents?: boolean;
-}
-
+/**
+ * If you are using [[Space]] then you don't need to use or interact directly with this class.  It is used
+ * internally by [[Space]] along with [[Pressable]] to interpret and respond to press gestures.
+ *
+ * On the other hand if you are using [[ViewPort]] without [[Space]] you may want to use this to
+ * make handling gestures easier.
+ *
+ * It works by calling a [[DecidePressHandlingCallback]] callback whenever a
+ * press starts, and the callback decides how the press should be handled.
+ *
+ * After you construct the [[PressInterpreter]] pass the [[pressHandlers]] to
+ * the [[ViewPort]]'s constructors (as part of the `options` parameter).
+ */
 export class PressInterpreter {
   public readonly pressHandlers: Pick<ViewPortOptions, 'onPressStart' | 'onPressMove' | 'onPressEnd' | 'onPressCancel'>;
 
@@ -57,10 +92,7 @@ export class PressInterpreter {
   private capturePressTimerId?: any;
   private longPressTimerId?: any;
 
-  public constructor(
-    private readonly onDecideHowToHandlePress: DecidePressHandlingCallback,
-    private readonly options?: PressInterpreterOptions,
-  ) {
+  public constructor(private readonly onDecideHowToHandlePress: DecidePressHandlingCallback) {
     this.pressHandlers = {
       onPressStart: this.handlePressStart,
       onPressMove: this.handlePressMove,
@@ -94,9 +126,6 @@ export class PressInterpreter {
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
   ): 'capture' | 'ignore' | undefined => {
-    if (this.options?.debugEvents) {
-      console.log(`PressInterpreter:handlePressStart`);
-    }
     if (this.currentConfig) {
       this.reset();
     }
@@ -134,9 +163,6 @@ export class PressInterpreter {
   };
 
   private handlePressMove = (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates): 'release' | undefined => {
-    if (this.options?.debugEvents) {
-      console.log(`PressInterpreter:handlePressMove`);
-    }
     if (
       !this.currentConfig ||
       this.currentConfig.ignorePressEntirely ||
@@ -176,9 +202,6 @@ export class PressInterpreter {
   };
 
   private handlePressEnd = (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => {
-    if (this.options?.debugEvents) {
-      console.log(`PressInterpreter:handlePressEnd`);
-    }
     if (!this.currentConfig || this.currentConfig.ignorePressEntirely) {
       this.reset();
       return;
@@ -207,9 +230,6 @@ export class PressInterpreter {
   };
 
   private handlePressCancel = (e: MouseEvent | TouchEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`PressInterpreter:handlePressCancelled`);
-    }
     if (this.currentPressCapturedForHandler) {
       this.currentConfig?.onCapturePressCancelled?.();
     } else {

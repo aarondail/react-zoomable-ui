@@ -18,8 +18,6 @@ export interface SpaceProps {
    * Optional CSS class to use on the outer `div` that the [[Space]] renders.
    */
   readonly className?: string;
-  /** @internalapi */
-  readonly debugEvents?: boolean;
   /**
    * Optional styles to set on the outer `div` that the [[Space]] renders.
    */
@@ -86,112 +84,8 @@ interface SpaceState {
 /**
  * This component makes its children zoomable and pan-able.
  *
- * ## Examples
- *
- * Taking over the entire window:
- *
- * ```css
- * // ...and any other elements between the body and the Space...
- * html, body {
- *   height: 100%;
- *   width: 100%;
- * }
- * ```
- * &nbsp;
- * ```javascript
- * return (
- *   <div style={{height: '100%', position: 'relative'}}>
- *     <Space>
- *      <h1>Example</h1>
- *      <span>You can pan and zoom this text</span>
- *     </Space>
- *   </div>
- * );
- * ```
- *
- * Showing an image in a fixed size area:
- *
- * ```javascript
- * const imageWidth = 1280;
- * const imageHeight = 960;
- *
- * return (
- *   <div style={{ width: 300, height: 300, position: "relative" }}>
- *     <Space
- *       style={{ border: "solid 1px black" }}
- *       onCreate={viewPort => {
- *         viewPort.setBounds({ x: [0, imageWidth], y: [0, imageHeight] });
- *         viewPort.camera.centerFitAreaIntoView({
- *           left: 0,
- *           top: 0,
- *           width: imageWidth,
- *           height: imageHeight
- *         });
- *       }}
- *     >
- *       <img src="mountain.png" width={imageWidth} height={imageHeight} alt="A Mountain" />
- *     </Zoomable.Space>
- *   </div>
- * );
- * ```
- *
- * ## How it works
- *
- * The `Space` component renders its children wrapped in two `div`s, an outer
- * one and an inner one. The inner `div` is moved and scaled using CSS
- * transforms inside the outer `div`.
- *
- * This is done by using a [[ViewPort]] instance, which decides what portion of
- * the inner `div` (and its children) to display inside the bounds of the outer
- * `div`. The [[ViewPort]] creates a virtual coordinate space for the inner
- * `div` to be placed in, and the CSS transforms (mentioned above) translate
- * the visible portion of the virtual coordinate space into the space occupied
- * by the outer `div`.
- *
- * The [[ViewPort]] also does the lower-level work of handling zooming and
- * panning, provides access to the [[ViewPortCamera]] for changing what portion
- * of the inner `div` / the virtual coordinate space is visible, and provides
- * other functionality like setting the boundaries of the virtual coordinate
- * space.
- *
- * Components inside a `Space`, at any depth, may use the [[SpaceContext]] to
- * get access to the [[ViewPort]]. It can also be accessed via the [[viewPort]]
- * property on the `Space` itself.
- *
- * ## Sizing
- *
- * The outer `div` rendered by the `Space` component is *absolutely positioned*
- * to take up all available space from its parent element. This can be
- * overridden (with your own CSS rules or styles) but if you don't do that you
- * probably should make sure its parent element has `position: relative` in its
- * styles. One exception to that would be if you intend for the `Space` to
- * cover the entire page, in which case it doesn't matter.
- *
- * Also, note that by default the parent element will not get sized based on
- * its `Space` child. This means that if the parent's size would be based on
- * its children (e.g. its a simple `<div>` with no specific styling), it may
- * end up with a height of 0. In which case the Space will also have a height
- * of 0. You can give the parent element a fixed size or use Flexbox, `height:
- * 100%`, or any other means to make the parent take up space on its own.
- *
- * For sizing to work well, `Space` probably should be the only child of its
- * parent element.
- *
- * For more details [Sizing](../docs/Sizing.md).
- *
- * ## Resizing
- *
- * `Space` will not automatically detect when the parent element resizes in all
- * cases. Window resizes will be detected, but if there are other cases where
- * resizing happens, the `Space` must be either manually told about it via a
- * call to the [[updateSize]] method, or by setting the
- * [[pollForElementResizing]] prop to true.
- *
- * If this is not done the dimensions of the `ViewPort` may be off, and certain
- * behavior like zooming may behave oddly.
- *
- * Though, just to say it again, if the only time the parent element resizes is
- * when the window itself resizes, it will detect that automatically.
+ * Please read the (Guide)[../docs/Guide.md] for all the details on how to use
+ * this.
  *
  * ## Props
  *
@@ -240,7 +134,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     this.interactableRegistry = new Map();
     this.state = {};
 
-    this.pressInterpreter = new PressInterpreter(this.handleDecideHowToHandlePress, { debugEvents: props.debugEvents });
+    this.pressInterpreter = new PressInterpreter(this.handleDecideHowToHandlePress);
     // This won't actually start polling until we give it an element, and tell
     // it to start polling...
     this.elementSizeChangePoller = new ElementSizeChangePoller(this.updateSize);
@@ -437,7 +331,6 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 
     if (this.outerDivRef) {
       (this as Writeable<Space>).viewPort = new ViewPort(this.outerDivRef, {
-        debugEvents: this.props.debugEvents,
         onHover: this.handleHover,
         onPressContextMenu: this.handlePressContextMenu,
         onUpdated: this.handleViewPortUpdated,
