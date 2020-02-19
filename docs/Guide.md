@@ -3,11 +3,11 @@
 This guide will walk you through what you need to know to use React Zoomable UI.
 
 - [Installation](Guide.md#Installation)
-- [The Space Component](Guide.md#TheSpaceComponent)
+- [The Space Component](Guide.md#The Space Component)
 - [Sizing](Guide.md#Sizing)
-- [Layout of Children](Guide.md#LayoutofChildren)
+- [Layout of Children](Guide.md#Layout of Children)
 - [Resizing](Guide.md#Resizing)
-- [Virtual Space vs Client Space](Guide.md#VirtualSpacevsClientSpace)
+- [Virtual Space vs Client Space](Guide.md#Virtual Space vs Client Space)
 - [The ViewPort and ViewPortCamera](Guide.md#TheViewPortandViewPortCamera)
 - [Setting Bounds](Guide.md#SettingBounds)
 - [Preventing Accidental Browser Zooming](Guide.md#PreventingAccidentalBrowserZooming)
