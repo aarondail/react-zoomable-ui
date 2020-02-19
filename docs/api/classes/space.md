@@ -2,7 +2,7 @@
 
 This component makes its children zoomable and pan-able.
 
-Please read the (Guide)[../docs/Guide.md] for all the details on how to use
+Please read the [Guide](../../Guide.md) for all the details on how to use
 this.
 
 ## Props
