@@ -67,7 +67,7 @@ Some tips on sizing:
 - If you want to make the `Space` take up all available window space, you can give all its parent element and all its ancestor elements (including the `html` and `body`) `height: 100%`.
 - If you want to make the `Space` take up almost all available space except for a top bar, bottom bar, and/or side panel, you can use Flexbox to size the `div`s, and just make sure to add `position: relative` to the (center) `div` that contains the `Space`.
 - If you want to make the `Space` take up a fixed amount of space, you can put it in a `div` with a fixed size (and `position: relative`).
-- - Alternatively, you can give it a class or style with a fixed size, and `position: default`.
+- Alternatively, you can give it a class or style with a fixed size, and `position: default`.
 
 ## Layout of Children
 
