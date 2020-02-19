@@ -7,8 +7,8 @@ This guide will walk you through what you need to know to use React Zoomable UI.
 - [Sizing](Guide.md#sizing)
 - [Layout of Children](Guide.md#layout-of-children)
 - [Resizing](Guide.md#resizing)
-- [Virtual Space vs Client Space](Guide.md#virtual-space-vs-client-space)
-- [The ViewPort and ViewPortCamera](Guide.md#the-viewport-and-viewport-camera)
+- [VirtualSpace vs ClientSpace](Guide.md#virtualspace-vs-clientspace)
+- [The ViewPort and ViewPortCamera](Guide.md#the-viewport-and-viewportcamera)
 - [Setting Bounds](Guide.md#setting-bounds)
 - [Preventing Accidental Browser Zooming](Guide.md#preventing-accidental-browser-zooming)
 - [Preventing Browser Scroll Bouncing](Guide.md#preventing-browser-scroll-bouncing)
@@ -186,7 +186,7 @@ This doesn't affect zooming though.
 
 ## Known Issues
 
-_Scrollable area inside the zoomable area_
+**Scrollable area inside the zoomable area**
 
 If you have HTML elements inside a `Space`, don't try to make them scrollable (via `overflow: scroll`). This works ok on some browsers, like Safari but kills panning and zooming performance on others, like `Chrome`.
 

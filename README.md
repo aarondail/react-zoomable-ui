@@ -103,9 +103,7 @@ function ZoomableImage() {
 ## Documentation
 
 - [Guide](docs/Guide.md)
-- [API](docs/API.md)
-- [Usage without React](docs/UsageWithoutReact.md)
-- [Known Issues](docs/KnownIssues.md)
+- [API](docs/api/API.md)
 
 ## License
 
