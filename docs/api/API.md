@@ -1,5 +1,3 @@
-# react-zoomable-ui
-
 ## Index
 
 ### Classes

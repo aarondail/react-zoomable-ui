@@ -62,6 +62,8 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 
 • **camera**: _[ViewPortCameraInterface](../globals.md#viewportcamerainterface)_
 
+The camera provides methods to move and animate the [ViewPort](viewport.md).
+
 ---
 
 ### centerX
@@ -122,6 +124,9 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 
 ▸ **destroy**(): _void_
 
+Called this to detach all event listeners that the [ViewPort](viewport.md) sets up.
+After this is called no further updates will happen.
+
 **Returns:** _void_
 
 ---
@@ -129,6 +134,10 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 ### setBounds
 
 ▸ **setBounds**(`bounds`: [ViewPortBounds](../interfaces/viewportbounds.md)): _void_
+
+Constrain the virtual space so the user can not pan beyond, and the camera
+cannot show anything beyond, the provided min/max values for x, y, and the
+zoom factor.
 
 **Parameters:**
 
@@ -177,12 +186,13 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 
 ▸ **updateContainerSize**(): _void_
 
-This should be used when the div is resized. By default resizes due
-to the window itself resizing will be automatically handled, but any other
-resizes won't be handled (since there isn't a good way to get notified when
-the div resizes.
+This should be used when the div is resized. By default resizes due to the
+window itself resizing will be automatically handled, but any other
+resizes won't be handled (since there isn't a good way to get notified
+when the div resizes.
 
-If you are getting acess to the `ViewPort` via [Space](space.md) or [SpaceContext](../globals.md#const-spacecontext) you should not call this method directly and should
+If you are getting access to the `ViewPort` via [Space](space.md) or
+[SpaceContext](../globals.md#const-spacecontext) you should not call this method directly and should
 instead call the [Space.updateSize](space.md#updatesize) method.
 
 **Returns:** _void_

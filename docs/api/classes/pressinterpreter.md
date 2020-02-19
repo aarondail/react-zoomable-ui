@@ -32,11 +32,16 @@ the [ViewPort](viewport.md)'s constructors (as part of the `options` parameter).
 
 \+ **new PressInterpreter**(`onDecideHowToHandlePress`: [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback)): _[PressInterpreter](pressinterpreter.md)_
 
+If you are using a [Space](space.md) you do not need to create one of these, but
+if you aren't using a [Space](space.md) this should be done before the
+[ViewPort](viewport.md) is created, and then the [pressHandlers](pressinterpreter.md#presshandlers) should be passed
+to the [ViewPort](viewport.md)'s [ViewPortOptions](../interfaces/viewportoptions.md).
+
 **Parameters:**
 
-| Name                       | Type                                                                     |
-| -------------------------- | ------------------------------------------------------------------------ |
-| `onDecideHowToHandlePress` | [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback) |
+| Name                       | Type                                                                     | Description                                                                                                                              |
+| -------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `onDecideHowToHandlePress` | [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback) | This callback decides how to handle presses. See [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback) for more info. |
 
 **Returns:** _[PressInterpreter](pressinterpreter.md)_
 
@@ -45,3 +50,5 @@ the [ViewPort](viewport.md)'s constructors (as part of the `options` parameter).
 ### pressHandlers
 
 • **pressHandlers**: _Pick‹[ViewPortOptions](../interfaces/viewportoptions.md), "onPressStart" | "onPressMove" | "onPressEnd" | "onPressCancel"›_
+
+Pass this to the [ViewPort](viewport.md) as part of its [ViewPortOptions](../interfaces/viewportoptions.md).
