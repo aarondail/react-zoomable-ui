@@ -4,8 +4,6 @@
 
 - **ViewPortCameraAnimationOptions**
 
-  ↳ [ViewPortCameraAnimation](viewportcameraanimation.md)
-
 ## Index
 
 ### Properties

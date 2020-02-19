@@ -108,7 +108,7 @@ export interface ViewPortOptions {
  * virtual space (from top left to bottom right) should be visible inside the
  * bounds of containing HTML element where the virtual space is being rendered.
  *
- * Please see the (Guide)[../docs/Guide.md] for more details.
+ * Please see the [ Guide ](../../Guide.md) for more details.
  */
 export class ViewPort {
   // While these public properties APPEAR readonly they are in fact NOT. They

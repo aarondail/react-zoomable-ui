@@ -8,7 +8,9 @@ You can think of the view port as describing what rectangular portion of the
 virtual space (from top left to bottom right) should be visible inside the
 bounds of containing HTML element where the virtual space is being rendered.
 
-Please see the (Guide)[../docs/Guide.md] for more details.
+This is lower-level than the [[Space]](space.md), so in most cases you probably won't want to create one of these directly.
+
+Please see the [Guide](../../Guide.md) for more information.
 
 ## Hierarchy
 
@@ -124,7 +126,7 @@ The camera provides methods to move and animate the [ViewPort](viewport.md).
 
 ▸ **destroy**(): _void_
 
-Called this to detach all event listeners that the [ViewPort](viewport.md) sets up.
+Call this to detach all event listeners that the [ViewPort](viewport.md) sets up.
 After this is called no further updates will happen.
 
 **Returns:** _void_

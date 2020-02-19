@@ -15,7 +15,6 @@
 - [centerFitAreaIntoView](viewportcamera.md#centerfitareaintoview)
 - [centerFitHorizontalAreaIntoView](viewportcamera.md#centerfithorizontalareaintoview)
 - [destroy](viewportcamera.md#destroy)
-- [handleContainerSizeChanged](viewportcamera.md#handlecontainersizechanged)
 - [moveBy](viewportcamera.md#moveby)
 - [moveByInClientSpace](viewportcamera.md#movebyinclientspace)
 - [moveWithDeceleration](viewportcamera.md#movewithdeceleration)
@@ -87,23 +86,6 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 ### destroy
 
 ▸ **destroy**(): _void_
-
-**Returns:** _void_
-
----
-
-### handleContainerSizeChanged
-
-▸ **handleContainerSizeChanged**(`width`: [ClientPixelUnit](../API.md#clientpixelunit), `height`: [ClientPixelUnit](../API.md#clientpixelunit)): _void_
-
-This is not intended to be called by code outside of react-zoomable-ui itself.
-
-**Parameters:**
-
-| Name     | Type                                         |
-| -------- | -------------------------------------------- |
-| `width`  | [ClientPixelUnit](../API.md#clientpixelunit) |
-| `height` | [ClientPixelUnit](../API.md#clientpixelunit) |
 
 **Returns:** _void_
 
