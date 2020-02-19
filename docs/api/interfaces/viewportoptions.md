@@ -58,7 +58,7 @@ or lifting their finger.
 
 • **onPressMove**? : _undefined | function_
 
-Called when a press gesture moves, IF the press is currently captured (see
+Called when a press moves, IF the press is currently captured (see
 [onPressStart](viewportoptions.md#optional-onpressstart)). The callback can release the captured press by
 returning `'release'`.
 
@@ -70,7 +70,7 @@ returning `'release'`.
 
 Called when a press (press being a left mouse click or a single finger
 touch) starts in the [ViewPort](../classes/viewport.md). The callback can return whether the
-gesture should be captured, in which case the other `onPress*` methods
+interaction should be captured, in which case the other `onPress*` methods
 will be called. Or it can be ignored (in which case nothing at all will
 happen). Finally, the callback can return `undefined` which will initiate
 the default behavior: panning the virtual space.

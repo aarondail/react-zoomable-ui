@@ -29,7 +29,7 @@
 • **capturePressThresholdMs**? : _undefined | number_
 
 This is more of an advanced option. If set, this will be the number of
-milliseconds until the press gesture is captured. Once it is captured, it
+milliseconds until the press is captured. Once it is captured, it
 won't be interpreted as a tap, long tap, or pan, and the `onCapturePress*`
 props will begin to be called.
 

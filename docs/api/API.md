@@ -57,7 +57,7 @@ the underlying events that starts a "press" as far as the library is
 concerned (either a left click mouse down event, or a single finger touch
 start event), and returns an [PressHandlingOptions](interfaces/presshandlingoptions.md) object (or
 `undefined`) detailing how the [PressInterpreter](classes/pressinterpreter.md) should handle the
-"press" gesture.
+press.
 
 #### Type declaration:
 

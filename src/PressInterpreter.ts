@@ -23,7 +23,7 @@ const POTENTIAL_TAP_BOUNDS_DEFAULT: ClientPixelUnit = 8;
  * concerned (either a left click mouse down event, or a single finger touch
  * start event), and returns an [[PressHandlingOptions]] object (or
  * `undefined`) detailing how the [[PressInterpreter]] should handle the
- * "press" gesture.
+ * press.
  */
 export type DecidePressHandlingCallback = (
   e: MouseEvent | TouchEvent,
@@ -55,7 +55,7 @@ export interface PressHandlingOptions {
 
   /**
    * This is more of an advanced option. If set, this will be the number of
-   * milliseconds until the press gesture is captured. Once it is captured, it
+   * milliseconds until the press is captured. Once it is captured, it
    * won't be interpreted as a tap, long tap, or pan, and the `onCapturePress*`
    * props will begin to be called.
    *
@@ -70,10 +70,10 @@ export interface PressHandlingOptions {
 
 /**
  * If you are using [[Space]] then you don't need to use or interact directly with this class.  It is used
- * internally by [[Space]] along with [[Pressable]] to interpret and respond to press gestures.
+ * internally by [[Space]] along with [[Pressable]] to interpret and respond to presses.
  *
  * On the other hand if you are using [[ViewPort]] without [[Space]] you may want to use this to
- * make handling gestures easier.
+ * make handling interactions easier.
  *
  * It works by calling a [[DecidePressHandlingCallback]] callback whenever a
  * press starts, and the callback decides how the press should be handled.
