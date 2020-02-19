@@ -58,16 +58,16 @@ At a high level, how this works is: the `Space` component renders an outer `div`
 
 ## Sizing
 
-Very important: the outer `div` rendered by the `Space` component is _absolutely positioned_ to take up all available space from its parent element. This can be overridden (with your own CSS rules or styles) but if you don't do that you probably should make sure its parent element has `position: relative` in its styles. One exception to that would be if you intend for the `Space` to cover the entire page, in which case it doesn't matter.
+Very important: the outer `div` rendered by the `Space` component is _absolutely positioned_ to take up all available space. This can be overridden (with your own CSS rules or styles) but if you don't do that you probably should make sure its parent element has `position: relative` in its styles. One exception to that would be if you intend for the `Space` to cover the entire page, in which case it doesn't matter.
 
 Also, note that by default the parent element will not get sized based on its `Space` child. This means that if the parent's size would be based on its children (e.g. its a simple `<div>` with no specific styling), it may end up with a height of 0. In which case the Space will also have a height of 0. You can give the parent element a fixed size or use Flexbox, `height: 100%`, or any other means to make the parent take up space on its own. For sizing to work well, `Space`s should probably be the only child of their parent element.
 
 Some tips on sizing:
 
-- If you want to make the `Space` take up all available window space, you can give all its parent elements (including the `html` and `body`) `height: 100%`.
+- If you want to make the `Space` take up all available window space, you can give all its parent element and all its ancestor elements (including the `html` and `body`) `height: 100%`.
 - If you want to make the `Space` take up almost all available space except for a top bar, bottom bar, and/or side panel, you can use Flexbox to size the `div`s, and just make sure to add `position: relative` to the (center) `div` that contains the `Space`.
 - If you want to make the `Space` take up a fixed amount of space, you can put it in a `div` with a fixed size (and `position: relative`).
-- Alternatively, you can give it a class or style with a fixed size, and `position: default`.
+  -- Alternatively, you can give it a class or style with a fixed size, and `position: default`.
 
 ## Layout of Children
 
