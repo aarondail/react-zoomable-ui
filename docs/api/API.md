@@ -25,18 +25,18 @@
 
 ### Type aliases
 
-- [ClientPixelUnit](api.md#clientpixelunit)
-- [DecidePressHandlingCallback](api.md#decidepresshandlingcallback)
-- [VirtualSpacePixelUnit](api.md#virtualspacepixelunit)
-- [ZoomFactor](api.md#zoomfactor)
+- [ClientPixelUnit](API.md#clientpixelunit)
+- [DecidePressHandlingCallback](API.md#decidepresshandlingcallback)
+- [VirtualSpacePixelUnit](API.md#virtualspacepixelunit)
+- [ZoomFactor](API.md#zoomfactor)
 
 ### Variables
 
-- [SpaceContext](api.md#const-spacecontext)
+- [SpaceContext](API.md#const-spacecontext)
 
 ### Functions
 
-- [suppressBrowserZooming](api.md#suppressbrowserzooming)
+- [suppressBrowserZooming](API.md#suppressbrowserzooming)
 
 ## Type aliases
 
@@ -99,12 +99,12 @@ to the [ViewPort](classes/viewport.md).
 
 ### suppressBrowserZooming
 
-▸ **suppressBrowserZooming**(): _[CancelSuppressZoomingCallback](api.md#cancelsuppresszoomingcallback)_
+▸ **suppressBrowserZooming**(): _[CancelSuppressZoomingCallback](API.md#cancelsuppresszoomingcallback)_
 
 This is not used by the [ViewPort](classes/viewport.md), but if you have HTML elements around the
 [ViewPort](classes/viewport.md) you may want to suppress zooming or panning on the whole page. This
 function will do that.
 
-**Returns:** _[CancelSuppressZoomingCallback](api.md#cancelsuppresszoomingcallback)_
+**Returns:** _[CancelSuppressZoomingCallback](API.md#cancelsuppresszoomingcallback)_
 
 A callback which will stop the suppression.

@@ -215,4 +215,4 @@ If you have HTML elements inside a `Space`, don't try to make them scrollable (v
 
 ## Complete API Reference
 
-For more details on all the individual classes, functions, and types (this library is written in typescript after all), check out the [API Reference](api/API.md).
+For more details on all the individual classes, functions, and types (this library is written in typescript after all), check out the [Complete API Reference](api/API.md).

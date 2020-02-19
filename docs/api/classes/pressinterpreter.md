@@ -6,7 +6,7 @@ internally by [Space](space.md) along with [Pressable](pressable.md) to interpre
 On the other hand if you are using [ViewPort](viewport.md) without [Space](space.md) you may want to use this to
 make handling interactions easier.
 
-It works by calling a [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback) callback whenever a
+It works by calling a [DecidePressHandlingCallback](../API.md#decidepresshandlingcallback) callback whenever a
 press starts, and the callback decides how the press should be handled.
 
 After you construct the [PressInterpreter](pressinterpreter.md) pass the [pressHandlers](pressinterpreter.md#presshandlers) to
@@ -30,13 +30,13 @@ the [ViewPort](viewport.md)'s constructors (as part of the `options` parameter).
 
 ### constructor
 
-\+ **new PressInterpreter**(`onDecideHowToHandlePress`: [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback)): _[PressInterpreter](pressinterpreter.md)_
+\+ **new PressInterpreter**(`onDecideHowToHandlePress`: [DecidePressHandlingCallback](../API.md#decidepresshandlingcallback)): _[PressInterpreter](pressinterpreter.md)_
 
 **Parameters:**
 
 | Name                       | Type                                                                 | Description                                                                                                                          |
 | -------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `onDecideHowToHandlePress` | [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback) | This callback decides how to handle presses. See [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback) for more info. |
+| `onDecideHowToHandlePress` | [DecidePressHandlingCallback](../API.md#decidepresshandlingcallback) | This callback decides how to handle presses. See [DecidePressHandlingCallback](../API.md#decidepresshandlingcallback) for more info. |
 
 **Returns:** _[PressInterpreter](pressinterpreter.md)_
 

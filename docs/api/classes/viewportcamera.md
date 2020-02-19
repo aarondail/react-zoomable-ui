@@ -54,10 +54,10 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 
 | Name     | Type                                                     |
 | -------- | -------------------------------------------------------- |
-| `height` | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit) |
-| `left`   | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit) |
-| `top`    | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit) |
-| `width`  | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit) |
+| `height` | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
+| `left`   | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
+| `top`    | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
+| `width`  | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
 
 ▪`Optional` **additionalBounds**: _Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›_
 
@@ -69,14 +69,14 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 
 ### centerFitHorizontalAreaIntoView
 
-▸ **centerFitHorizontalAreaIntoView**(`left`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `width`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `additionalBounds?`: Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›, `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
+▸ **centerFitHorizontalAreaIntoView**(`left`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `width`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `additionalBounds?`: Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›, `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
 
 **Parameters:**
 
 | Name                | Type                                                                              |
 | ------------------- | --------------------------------------------------------------------------------- |
-| `left`              | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
-| `width`             | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
+| `left`              | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
+| `width`             | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
 | `additionalBounds?` | Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›                   |
 | `animationOptions?` | [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md) |
 
@@ -94,7 +94,7 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 
 ### handleContainerSizeChanged
 
-▸ **handleContainerSizeChanged**(`width`: [ClientPixelUnit](../api.md#clientpixelunit), `height`: [ClientPixelUnit](../api.md#clientpixelunit)): _void_
+▸ **handleContainerSizeChanged**(`width`: [ClientPixelUnit](../API.md#clientpixelunit), `height`: [ClientPixelUnit](../API.md#clientpixelunit)): _void_
 
 This is not intended to be called by code outside of react-zoomable-ui itself.
 
@@ -102,8 +102,8 @@ This is not intended to be called by code outside of react-zoomable-ui itself.
 
 | Name     | Type                                         |
 | -------- | -------------------------------------------- |
-| `width`  | [ClientPixelUnit](../api.md#clientpixelunit) |
-| `height` | [ClientPixelUnit](../api.md#clientpixelunit) |
+| `width`  | [ClientPixelUnit](../API.md#clientpixelunit) |
+| `height` | [ClientPixelUnit](../API.md#clientpixelunit) |
 
 **Returns:** _void_
 
@@ -111,17 +111,17 @@ This is not intended to be called by code outside of react-zoomable-ui itself.
 
 ### moveBy
 
-▸ **moveBy**(`dx`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `dy`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `dZoom?`: [ZoomFactor](../api.md#zoomfactor), `anchorContainerX?`: [ClientPixelUnit](../api.md#clientpixelunit), `anchorContainerY?`: [ClientPixelUnit](../api.md#clientpixelunit), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
+▸ **moveBy**(`dx`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `dy`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `dZoom?`: [ZoomFactor](../API.md#zoomfactor), `anchorContainerX?`: [ClientPixelUnit](../API.md#clientpixelunit), `anchorContainerY?`: [ClientPixelUnit](../API.md#clientpixelunit), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
 
 **Parameters:**
 
 | Name                | Type                                                                              |
 | ------------------- | --------------------------------------------------------------------------------- |
-| `dx`                | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
-| `dy`                | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
-| `dZoom?`            | [ZoomFactor](../api.md#zoomfactor)                                                |
-| `anchorContainerX?` | [ClientPixelUnit](../api.md#clientpixelunit)                                      |
-| `anchorContainerY?` | [ClientPixelUnit](../api.md#clientpixelunit)                                      |
+| `dx`                | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
+| `dy`                | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
+| `dZoom?`            | [ZoomFactor](../API.md#zoomfactor)                                                |
+| `anchorContainerX?` | [ClientPixelUnit](../API.md#clientpixelunit)                                      |
+| `anchorContainerY?` | [ClientPixelUnit](../API.md#clientpixelunit)                                      |
 | `animationOptions?` | [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md) |
 
 **Returns:** _void_
@@ -130,17 +130,17 @@ This is not intended to be called by code outside of react-zoomable-ui itself.
 
 ### moveByInClientSpace
 
-▸ **moveByInClientSpace**(`dx`: [ClientPixelUnit](../api.md#clientpixelunit), `dy`: [ClientPixelUnit](../api.md#clientpixelunit), `dZoom?`: [ZoomFactor](../api.md#zoomfactor), `anchorContainerX?`: [ClientPixelUnit](../api.md#clientpixelunit), `anchorContainerY?`: [ClientPixelUnit](../api.md#clientpixelunit), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
+▸ **moveByInClientSpace**(`dx`: [ClientPixelUnit](../API.md#clientpixelunit), `dy`: [ClientPixelUnit](../API.md#clientpixelunit), `dZoom?`: [ZoomFactor](../API.md#zoomfactor), `anchorContainerX?`: [ClientPixelUnit](../API.md#clientpixelunit), `anchorContainerY?`: [ClientPixelUnit](../API.md#clientpixelunit), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
 
 **Parameters:**
 
 | Name                | Type                                                                              |
 | ------------------- | --------------------------------------------------------------------------------- |
-| `dx`                | [ClientPixelUnit](../api.md#clientpixelunit)                                      |
-| `dy`                | [ClientPixelUnit](../api.md#clientpixelunit)                                      |
-| `dZoom?`            | [ZoomFactor](../api.md#zoomfactor)                                                |
-| `anchorContainerX?` | [ClientPixelUnit](../api.md#clientpixelunit)                                      |
-| `anchorContainerY?` | [ClientPixelUnit](../api.md#clientpixelunit)                                      |
+| `dx`                | [ClientPixelUnit](../API.md#clientpixelunit)                                      |
+| `dy`                | [ClientPixelUnit](../API.md#clientpixelunit)                                      |
+| `dZoom?`            | [ZoomFactor](../API.md#zoomfactor)                                                |
+| `anchorContainerX?` | [ClientPixelUnit](../API.md#clientpixelunit)                                      |
+| `anchorContainerY?` | [ClientPixelUnit](../API.md#clientpixelunit)                                      |
 | `animationOptions?` | [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md) |
 
 **Returns:** _void_
@@ -149,15 +149,15 @@ This is not intended to be called by code outside of react-zoomable-ui itself.
 
 ### moveWithDeceleration
 
-▸ **moveWithDeceleration**(`vx`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `vy`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `friction`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `preventInterruption?`: undefined | false | true): _void_
+▸ **moveWithDeceleration**(`vx`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `vy`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `friction`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `preventInterruption?`: undefined | false | true): _void_
 
 **Parameters:**
 
 | Name                   | Type                                                     |
 | ---------------------- | -------------------------------------------------------- |
-| `vx`                   | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit) |
-| `vy`                   | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit) |
-| `friction`             | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit) |
+| `vx`                   | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
+| `vy`                   | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
+| `friction`             | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
 | `preventInterruption?` | undefined &#124; false &#124; true                       |
 
 **Returns:** _void_
@@ -166,15 +166,15 @@ This is not intended to be called by code outside of react-zoomable-ui itself.
 
 ### moveWithDecelerationInClientSpace
 
-▸ **moveWithDecelerationInClientSpace**(`vx`: [ClientPixelUnit](../api.md#clientpixelunit), `vy`: [ClientPixelUnit](../api.md#clientpixelunit), `friction`: [ClientPixelUnit](../api.md#clientpixelunit), `preventInterruption?`: undefined | false | true): _void_
+▸ **moveWithDecelerationInClientSpace**(`vx`: [ClientPixelUnit](../API.md#clientpixelunit), `vy`: [ClientPixelUnit](../API.md#clientpixelunit), `friction`: [ClientPixelUnit](../API.md#clientpixelunit), `preventInterruption?`: undefined | false | true): _void_
 
 **Parameters:**
 
 | Name                   | Type                                         | Default |
 | ---------------------- | -------------------------------------------- | ------- |
-| `vx`                   | [ClientPixelUnit](../api.md#clientpixelunit) | -       |
-| `vy`                   | [ClientPixelUnit](../api.md#clientpixelunit) | -       |
-| `friction`             | [ClientPixelUnit](../api.md#clientpixelunit) | 0.84    |
+| `vx`                   | [ClientPixelUnit](../API.md#clientpixelunit) | -       |
+| `vy`                   | [ClientPixelUnit](../API.md#clientpixelunit) | -       |
+| `friction`             | [ClientPixelUnit](../API.md#clientpixelunit) | 0.84    |
 | `preventInterruption?` | undefined &#124; false &#124; true           | -       |
 
 **Returns:** _void_
@@ -183,15 +183,15 @@ This is not intended to be called by code outside of react-zoomable-ui itself.
 
 ### recenter
 
-▸ **recenter**(`x`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `y`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `newZoomFactor?`: [ZoomFactor](../api.md#zoomfactor), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
+▸ **recenter**(`x`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `y`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `newZoomFactor?`: [ZoomFactor](../API.md#zoomfactor), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
 
 **Parameters:**
 
 | Name                | Type                                                                              |
 | ------------------- | --------------------------------------------------------------------------------- |
-| `x`                 | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
-| `y`                 | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
-| `newZoomFactor?`    | [ZoomFactor](../api.md#zoomfactor)                                                |
+| `x`                 | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
+| `y`                 | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
+| `newZoomFactor?`    | [ZoomFactor](../API.md#zoomfactor)                                                |
 | `animationOptions?` | [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md) |
 
 **Returns:** _void_
@@ -226,15 +226,15 @@ from this library.
 
 ### updateTopLeft
 
-▸ **updateTopLeft**(`x`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `y`: [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit), `newZoomFactor?`: [ZoomFactor](../api.md#zoomfactor), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
+▸ **updateTopLeft**(`x`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `y`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `newZoomFactor?`: [ZoomFactor](../API.md#zoomfactor), `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
 
 **Parameters:**
 
 | Name                | Type                                                                              |
 | ------------------- | --------------------------------------------------------------------------------- |
-| `x`                 | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
-| `y`                 | [VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)                          |
-| `newZoomFactor?`    | [ZoomFactor](../api.md#zoomfactor)                                                |
+| `x`                 | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
+| `y`                 | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)                          |
+| `newZoomFactor?`    | [ZoomFactor](../API.md#zoomfactor)                                                |
 | `animationOptions?` | [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md) |
 
 **Returns:** _void_

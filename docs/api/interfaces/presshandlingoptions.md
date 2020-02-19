@@ -108,7 +108,7 @@ tap. The default is undefined.
 
 ### `Optional` potentialTapBounds
 
-• **potentialTapBounds**? : _[ClientPixelUnit](../api.md#clientpixelunit)_
+• **potentialTapBounds**? : _[ClientPixelUnit](../API.md#clientpixelunit)_
 
 The area around the initial event in which the pointer can move before the
 press is interpreted as just a pan. It will not be considered a tap or
