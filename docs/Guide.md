@@ -2,20 +2,20 @@
 
 This guide will walk you through what you need to know to use React Zoomable UI.
 
-- [Installation](Guide.md#Installation)
-- [The Space Component](Guide.md#The Space Component)
-- [Sizing](Guide.md#Sizing)
-- [Layout of Children](Guide.md#Layout of Children)
-- [Resizing](Guide.md#Resizing)
-- [Virtual Space vs Client Space](Guide.md#Virtual Space vs Client Space)
-- [The ViewPort and ViewPortCamera](Guide.md#TheViewPortandViewPortCamera)
-- [Setting Bounds](Guide.md#SettingBounds)
-- [Preventing Accidental Browser Zooming](Guide.md#PreventingAccidentalBrowserZooming)
-- [Preventing Browser Scroll Bouncing](Guide.md#PreventingBrowserScrollBouncing)
-- [Interactions and Pressable](Guide.md#InteractionsandPressable)
-- [NoPanArea](Guide.md#NoPanArea)
-- [Known Issues](Guide.md#KnownIssues)
-- [API Reference](Guide.md#APIReference)
+- [Installation](Guide.md#installation)
+- [The Space Component](Guide.md#the-Space-component)
+- [Sizing](Guide.md#sizing)
+- [Layout of Children](Guide.md#layout-of-children)
+- [Resizing](Guide.md#resizing)
+- [Virtual Space vs Client Space](Guide.md#virtual-space-vs-client-space)
+- [The ViewPort and ViewPortCamera](Guide.md#the-viewport-and-viewport-camera)
+- [Setting Bounds](Guide.md#setting-bounds)
+- [Preventing Accidental Browser Zooming](Guide.md#preventing-accidental-browser-zooming)
+- [Preventing Browser Scroll Bouncing](Guide.md#preventing-browser-scroll-bouncing)
+- [Interactions and Pressable](Guide.md#interactions-and-pressable)
+- [NoPanArea](Guide.md#nopanarea)
+- [Known Issues](Guide.md#known-issues)
+- [API Reference](Guide.md#api-reference)
 
 ## Installation
 
@@ -192,4 +192,4 @@ If you have HTML elements inside a `Space`, don't try to make them scrollable (v
 
 ## API Reference
 
-For more details on the individual classes, functions, and types (this library is written in typescript after all), check out the [API Reference](API.md).
+For more details on the individual classes, functions, and types (this library is written in typescript after all), check out the [API Reference](api/API.md).
