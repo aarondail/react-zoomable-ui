@@ -42,7 +42,7 @@
 
 ### ClientPixelUnit
 
-Ƭ **ClientPixelUnit**: _number_
+**ClientPixelUnit**: _number_
 
 This is just a type alias for `number`. Variables or parameters of this type refer to client (as in the browser window)'s concept of pixels (which are not the same as screen pixels).
 
@@ -50,7 +50,7 @@ This is just a type alias for `number`. Variables or parameters of this type ref
 
 ### DecidePressHandlingCallback
 
-Ƭ **DecidePressHandlingCallback**: _function_
+**DecidePressHandlingCallback**: _function_
 
 This type of callback is given to the [PressInterpreter](classes/pressinterpreter.md) and takes one of
 the underlying events that starts a "press" as far as the library is
@@ -61,7 +61,7 @@ press.
 
 #### Type declaration:
 
-▸ (`e`: MouseEvent | TouchEvent, `coordinates`: [PressEventCoordinates](interfaces/presseventcoordinates.md)): _[PressHandlingOptions](interfaces/presshandlingoptions.md) | undefined_
+(`e`: MouseEvent | TouchEvent, `coordinates`: [PressEventCoordinates](interfaces/presseventcoordinates.md)): _[PressHandlingOptions](interfaces/presshandlingoptions.md) | undefined_
 
 **Parameters:**
 
@@ -74,7 +74,7 @@ press.
 
 ### VirtualSpacePixelUnit
 
-Ƭ **VirtualSpacePixelUnit**: _number_
+**VirtualSpacePixelUnit**: _number_
 
 This is a type alias representing the pixels inside the virtual space created by the library.
 
@@ -82,7 +82,7 @@ This is a type alias representing the pixels inside the virtual space created by
 
 ### ZoomFactor
 
-Ƭ **ZoomFactor**: _number_
+**ZoomFactor**: _number_
 
 A type alias for number. A zoom factor is the amount the virtual space is being zoomed in. `2` represents 200% zoom (in), while `0.5` represents 50% zoom (so zoomed out).
 
@@ -90,21 +90,20 @@ A type alias for number. A zoom factor is the amount the virtual space is being 
 
 ### `Const` SpaceContext
 
-• **SpaceContext**: _Context‹[SpaceContextType](interfaces/spacecontexttype.md)›_ = React.createContext<SpaceContextType>(undefined as any)
+**SpaceContext**: `React.Context‹[SpaceContextType](interfaces/spacecontexttype.md)›`
 
-This React context can be used within a [Space](classes/space.md) to get access
-to the [ViewPort](classes/viewport.md).
+This React context can be used within a [Space](classes/space.md) to get access to the [ViewPort](classes/viewport.md).
 
 ## Functions
 
 ### suppressBrowserZooming
 
-▸ **suppressBrowserZooming**(): _[CancelSuppressZoomingCallback](API.md#cancelsuppresszoomingcallback)_
+**suppressBrowserZooming**(): `() => void`
 
 This is not used by the [ViewPort](classes/viewport.md), but if you have HTML elements around the
 [ViewPort](classes/viewport.md) you may want to suppress zooming or panning on the whole page. This
 function will do that.
 
-**Returns:** _[CancelSuppressZoomingCallback](API.md#cancelsuppresszoomingcallback)_
+**Returns:** `() => void`
 
 A callback which will stop the suppression.
