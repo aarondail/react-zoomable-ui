@@ -69,7 +69,7 @@ been first rendered. This can be used, for example, to make the
 
 ### `Optional` onDecideHowToHandlePress
 
-• **onDecideHowToHandlePress**? : _[DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback)_
+• **onDecideHowToHandlePress**? : _[DecidePressHandlingCallback](../api.md#decidepresshandlingcallback)_
 
 Optional callback to be called when a press is initiated in the space.
 Generally you should prefer to use [Pressable](../classes/pressable.md) to handle presses, but

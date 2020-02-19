@@ -60,7 +60,7 @@ Please see the (Guide)[../docs/Guide.md] for more details.
 
 ### camera
 
-• **camera**: _[ViewPortCameraInterface](../globals.md#viewportcamerainterface)_
+• **camera**: _[ViewPortCameraInterface](../api.md#viewportcamerainterface)_
 
 The camera provides methods to move and animate the [ViewPort](viewport.md).
 
@@ -68,55 +68,55 @@ The camera provides methods to move and animate the [ViewPort](viewport.md).
 
 ### centerX
 
-• **centerX**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **centerX**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### centerY
 
-• **centerY**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **centerY**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### containerHeight
 
-• **containerHeight**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerHeight**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### containerWidth
 
-• **containerWidth**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerWidth**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### height
 
-• **height**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **height**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### left
 
-• **left**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **left**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### top
 
-• **top**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **top**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### width
 
-• **width**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **width**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### zoomFactor
 
-• **zoomFactor**: _[ZoomFactor](../globals.md#zoomfactor)_
+• **zoomFactor**: _[ZoomFactor](../api.md#zoomfactor)_
 
 ## Methods
 
@@ -165,20 +165,20 @@ zoom factor.
 
 ### translateClientXYCoordinatesToVirtualSpace
 
-▸ **translateClientXYCoordinatesToVirtualSpace**(`x`: [ClientPixelUnit](../globals.md#clientpixelunit), `y`: [ClientPixelUnit](../globals.md#clientpixelunit)): _object_
+▸ **translateClientXYCoordinatesToVirtualSpace**(`x`: [ClientPixelUnit](../api.md#clientpixelunit), `y`: [ClientPixelUnit](../api.md#clientpixelunit)): _object_
 
 **Parameters:**
 
-| Name | Type                                             |
-| ---- | ------------------------------------------------ |
-| `x`  | [ClientPixelUnit](../globals.md#clientpixelunit) |
-| `y`  | [ClientPixelUnit](../globals.md#clientpixelunit) |
+| Name | Type                                         |
+| ---- | -------------------------------------------- |
+| `x`  | [ClientPixelUnit](../api.md#clientpixelunit) |
+| `y`  | [ClientPixelUnit](../api.md#clientpixelunit) |
 
 **Returns:** _object_
 
-- **x**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+- **x**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
-- **y**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+- **y**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
@@ -192,7 +192,7 @@ resizes won't be handled (since there isn't a good way to get notified
 when the div resizes.
 
 If you are getting access to the `ViewPort` via [Space](space.md) or
-[SpaceContext](../globals.md#const-spacecontext) you should not call this method directly and should
+[SpaceContext](../api.md#const-spacecontext) you should not call this method directly and should
 instead call the [Space.updateSize](space.md#updatesize) method.
 
 **Returns:** _void_

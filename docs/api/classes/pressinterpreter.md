@@ -6,7 +6,7 @@ internally by [Space](space.md) along with [Pressable](pressable.md) to interpre
 On the other hand if you are using [ViewPort](viewport.md) without [Space](space.md) you may want to use this to
 make handling gestures easier.
 
-It works by calling a [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback) callback whenever a
+It works by calling a [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback) callback whenever a
 press starts, and the callback decides how the press should be handled.
 
 After you construct the [PressInterpreter](pressinterpreter.md) pass the [pressHandlers](pressinterpreter.md#presshandlers) to
@@ -30,7 +30,7 @@ the [ViewPort](viewport.md)'s constructors (as part of the `options` parameter).
 
 ### constructor
 
-\+ **new PressInterpreter**(`onDecideHowToHandlePress`: [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback)): _[PressInterpreter](pressinterpreter.md)_
+\+ **new PressInterpreter**(`onDecideHowToHandlePress`: [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback)): _[PressInterpreter](pressinterpreter.md)_
 
 If you are using a [Space](space.md) you do not need to create one of these, but
 if you aren't using a [Space](space.md) this should be done before the
@@ -39,9 +39,9 @@ to the [ViewPort](viewport.md)'s [ViewPortOptions](../interfaces/viewportoptions
 
 **Parameters:**
 
-| Name                       | Type                                                                     | Description                                                                                                                              |
-| -------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `onDecideHowToHandlePress` | [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback) | This callback decides how to handle presses. See [DecidePressHandlingCallback](../globals.md#decidepresshandlingcallback) for more info. |
+| Name                       | Type                                                                 | Description                                                                                                                          |
+| -------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `onDecideHowToHandlePress` | [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback) | This callback decides how to handle presses. See [DecidePressHandlingCallback](../api.md#decidepresshandlingcallback) for more info. |
 
 **Returns:** _[PressInterpreter](pressinterpreter.md)_
 

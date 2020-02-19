@@ -27,7 +27,7 @@
 
 ### clientX
 
-• **clientX**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **clientX**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 _Inherited from [PressEventCoordinates](presseventcoordinates.md).[clientX](presseventcoordinates.md#clientx)_
 
@@ -35,13 +35,13 @@ _Inherited from [PressEventCoordinates](presseventcoordinates.md).[clientX](pres
 
 ### clientXDelta
 
-• **clientXDelta**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **clientXDelta**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### clientY
 
-• **clientY**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **clientY**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 _Inherited from [PressEventCoordinates](presseventcoordinates.md).[clientY](presseventcoordinates.md#clienty)_
 
@@ -49,13 +49,13 @@ _Inherited from [PressEventCoordinates](presseventcoordinates.md).[clientY](pres
 
 ### clientYDelta
 
-• **clientYDelta**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **clientYDelta**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### containerX
 
-• **containerX**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerX**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 _Inherited from [PressEventCoordinates](presseventcoordinates.md).[containerX](presseventcoordinates.md#containerx)_
 
@@ -63,13 +63,13 @@ _Inherited from [PressEventCoordinates](presseventcoordinates.md).[containerX](p
 
 ### containerXDelta
 
-• **containerXDelta**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerXDelta**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### containerY
 
-• **containerY**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerY**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 _Inherited from [PressEventCoordinates](presseventcoordinates.md).[containerY](presseventcoordinates.md#containery)_
 
@@ -77,13 +77,13 @@ _Inherited from [PressEventCoordinates](presseventcoordinates.md).[containerY](p
 
 ### containerYDelta
 
-• **containerYDelta**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerYDelta**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### x
 
-• **x**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **x**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 _Inherited from [PressEventCoordinates](presseventcoordinates.md).[x](presseventcoordinates.md#x)_
 
@@ -91,13 +91,13 @@ _Inherited from [PressEventCoordinates](presseventcoordinates.md).[x](pressevent
 
 ### xDelta
 
-• **xDelta**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **xDelta**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### y
 
-• **y**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **y**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 _Inherited from [PressEventCoordinates](presseventcoordinates.md).[y](presseventcoordinates.md#y)_
 
@@ -105,4 +105,4 @@ _Inherited from [PressEventCoordinates](presseventcoordinates.md).[y](pressevent
 
 ### yDelta
 
-• **yDelta**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **yDelta**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_

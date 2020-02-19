@@ -2,7 +2,6 @@
 
 ### Classes
 
-- [ElementSizeChangePoller](classes/elementsizechangepoller.md)
 - [NoPanArea](classes/nopanarea.md)
 - [PressInterpreter](classes/pressinterpreter.md)
 - [Pressable](classes/pressable.md)
@@ -26,18 +25,18 @@
 
 ### Type aliases
 
-- [ClientPixelUnit](globals.md#clientpixelunit)
-- [DecidePressHandlingCallback](globals.md#decidepresshandlingcallback)
-- [VirtualSpacePixelUnit](globals.md#virtualspacepixelunit)
-- [ZoomFactor](globals.md#zoomfactor)
+- [ClientPixelUnit](api.md#clientpixelunit)
+- [DecidePressHandlingCallback](api.md#decidepresshandlingcallback)
+- [VirtualSpacePixelUnit](api.md#virtualspacepixelunit)
+- [ZoomFactor](api.md#zoomfactor)
 
 ### Variables
 
-- [SpaceContext](globals.md#const-spacecontext)
+- [SpaceContext](api.md#const-spacecontext)
 
 ### Functions
 
-- [suppressBrowserZooming](globals.md#suppressbrowserzooming)
+- [suppressBrowserZooming](api.md#suppressbrowserzooming)
 
 ## Type aliases
 
@@ -100,12 +99,12 @@ to the [ViewPort](classes/viewport.md).
 
 ### suppressBrowserZooming
 
-▸ **suppressBrowserZooming**(): _[CancelSuppressZoomingCallback](globals.md#cancelsuppresszoomingcallback)_
+▸ **suppressBrowserZooming**(): _[CancelSuppressZoomingCallback](api.md#cancelsuppresszoomingcallback)_
 
 This is not used by the [ViewPort](classes/viewport.md), but if you have HTML elements around the
 [ViewPort](classes/viewport.md) you may want to suppress zooming or panning on the whole page. This
 function will do that.
 
-**Returns:** _[CancelSuppressZoomingCallback](globals.md#cancelsuppresszoomingcallback)_
+**Returns:** _[CancelSuppressZoomingCallback](api.md#cancelsuppresszoomingcallback)_
 
 A callback which will stop the suppression.

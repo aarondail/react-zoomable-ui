@@ -21,34 +21,34 @@
 
 ### clientX
 
-• **clientX**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **clientX**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### clientY
 
-• **clientY**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **clientY**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### containerX
 
-• **containerX**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerX**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### containerY
 
-• **containerY**: _[ClientPixelUnit](../globals.md#clientpixelunit)_
+• **containerY**: _[ClientPixelUnit](../api.md#clientpixelunit)_
 
 ---
 
 ### x
 
-• **x**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **x**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
 
 ---
 
 ### y
 
-• **y**: _[VirtualSpacePixelUnit](../globals.md#virtualspacepixelunit)_
+• **y**: _[VirtualSpacePixelUnit](../api.md#virtualspacepixelunit)_
