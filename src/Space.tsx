@@ -179,7 +179,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 
   /**
    * This should be called in some cases to tell the `Space` that its parent
-   * element has resized. See the section on [[Sizing]] above for more info.
+   * element has resized. See the [Guide](../../Guide.md) for more info.
    */
   public updateSize = () => {
     if (this.viewPort) {

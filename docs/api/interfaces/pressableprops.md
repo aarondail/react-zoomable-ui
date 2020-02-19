@@ -4,6 +4,35 @@
 
 - **PressableProps**
 
+## Index
+
+### Properties
+
+- [capturePressClassName](pressableprops.md#optional-capturepressclassname)
+- [capturePressStyle](pressableprops.md#optional-capturepressstyle)
+- [capturePressThresholdMs](pressableprops.md#optional-capturepressthresholdms)
+- [children](pressableprops.md#optional-children)
+- [className](pressableprops.md#optional-classname)
+- [disabled](pressableprops.md#optional-disabled)
+- [disabledClassName](pressableprops.md#optional-disabledclassname)
+- [disabledStyle](pressableprops.md#optional-disabledstyle)
+- [hoverClassName](pressableprops.md#optional-hoverclassname)
+- [hoverStyle](pressableprops.md#optional-hoverstyle)
+- [id](pressableprops.md#optional-id)
+- [longTapThresholdMs](pressableprops.md#optional-longtapthresholdms)
+- [onCapturePressCancelled](pressableprops.md#optional-oncapturepresscancelled)
+- [onCapturePressEnd](pressableprops.md#optional-oncapturepressend)
+- [onCapturePressMove](pressableprops.md#optional-oncapturepressmove)
+- [onCapturePressStart](pressableprops.md#optional-oncapturepressstart)
+- [onLongTap](pressableprops.md#optional-onlongtap)
+- [onPressContextMenu](pressableprops.md#optional-onpresscontextmenu)
+- [onTap](pressableprops.md#optional-ontap)
+- [potentialLongTapClassName](pressableprops.md#optional-potentiallongtapclassname)
+- [potentialLongTapStyle](pressableprops.md#optional-potentiallongtapstyle)
+- [potentialTapClassName](pressableprops.md#optional-potentialtapclassname)
+- [potentialTapStyle](pressableprops.md#optional-potentialtapstyle)
+- [style](pressableprops.md#optional-style)
+
 ## Properties
 
 ### `Optional` capturePressClassName

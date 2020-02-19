@@ -82,6 +82,9 @@ export interface PressHandlingOptions {
  * the [[ViewPort]]'s constructors (as part of the `options` parameter).
  */
 export class PressInterpreter {
+  /**
+   * Pass this to the [[ViewPort]] as part of its [[ViewPortOptions]].
+   */
   public readonly pressHandlers: Pick<ViewPortOptions, 'onPressStart' | 'onPressMove' | 'onPressEnd' | 'onPressCancel'>;
 
   private currentConfig?: PressHandlingOptions;
@@ -92,6 +95,14 @@ export class PressInterpreter {
   private capturePressTimerId?: any;
   private longPressTimerId?: any;
 
+  /**
+   * If you are using a [[Space]] you do not need to create one of these, but
+   * if you aren't using a [[Space]] this should be done before the
+   * [[ViewPort]] is created, and then the [[pressHandlers]] should be passed
+   * to the [[ViewPort]]'s [[ViewPortOptions]].
+   *
+   * @param onDecideHowToHandlePress This callback decides how to handle presses.  See [[DecidePressHandlingCallback]] for more info.
+   */
   public constructor(private readonly onDecideHowToHandlePress: DecidePressHandlingCallback) {
     this.pressHandlers = {
       onPressStart: this.handlePressStart,

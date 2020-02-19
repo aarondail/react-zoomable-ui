@@ -6,6 +6,13 @@
 
   ↳ [ViewPortCameraAnimation](viewportcameraanimation.md)
 
+## Index
+
+### Properties
+
+- [durationMilliseconds](viewportcameraanimationoptions.md#durationmilliseconds)
+- [preventInterruption](viewportcameraanimationoptions.md#optional-preventinterruption)
+
 ## Properties
 
 ### durationMilliseconds

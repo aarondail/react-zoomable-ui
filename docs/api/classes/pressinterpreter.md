@@ -16,6 +16,16 @@ the [ViewPort](viewport.md)'s constructors (as part of the `options` parameter).
 
 - **PressInterpreter**
 
+## Index
+
+### Constructors
+
+- [constructor](pressinterpreter.md#constructor)
+
+### Properties
+
+- [pressHandlers](pressinterpreter.md#presshandlers)
+
 ## Constructors
 
 ### constructor

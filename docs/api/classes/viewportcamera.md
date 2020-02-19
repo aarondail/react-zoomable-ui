@@ -4,6 +4,27 @@
 
 - **ViewPortCamera**
 
+## Index
+
+### Constructors
+
+- [constructor](viewportcamera.md#constructor)
+
+### Methods
+
+- [centerFitAreaIntoView](viewportcamera.md#centerfitareaintoview)
+- [centerFitHorizontalAreaIntoView](viewportcamera.md#centerfithorizontalareaintoview)
+- [destroy](viewportcamera.md#destroy)
+- [handleContainerSizeChanged](viewportcamera.md#handlecontainersizechanged)
+- [moveBy](viewportcamera.md#moveby)
+- [moveByInClientSpace](viewportcamera.md#movebyinclientspace)
+- [moveWithDeceleration](viewportcamera.md#movewithdeceleration)
+- [moveWithDecelerationInClientSpace](viewportcamera.md#movewithdecelerationinclientspace)
+- [recenter](viewportcamera.md#recenter)
+- [setBounds](viewportcamera.md#setbounds)
+- [setBoundsToContainer](viewportcamera.md#setboundstocontainer)
+- [updateTopLeft](viewportcamera.md#updatetopleft)
+
 ## Constructors
 
 ### constructor

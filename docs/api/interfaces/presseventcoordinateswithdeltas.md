@@ -6,6 +6,23 @@
 
   ↳ **PressEventCoordinatesWithDeltas**
 
+## Index
+
+### Properties
+
+- [clientX](presseventcoordinateswithdeltas.md#clientx)
+- [clientXDelta](presseventcoordinateswithdeltas.md#clientxdelta)
+- [clientY](presseventcoordinateswithdeltas.md#clienty)
+- [clientYDelta](presseventcoordinateswithdeltas.md#clientydelta)
+- [containerX](presseventcoordinateswithdeltas.md#containerx)
+- [containerXDelta](presseventcoordinateswithdeltas.md#containerxdelta)
+- [containerY](presseventcoordinateswithdeltas.md#containery)
+- [containerYDelta](presseventcoordinateswithdeltas.md#containerydelta)
+- [x](presseventcoordinateswithdeltas.md#x)
+- [xDelta](presseventcoordinateswithdeltas.md#xdelta)
+- [y](presseventcoordinateswithdeltas.md#y)
+- [yDelta](presseventcoordinateswithdeltas.md#ydelta)
+
 ## Properties
 
 ### clientX

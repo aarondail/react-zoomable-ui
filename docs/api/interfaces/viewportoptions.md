@@ -4,13 +4,19 @@
 
 - **ViewPortOptions**
 
+## Index
+
+### Properties
+
+- [onHover](viewportoptions.md#optional-onhover)
+- [onPressCancel](viewportoptions.md#optional-onpresscancel)
+- [onPressContextMenu](viewportoptions.md#optional-onpresscontextmenu)
+- [onPressEnd](viewportoptions.md#optional-onpressend)
+- [onPressMove](viewportoptions.md#optional-onpressmove)
+- [onPressStart](viewportoptions.md#optional-onpressstart)
+- [onUpdated](viewportoptions.md#optional-onupdated)
+
 ## Properties
-
-### `Optional` debugEvents
-
-• **debugEvents**? : _undefined | false | true_
-
----
 
 ### `Optional` onHover
 

@@ -4,6 +4,17 @@
 
 - **VirtualSpaceRect**
 
+## Index
+
+### Properties
+
+- [bottom](virtualspacerect.md#bottom)
+- [height](virtualspacerect.md#height)
+- [left](virtualspacerect.md#left)
+- [right](virtualspacerect.md#right)
+- [top](virtualspacerect.md#top)
+- [width](virtualspacerect.md#width)
+
 ## Properties
 
 ### bottom

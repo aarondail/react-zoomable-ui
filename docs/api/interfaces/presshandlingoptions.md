@@ -4,6 +4,24 @@
 
 - **PressHandlingOptions**
 
+## Index
+
+### Properties
+
+- [capturePressThresholdMs](presshandlingoptions.md#optional-capturepressthresholdms)
+- [ignorePressEntirely](presshandlingoptions.md#optional-ignorepressentirely)
+- [longTapThresholdMs](presshandlingoptions.md#optional-longtapthresholdms)
+- [onCapturePressCancelled](presshandlingoptions.md#optional-oncapturepresscancelled)
+- [onCapturePressEnd](presshandlingoptions.md#optional-oncapturepressend)
+- [onCapturePressMove](presshandlingoptions.md#optional-oncapturepressmove)
+- [onCapturePressStart](presshandlingoptions.md#optional-oncapturepressstart)
+- [onLongTap](presshandlingoptions.md#optional-onlongtap)
+- [onPotentialLongTap](presshandlingoptions.md#optional-onpotentiallongtap)
+- [onPotentialTap](presshandlingoptions.md#optional-onpotentialtap)
+- [onTap](presshandlingoptions.md#optional-ontap)
+- [onTapAbandoned](presshandlingoptions.md#optional-ontapabandoned)
+- [potentialTapBounds](presshandlingoptions.md#optional-potentialtapbounds)
+
 ## Properties
 
 ### `Optional` capturePressThresholdMs

@@ -3,11 +3,26 @@ import Hammer from 'hammerjs';
 import { browserIsSafariDesktop, isMouseEvent } from './utils';
 import { ViewPortCamera, ViewPortCameraInterface, ViewPortCameraValues } from './ViewPortCamera';
 
-// 0,0 as top left of browser window to screenWidth, screenHeight as button right.
+/**
+ * This is just a type alias for `number`. Variables or parameters of this type
+ * refer to client (as in the browser window)'s concept of pixels (which are
+ * not the same as screen pixels).
+ *
+ * So 0,0 is top left of browser window, and it increases to the bottom right
+ * of the window.
+ */
 export type ClientPixelUnit = number;
-// 0,0 as the top left pixel of the virtual space we want to render stuff in, increasing to the bottom right.
+/**
+ * This is a type alias representing the pixels inside the virtual space
+ * created by the library.
+ *
+ * So 0,0 is the top left pixel of the virtual space we want to render stuff
+ * in, and it increases to the bottom and right.
+ */
 export type VirtualSpacePixelUnit = number;
-// 2 means 2x zoomed in, 0.5 means 2x zoomed out.
+/**
+ * A type alias for number.  A zoom factor is the amount the virtual space is being zoomed in.  `2` represents 200% zoom (in), while `0.5` represents 50% zoom (so zoomed out).
+ */
 export type ZoomFactor = number;
 
 export interface VirtualSpaceRect {
@@ -37,13 +52,33 @@ export interface ViewPortBounds {
 export interface ViewPortOptions {
   readonly debugEvents?: boolean;
 
+  /**
+   * Called whenever the [[ViewPort]] updates any of its values.
+   */
   readonly onUpdated?: () => void;
 
+  /**
+   * Called when a press (press being a left mouse click or a single finger
+   * touch) starts in the [[ViewPort]]. The callback can return whether the
+   * gesture should be captured, in which case the other `onPress*` methods
+   * will be called. Or it can be ignored (in which case nothing at all will
+   * happen). Finally, the callback can return `undefined` which will initiate
+   * the default behavior: panning the virtual space.
+   */
   readonly onPressStart?: (
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
   ) => 'capture' | 'ignore' | undefined;
+  /**
+   * Called when a press gesture moves, IF the press is currently captured (see
+   * [[onPressStart]]). The callback can release the captured press by
+   * returning `'release'`.
+   */
   readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'release' | undefined;
+  /**
+   * Called when a press ends normally by the user releasing the mouse button
+   * or lifting their finger.
+   */
   readonly onPressEnd?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => void;
   /**
    * After a press starts there are some cases where it can be canceled rather
@@ -54,7 +89,13 @@ export interface ViewPortOptions {
    * motion.
    */
   readonly onPressCancel?: (e: MouseEvent | TouchEvent) => void;
+  /**
+   * Called whenever a mouse pointer moves over the [[ViewPort]].
+   */
   readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
+  /**
+   * Called when a right click happens inside the [[ViewPort]].
+   */
   readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
 }
 
@@ -83,6 +124,9 @@ export class ViewPort {
   public readonly height: VirtualSpacePixelUnit;
   public readonly zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
 
+  /**
+   * The camera provides methods to move and animate the [[ViewPort]].
+   */
   public readonly camera: ViewPortCameraInterface;
 
   private readonly containerDiv: HTMLElement;
@@ -182,6 +226,10 @@ export class ViewPort {
     this.hammer.on('pinchcancel', this.handleHammerPinchCancel);
   }
 
+  /**
+   * Called this to detach all event listeners that the [[ViewPort]] sets up.
+   * After this is called no further updates will happen.
+   */
   public destroy(): void {
     this.camera.destroy();
 
@@ -205,6 +253,11 @@ export class ViewPort {
     this.hammer.destroy();
   }
 
+  /**
+   * Constrain the virtual space so the user can not pan beyond, and the camera
+   * cannot show anything beyond, the provided min/max values for x, y, and the
+   * zoom factor.
+   */
   public setBounds(bounds: ViewPortBounds): void {
     // The `camera` is really a `ViewPortCamera`, we just declare the field as
     // `ViewPortCameraInterface` to hide the `setBounds` method on it.
@@ -239,12 +292,13 @@ export class ViewPort {
   }
 
   /**
-   * This should be used when the div is resized.  By default resizes due
-   * to the window itself resizing will be automatically handled, but any other
-   * resizes won't be handled (since there isn't a good way to get notified when
-   * the div resizes.
+   * This should be used when the div is resized. By default resizes due to the
+   * window itself resizing will be automatically handled, but any other
+   * resizes won't be handled (since there isn't a good way to get notified
+   * when the div resizes.
    *
-   * If you are getting acess to the `ViewPort` via [[Space]] or [[SpaceContext]] you should not call this method directly and should
+   * If you are getting access to the `ViewPort` via [[Space]] or
+   * [[SpaceContext]] you should not call this method directly and should
    * instead call the [[Space.updateSize]] method.
    */
   public updateContainerSize() {

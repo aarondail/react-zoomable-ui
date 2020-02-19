@@ -4,6 +4,22 @@
 
 - **SpaceProps**
 
+## Index
+
+### Properties
+
+- [className](spaceprops.md#optional-classname)
+- [id](spaceprops.md#optional-id)
+- [innerDivClassName](spaceprops.md#optional-innerdivclassname)
+- [innerDivStyle](spaceprops.md#optional-innerdivstyle)
+- [onCreate](spaceprops.md#optional-oncreate)
+- [onDecideHowToHandlePress](spaceprops.md#optional-ondecidehowtohandlepress)
+- [onHover](spaceprops.md#optional-onhover)
+- [onPressContextMenu](spaceprops.md#optional-onpresscontextmenu)
+- [onUpdated](spaceprops.md#optional-onupdated)
+- [pollForElementResizing](spaceprops.md#optional-pollforelementresizing)
+- [style](spaceprops.md#optional-style)
+
 ## Properties
 
 ### `Optional` className

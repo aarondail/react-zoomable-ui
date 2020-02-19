@@ -4,20 +4,28 @@
 
 - **ViewPortBounds**
 
+## Index
+
+### Properties
+
+- [x](viewportbounds.md#optional-x)
+- [y](viewportbounds.md#optional-y)
+- [zoom](viewportbounds.md#optional-zoom)
+
 ## Properties
 
 ### `Optional` x
 
-• **x**? : _keyof [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
+• **x**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
 
 ---
 
 ### `Optional` y
 
-• **y**? : _keyof [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
+• **y**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
 
 ---
 
 ### `Optional` zoom
 
-• **zoom**? : _keyof [VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
+• **zoom**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_

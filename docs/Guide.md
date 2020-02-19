@@ -15,7 +15,7 @@ This guide will walk you through what you need to know to use React Zoomable UI.
 - [Interactions and Pressable](Guide.md#InteractionsandPressable)
 - [NoPanArea](Guide.md#NoPanArea)
 - [Known Issues](Guide.md#KnownIssues)
-- [Next Steps](Guide.md#NextSteps)
+- [API Reference](Guide.md#APIReference)
 
 ## Installation
 
@@ -186,11 +186,10 @@ This doesn't affect zooming though.
 
 ## Known Issues
 
-### Scrollable area inside the zoomable area:
+_Scrollable area inside the zoomable area_
 
 If you have HTML elements inside a `Space`, don't try to make them scrollable (via `overflow: scroll`). This works ok on some browsers, like Safari but kills panning and zooming performance on others, like `Chrome`.
 
-## Next Steps
+## API Reference
 
-- Checkout [Known Issues](KnownIssues.md)
-- [API Reference](API.md)
+For more details on the individual classes, functions, and types (this library is written in typescript after all), check out the [API Reference](API.md).
