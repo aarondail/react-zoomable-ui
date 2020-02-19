@@ -56,7 +56,7 @@ function Example() {
 
 At a high level, how this works is: the `Space` component renders an outer `div` and an inner `div`, and the `Space`'s children get rendered inside the inner `div`. The `Space` listens for mouse and touch (and other) events on the outer `div` (technically its a `ViewPort` doing the listening, but more about that below), and based on those events it translates (i.e. changes the x,y position) and scales the inner `div`, using CSS transforms. If there was no outer `div`, the inner `div` would just fly around the rest of the page, but the outer `div` is there and basically serves to give the inner `div` a limited area in which to be rendered (by the browser).
 
-### API Reference
+#### API Reference
 
 - [Space](api/classes/space.md)
 
@@ -115,7 +115,7 @@ You can get access to the `ViewPort` from the `Space` in a few ways:
 
 Also, note that the `ViewPort` can be used by itself without the `Space`, and technically without `React`, if you want to do something more custom with your rendering (e.g. canvas or WebGL). You just construct a new `ViewPort` with a `div` that is the area in which rendering should happen, and it will listen for events on it and track what portion of the virtual space should be visible. You can then listen to updates of the visible virtual space via a callback you pass in to the `ViewPort` constructor.
 
-### API Reference
+#### API Reference
 
 - [ViewPort](api/classes/viewport.md)
 - [ViewPortCamera](api/classes/viewportcamera.md)
@@ -192,7 +192,7 @@ Other than dealing with presses, there are events (in the form of props) on both
 
 If you are using a `ViewPort` without a `Space`, it has its own lower-level set of interaction events you can use. You may also want to use the (also lower-level) `PressInterpreter` to make interpreting presses simpler (this is what the `Space` uses internally).
 
-### API Reference
+#### API Reference
 
 - [Pressable](api/classes/pressable.md)
 - [PressInterpreter](api/classes/pressinterpreter.md)
@@ -203,7 +203,7 @@ If you have a part of your `Space` that you do not want to be pan-able for some 
 
 This doesn't affect zooming though.
 
-### API Reference
+#### API Reference
 
 - [NoPanArea](api/classes/nopanarea.md)
 
