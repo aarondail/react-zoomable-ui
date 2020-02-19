@@ -1,5 +1,3 @@
-## Index
-
 ### Classes
 
 - [NoPanArea](classes/nopanarea.md)

@@ -37,7 +37,7 @@ the `Space`, and, among other things, provides access to the
 
 This is not created until after the component has been mounted, so use the
 [onCreate](../interfaces/spaceprops.md#optional-oncreate) prop if you need to manipulate it before the children of the
-`Space` are first rendered. The [[onUpdate]] prop can be used to listen
+`Space` are first rendered. The [onUpdated](../interfaces/spaceprops.md#optional-onupdated) prop can be used to listen
 for changes.
 
 ## Methods

@@ -84,7 +84,7 @@ interface SpaceState {
 /**
  * This component makes its children zoomable and pan-able.
  *
- * Please read the (Guide)[../docs/Guide.md] for all the details on how to use
+ * Please read the [Guide](../../Guide.md) for all the details on how to use
  * this.
  *
  * ## Props
@@ -99,7 +99,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
    *
    * This is not created until after the component has been mounted, so use the
    * [[onCreate]] prop if you need to manipulate it before the children of the
-   * `Space` are first rendered. The [[onUpdate]] prop can be used to listen
+   * `Space` are first rendered. The [[onUpdated]] prop can be used to listen
    * for changes.
    */
   // This is not really readonly but we want to make it appear that way for code
