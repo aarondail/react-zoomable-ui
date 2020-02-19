@@ -8,7 +8,7 @@ You can think of the view port as describing what rectangular portion of the
 virtual space (from top left to bottom right) should be visible inside the
 bounds of containing HTML element where the virtual space is being rendered.
 
-This is lower-level than the [[Space]](space.md), so in most cases you probably won't want to create one of these directly.
+This is lower-level than the [Space](space.md), so in most cases you probably won't want to create one of these directly.
 
 Please see the [Guide](../../Guide.md) for more information.
 
@@ -62,7 +62,7 @@ Please see the [Guide](../../Guide.md) for more information.
 
 ### camera
 
-• **camera**: _[ViewPortCameraInterface](../API.md#viewportcamerainterface)_
+• **camera**: _[ViewPortCamera](viewportcamera.md)_
 
 The camera provides methods to move and animate the [ViewPort](viewport.md).
 
