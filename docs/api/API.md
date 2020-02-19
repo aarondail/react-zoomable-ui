@@ -90,7 +90,7 @@ A type alias for number. A zoom factor is the amount the virtual space is being 
 
 ### `Const` SpaceContext
 
-**SpaceContext**: `React.Context‹[SpaceContextType](interfaces/spacecontexttype.md)›`
+**SpaceContext**: `React.Context‹`[SpaceContextType](interfaces/spacecontexttype.md)`›`
 
 This React context can be used within a [Space](classes/space.md) to get access to the [ViewPort](classes/viewport.md).
 
