@@ -11,7 +11,7 @@ export class ElementSizeChangePoller {
 
   /**
    * Constructs a new instance, but initially it won't know which element to
-   * watch. You have to call [[update]] to pass it the element.
+   * watch. You have to call `update` to pass it the element.
    *
    * @param onSizeChanged Callback to call when a watched element's size changes.
    */

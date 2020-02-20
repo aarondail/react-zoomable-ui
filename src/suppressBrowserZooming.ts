@@ -1,8 +1,8 @@
 export type CancelSuppressZoomingCallback = () => void;
 
 /**
- * This is not used by the [[ViewPort]], but if you have HTML elements around the
- * [[ViewPort]] you may want to suppress zooming or panning on the whole page. This
+ * This is not used by the `ViewPort`, but if you have HTML elements around the
+ * `ViewPort` you may want to suppress zooming or panning on the whole page. This
  * function will do that.
  *
  * @returns A callback which will stop the suppression.

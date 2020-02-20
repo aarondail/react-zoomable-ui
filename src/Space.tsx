@@ -11,65 +11,65 @@ import { PressEventCoordinates, ViewPort } from './ViewPort';
 
 export interface SpaceProps {
   /**
-   * Optional id to use on the outer `div` that the [[Space]] renders.
+   * Optional id to use on the outer `div` that the `Space` renders.
    */
   readonly id?: string;
   /**
-   * Optional CSS class to use on the outer `div` that the [[Space]] renders.
+   * Optional CSS class to use on the outer `div` that the `Space` renders.
    */
   readonly className?: string;
   /**
-   * Optional styles to set on the outer `div` that the [[Space]] renders.
+   * Optional styles to set on the outer `div` that the `Space` renders.
    */
   readonly style?: React.CSSProperties;
   /**
-   * Optional CSS class to use on the inner `div` that the [[Space]] scales and
+   * Optional CSS class to use on the inner `div` that the `Space` scales and
    * transforms.
    */
   readonly innerDivClassName?: string;
   /**
-   * Optional styles class to use on the inner `div` that the [[Space]] scales
+   * Optional styles class to use on the inner `div` that the `Space` scales
    * and transforms.
    */
   readonly innerDivStyle?: React.CSSProperties;
   /**
    * If set, the `Space` will poll every 500ms for changes to its parent element's size. This only has to be used if the
-   * parent element can resize for reasons other than the window resizing, and if the [[updateSize]] is not used.
+   * parent element can resize for reasons other than the window resizing, and if the `updateSize` is not used.
    */
   readonly pollForElementResizing?: boolean;
 
   /**
    * Called when the `Space` first creates the outer `div` and sets up the
-   * [[ViewPort]], but before the inner `div` and the `Space's children have
+   * `ViewPort`, but before the inner `div` and the `Space's children have
    * been first rendered. This can be used, for example, to make the
-   * [[ViewPort]] focus on a certain portion of the virtual space.
+   * `ViewPort` focus on a certain portion of the virtual space.
    */
   readonly onCreate?: (viewPort: ViewPort) => void;
   /**
-   * Called whenever the [[ViewPort]] is updated.
+   * Called whenever the `ViewPort` is updated.
    */
   readonly onUpdated?: (viewPort: ViewPort) => void;
 
   /**
    * Optional callback to be called when a press is initiated in the space.
-   * Generally you should prefer to use [[Pressable]] to handle presses, but
+   * Generally you should prefer to use `Pressable` to handle presses, but
    * this can be used as a lower level alternative. The result of the callback
-   * is a [[PressHandlingOptions]] (or `undefined`) that describes how the
+   * is a `PressHandlingOptions` (or `undefined`) that describes how the
    * press should be handled.
    *
-   * If the callback returns a [[PressHandlingOptions]] it will take precedence
-   * over [[Pressable]] and [[NoPanArea]] components (even if the press was on
+   * If the callback returns a `PressHandlingOptions` it will take precedence
+   * over `Pressable` and `NoPanArea` components (even if the press was on
    * one of those).
    */
   readonly onDecideHowToHandlePress?: DecidePressHandlingCallback;
   /**
-   * Called when a mouse hover event happens anywhere in the [[Space]].
+   * Called when a mouse hover event happens anywhere in the `Space`.
    */
   readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
   /**
-   * Called when a right click event happens anywhere in the [[Space]].
+   * Called when a right click event happens anywhere in the `Space`.
    *
-   * @returns Whether to prevent (`true`) a [[Pressable]] from also handling
+   * @returns Whether to prevent (`true`) a `Pressable` from also handling
    * this event (if it was also the target).
    *
    */
@@ -89,17 +89,17 @@ interface SpaceState {
  *
  * ## Props
  *
- * See [[SpaceProps]].
+ * See `SpaceProps`.
  */
 export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   /**
    * Describes what portion of the virtual coordinate space is visible inside
    * the `Space`, and, among other things, provides access to the
-   * [[ViewPortCamera]] which can change that.
+   * `ViewPortCamera` which can change that.
    *
    * This is not created until after the component has been mounted, so use the
-   * [[onCreate]] prop if you need to manipulate it before the children of the
-   * `Space` are first rendered. The [[onUpdated]] prop can be used to listen
+   * `onCreate` prop if you need to manipulate it before the children of the
+   * `Space` are first rendered. The `onUpdated` prop can be used to listen
    * for changes.
    */
   // This is not really readonly but we want to make it appear that way for code

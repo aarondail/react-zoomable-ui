@@ -4,7 +4,7 @@ import { InteractableComponent } from './Interactable';
 import { ViewPort } from './ViewPort';
 
 /**
- * The type of the [[SpaceContext]] data.
+ * The type of the `SpaceContext` data.
  */
 export interface SpaceContextType {
   readonly rootDivUniqueClassName: string;
@@ -14,9 +14,9 @@ export interface SpaceContextType {
 }
 
 /**
- * This React context can be used within a [[Space]] to get access
- * to the [[ViewPort]].
+ * This React context can be used within a `Space` to get access
+ * to the `ViewPort`.
  *
- * See [[SpaceContextType]] for the type of the data.
+ * See `SpaceContextType` for the type of the data.
  */
 export const SpaceContext = React.createContext<SpaceContextType>(undefined as any);

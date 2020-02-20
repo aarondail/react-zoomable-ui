@@ -11,7 +11,6 @@ This guide will walk you through what you need to know to use React Zoomable UI.
 - [The ViewPort and ViewPortCamera](Guide.md#the-viewport-and-viewportcamera)
 - [Setting Bounds](Guide.md#setting-bounds)
 - [Preventing Accidental Browser Zooming](Guide.md#preventing-accidental-browser-zooming)
-- [Preventing Browser Scroll Bouncing](Guide.md#preventing-browser-scroll-bouncing)
 - [Interactions and Pressable](Guide.md#interactions-and-pressable)
 - [NoPanArea](Guide.md#nopanarea)
 - [Known Issues](Guide.md#known-issues)
@@ -73,7 +72,7 @@ Some tips on sizing:
 - If you want to make the `Space` take up all available window space, you can give all its parent element and all its ancestor elements (including the `html` and `body`) `height: 100%`.
 - If you want to make the `Space` take up almost all available space except for a top bar, bottom bar, and/or side panel, you can use Flexbox to size the `div`s, and just make sure to add `position: relative` to the (center) `div` that contains the `Space`.
 - If you want to make the `Space` take up a fixed amount of space, you can put it in a `div` with a fixed size (and `position: relative`).
-  - Alternatively, you can give it a class or style with a fixed size, and `position: default`.
+  - Alternatively, you can give it a class or style with a fixed size, and `position: static`.
 - For sizing to work well, `Space` should probably be the only child of its parent.
 
 ## Layout of Children
@@ -84,7 +83,7 @@ This might be what you want, but it might not.
 
 If you want the children to be laid out over a large fixed size area you have a couple options:
 
-- Pass a fixed `height` and `width` to the `Space`'s `contentDivStyle` prop, or wrap the children in a `div` with a fixed size.
+- Pass a fixed `height` and `width` to the `Space`'s `innerDivStyle` prop, or wrap the children in a `div` with a fixed size.
 - Position the children of the `Space` (the direct children only) using absolute positioning.
 
 # Resizing
@@ -110,7 +109,7 @@ The `Space` creates and manages a lower-level `ViewPort` object that does the he
 You can get access to the `ViewPort` from the `Space` in a few ways:
 
 - The `viewPort` property on the `Space` instance.
-- The `onCreate` and `onUpdate` props on the `Space`.
+- The `onCreate` and `onUpdated` props on the `Space`.
 - Using the `SpaceContext` in any component rendered inside the `Space`.
 
 Also, note that the `ViewPort` can be used by itself without the `Space`, and technically without `React`, if you want to do something more custom with your rendering (e.g. canvas or WebGL). You just construct a new `ViewPort` with a `div` that is the area in which rendering should happen, and it will listen for events on it and track what portion of the virtual space should be visible. You can then listen to updates of the visible virtual space via a callback you pass in to the `ViewPort` constructor.
@@ -166,16 +165,6 @@ The only case it misses (as far as I am aware) is if you have certain HTML `<inp
 
 Just be aware that doing these two things means the user really won't be able to zoom in on anything outside the `Space`, and this may kill accessibility if you use small text or icons.
 
-## Preventing Browser Scroll Bouncing
-
-You may also want to suppress the browser scroll bouncing behavior if you have elements outside your `Space`. This is the bouncing behavior the user will see if they are scrolling some area and reach one of the ends, or if they try to scroll/pan an element which isn't scrollable/pan-able (in which case the whole page bounces a bit). This is just a weird visual annoyance but you can fix it with some CSS:
-
-```
-html, body {
-  overflow: hidden;
-}
-```
-
 ## Interactions and Pressable
 
 Inside the `Space` clickable HTML elements like buttons and links will work OK, but when the user interacts with them the `Space` has to decide immediately to not initiate a pan. In this sense, these elements conflict with panning. This means, if you touch a button but then drag your finger off of it, it won't be treated as a pan. The reason for this is that if the `Space` did treat it as a pan, then when the interaction ended the browser would still think (since the pan kept the button under the finger) that the user wanted to click the button and it would fire a click event.
@@ -209,9 +198,9 @@ This doesn't affect zooming though.
 
 ## Known Issues
 
-**Scrollable area inside the zoomable area**
+**Scrollable area inside the Space**
 
-If you have HTML elements inside a `Space`, don't try to make them scrollable (via `overflow: scroll`). This works ok on some browsers, like Safari but kills panning and zooming performance on others, like `Chrome`.
+This doesn't work because panning takes precedence over scrolling.
 
 ## Complete API Reference
 

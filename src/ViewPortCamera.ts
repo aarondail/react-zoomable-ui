@@ -50,6 +50,11 @@ enum StopAnimationKind {
  */
 export type ViewPortCameraInterface = Omit<ViewPortCamera, 'setBounds'>;
 
+/**
+ * This class has methods to change and animate what portion of the virtual
+ * space is visible in the `ViewPort`. You should not construct this directly,
+ * rather get an instance from the `ViewPort`.
+ */
 export class ViewPortCamera {
   private derivedBounds: ViewPortBounds;
 
@@ -58,7 +63,8 @@ export class ViewPortCamera {
   private workingValues: ViewPortCameraValues;
 
   /**
-   * This is only intended to be constructed by the [[ViewPort]].
+   * This is only intended to be constructed by the `ViewPort`. Get an instance
+   * via the `viewPort` property.
    */
   constructor(private readonly values: ViewPortCameraValues, private readonly onUpdated?: () => void) {
     const { containerWidth, containerHeight, centerX, centerY, left, top, width, height, zoomFactor } = values;

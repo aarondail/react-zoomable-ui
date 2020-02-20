@@ -53,13 +53,13 @@ export interface ViewPortOptions {
   readonly debugEvents?: boolean;
 
   /**
-   * Called whenever the [[ViewPort]] updates any of its values.
+   * Called whenever the `ViewPort` updates any of its values.
    */
   readonly onUpdated?: () => void;
 
   /**
    * Called when a press (press being a left mouse click or a single finger
-   * touch) starts in the [[ViewPort]]. The callback can return whether the
+   * touch) starts in the `ViewPort`. The callback can return whether the
    * press should be captured, in which case the other `onPress*` methods
    * will be called. Or it can be ignored (in which case nothing at all will
    * happen). Finally, the callback can return `undefined` which will initiate
@@ -71,7 +71,7 @@ export interface ViewPortOptions {
   ) => 'capture' | 'ignore' | undefined;
   /**
    * Called when a press moves, IF the press is currently captured (see
-   * [[onPressStart]]). The callback can release the captured press by
+   * `onPressStart`). The callback can release the captured press by
    * returning `'release'`.
    */
   readonly onPressMove?: (e: MouseEvent | TouchEvent, coordinates: PressEventCoordinates) => 'release' | undefined;
@@ -90,17 +90,17 @@ export interface ViewPortOptions {
    */
   readonly onPressCancel?: (e: MouseEvent | TouchEvent) => void;
   /**
-   * Called whenever a mouse pointer moves over the [[ViewPort]].
+   * Called whenever a mouse pointer moves over the `ViewPort`.
    */
   readonly onHover?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
   /**
-   * Called when a right click happens inside the [[ViewPort]].
+   * Called when a right click happens inside the `ViewPort`.
    */
   readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
 }
 
 /**
- * The [[ViewPort]] represents a "view" into a virtual space, that is not
+ * The `ViewPort` represents a "view" into a virtual space, that is not
  * tied to the available screen space or HTML elements. Because of this, it is
  * infinite, but it also uses its own "units" (virtual space pixels).
  *
@@ -125,7 +125,7 @@ export class ViewPort {
   public readonly zoomFactor: ZoomFactor; // E.g. 2 is zoomed in, 1 is exactly at pixel perfect match to images, and 0.5 is zoomed out.
 
   /**
-   * The camera provides methods to move and animate the [[ViewPort]].
+   * The camera provides methods to move and animate the `ViewPort`.
    */
   public readonly camera: ViewPortCameraInterface;
 
@@ -227,7 +227,7 @@ export class ViewPort {
   }
 
   /**
-   * Called this to detach all event listeners that the [[ViewPort]] sets up.
+   * Called this to detach all event listeners that the `ViewPort` sets up.
    * After this is called no further updates will happen.
    */
   public destroy(): void {
@@ -297,9 +297,9 @@ export class ViewPort {
    * resizes won't be handled (since there isn't a good way to get notified
    * when the div resizes.
    *
-   * If you are getting access to the `ViewPort` via [[Space]] or
-   * [[SpaceContext]] you should not call this method directly and should
-   * instead call the [[Space.updateSize]] method.
+   * If you are getting access to the `ViewPort` via `Space` or
+   * `SpaceContext` you should not call this method directly and should
+   * instead call the `Space.updateSize` method.
    */
   public updateContainerSize() {
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();

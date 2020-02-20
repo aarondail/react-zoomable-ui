@@ -18,11 +18,11 @@ export interface PressEventCoordinatesWithDeltas extends PressEventCoordinates {
 const POTENTIAL_TAP_BOUNDS_DEFAULT: ClientPixelUnit = 8;
 
 /**
- * This type of callback is given to the [[PressInterpreter]] and takes one of
+ * This type of callback is given to the `PressInterpreter` and takes one of
  * the underlying events that starts a "press" as far as the library is
  * concerned (either a left click mouse down event, or a single finger touch
- * start event), and returns an [[PressHandlingOptions]] object (or
- * `undefined`) detailing how the [[PressInterpreter]] should handle the
+ * start event), and returns an `PressHandlingOptions` object (or
+ * `undefined`) detailing how the `PressInterpreter` should handle the
  * press.
  */
 export type DecidePressHandlingCallback = (
@@ -69,21 +69,21 @@ export interface PressHandlingOptions {
 }
 
 /**
- * If you are using [[Space]] then you don't need to use or interact directly with this class.  It is used
- * internally by [[Space]] along with [[Pressable]] to interpret and respond to presses.
+ * If you are using `Space` then you don't need to use or interact directly with this class.  It is used
+ * internally by `Space` along with `Pressable` to interpret and respond to presses.
  *
- * On the other hand if you are using [[ViewPort]] without [[Space]] you may want to use this to
+ * On the other hand if you are using `ViewPort` without `Space` you may want to use this to
  * make handling interactions easier.
  *
- * It works by calling a [[DecidePressHandlingCallback]] callback whenever a
+ * It works by calling a `DecidePressHandlingCallback` callback whenever a
  * press starts, and the callback decides how the press should be handled.
  *
- * After you construct the [[PressInterpreter]] pass the [[pressHandlers]] to
- * the [[ViewPort]]'s constructors (as part of the `options` parameter).
+ * After you construct the `PressInterpreter` pass the `pressHandlers` to
+ * the `ViewPort`'s constructors (as part of the `options` parameter).
  */
 export class PressInterpreter {
   /**
-   * Pass this to the [[ViewPort]] as part of its [[ViewPortOptions]].
+   * Pass this to the `ViewPort` as part of its `ViewPortOptions`.
    */
   public readonly pressHandlers: Pick<ViewPortOptions, 'onPressStart' | 'onPressMove' | 'onPressEnd' | 'onPressCancel'>;
 
@@ -96,12 +96,12 @@ export class PressInterpreter {
   private longPressTimerId?: any;
 
   /**
-   * If you are using a [[Space]] you do not need to create one of these, but
-   * if you aren't using a [[Space]] this should be done before the
-   * [[ViewPort]] is created, and then the [[pressHandlers]] should be passed
-   * to the [[ViewPort]]'s [[ViewPortOptions]].
+   * If you are using a `Space` you do not need to create one of these, but
+   * if you aren't using a `Space` this should be done before the
+   * `ViewPort` is created, and then the `pressHandlers` should be passed
+   * to the `ViewPort`'s `ViewPortOptions`.
    *
-   * @param onDecideHowToHandlePress This callback decides how to handle presses.  See [[DecidePressHandlingCallback]] for more info.
+   * @param onDecideHowToHandlePress This callback decides how to handle presses.  See `DecidePressHandlingCallback` for more info.
    */
   public constructor(private readonly onDecideHowToHandlePress: DecidePressHandlingCallback) {
     this.pressHandlers = {

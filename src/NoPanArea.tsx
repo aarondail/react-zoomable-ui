@@ -17,11 +17,11 @@ export interface NoPanAreaProps {
  *
  * This doesn't affect zooming though.
  *
- * Must only be used inside a [[Space]].
+ * Must only be used inside a `Space`.
  *
  * ## Props
  *
- * See [[NoPanAreaProps]].
+ * See `NoPanAreaProps`.
  */
 export class NoPanArea extends React.PureComponent<NoPanAreaProps> {
   public static contextType = SpaceContext;

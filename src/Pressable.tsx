@@ -27,7 +27,7 @@ export interface PressableProps {
   readonly disabled?: boolean;
   /**
    * This is more of an advanced option. If set, this will be the number of
-   * milliseconds until the [[Pressable]] captures a press. Once it is
+   * milliseconds until the `Pressable` captures a press. Once it is
    * captured it won't be interpreted as a tap, long tap, or a pan, and the
    * `onCapturePress*` props will begin to be called.
    *
@@ -72,11 +72,11 @@ export interface PressableState {
  *
  * It does not provide any UI.
  *
- * Must only be used inside a [[Space]].
+ * Must only be used inside a `Space`.
  *
  * ## Props
  *
- * See [[PressableProps]].
+ * See `PressableProps`.
  */
 export class Pressable extends React.PureComponent<PressableProps, PressableState> {
   public static contextType = SpaceContext;
@@ -132,7 +132,7 @@ export class Pressable extends React.PureComponent<PressableProps, PressableStat
   }
 
   /**
-   * Called by the [[Space]] to change the hover state.
+   * Called by the `Space` to change the hover state.
    *
    * This isn't intended to be called from outside the library.
    */

@@ -7,7 +7,7 @@ Make your HTML elements and [React](https://reactjs.com) components zoomable, an
 - Make your whole page zoomable and pan-able, or just part of it.
 - The zoomable space can be as large as you want, or bounded (x, y, and/or zoom).
 - Has events for different interactions, letting you control how the library responds to mouse clicks and touches.
-- Includes basic components that can distinguish, in a nuanced way, between panning, tapping, and long-tapping. These can also be used to implement more advanced interactions like dragging.
+- Includes a basic `Pressable` component that can distinguish between panning, tapping, and long-tapping. It can also be used to implement more advanced interactions like dragging.
 - Has TypeScript types.
 - Supports animations.
 - Technically can be used w/o React.
@@ -96,7 +96,7 @@ function ZoomableImage() {
         }}
       >
         <img src={mountain} width={imageWidth} height={imageHeight} alt="A Mountain" />
-      </Zoomable.Space>
+      </Space>
     </div>
 ```
 
