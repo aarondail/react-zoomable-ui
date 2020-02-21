@@ -71,11 +71,21 @@
       "prettier --write",
       "git add"
     ],
-    "*.{ts,tsx}": [
+    "src/*.{ts,tsx}": [
       "prettier --write",
       "tslint --project ./tsconfig.tslint.json --fix",
       "git add",
       "jest --bail --findRelatedTests"
+    ],
+    "tests/*.{ts,tsx}": [
+      "prettier --write",
+      "tslint --project ./tsconfig.tslint.json --fix",
+      "git add",
+      "jest --bail --findRelatedTests"
+    ],
+    "example/*.{ts,tsx}": [
+      "prettier --write",
+      "git add"
     ]
   }
 }
