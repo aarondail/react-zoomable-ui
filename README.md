@@ -2,8 +2,6 @@
 
 Make your HTML elements and [React](https://reactjs.com) components zoomable, and build interesting zoomable UIs. Supports zooming and panning via touch and mouse interactions.
 
-**This is still a WIP, the first release hasn't been made yet**
-
 ## Features
 
 - Make your whole page zoomable and pan-able, or just part of it.
@@ -36,7 +34,7 @@ Please send me issues if you run into problems.
 
 ## Examples
 
-TODO
+[https://aarondail.github.io/react-zoomable-ui/example/](https://aarondail.github.io/react-zoomable-ui/example/)
 
 ## Basic Usage
 
@@ -104,8 +102,8 @@ function ZoomableImage() {
 
 ## Documentation
 
-- [Guide](docs/Guide.md)
-- [API](docs/api/API.md)
+- [Guide](https://aarondail.github.io/react-zoomable-ui/Guide)
+- [API](https://aarondail.github.io/react-zoomable-ui/api/API)
 
 ## License
 

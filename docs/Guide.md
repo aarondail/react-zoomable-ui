@@ -2,6 +2,8 @@
 
 This guide will walk you through what you need to know to use React Zoomable UI.
 
+If you want to see example code using the library check out the [example/](https://github.com/aarondail/react-zoomable-ui/tree/master/example) directory. You can see the examples running live [here](https://aarondail.github.io/react-zoomable-ui/example/).
+
 - [Installation](Guide.md#installation)
 - [The Space Component](Guide.md#the-Space-component)
 - [Sizing](Guide.md#sizing)
