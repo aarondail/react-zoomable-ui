@@ -16,13 +16,13 @@
 
 ### `Optional` className
 
-• **className**? : _undefined | string_
+• **className**? : _undefined &#124; string_
 
 ---
 
 ### `Optional` id
 
-• **id**? : _undefined | string_
+• **id**? : _undefined &#124; string_
 
 ---
 

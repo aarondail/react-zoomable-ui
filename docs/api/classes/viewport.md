@@ -153,7 +153,7 @@ zoom factor.
 
 ### translateClientRectToVirtualSpace
 
-▸ **translateClientRectToVirtualSpace**(`rectOrElement`: ClientRect | HTMLElement): _[VirtualSpaceRect](../interfaces/virtualspacerect.md)_
+▸ **translateClientRectToVirtualSpace**(`rectOrElement`: ClientRect &#124; HTMLElement): _[VirtualSpaceRect](../interfaces/virtualspacerect.md)_
 
 **Parameters:**
 

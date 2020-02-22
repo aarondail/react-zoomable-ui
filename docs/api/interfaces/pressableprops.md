@@ -37,7 +37,7 @@
 
 ### `Optional` capturePressClassName
 
-• **capturePressClassName**? : _undefined | string_
+• **capturePressClassName**? : _undefined &#124; string_
 
 ---
 
@@ -49,7 +49,7 @@
 
 ### `Optional` capturePressThresholdMs
 
-• **capturePressThresholdMs**? : _undefined | number_
+• **capturePressThresholdMs**? : _undefined &#124; number_
 
 This is more of an advanced option. If set, this will be the number of
 milliseconds until the [Pressable](../classes/pressable.md) captures a press. Once it is
@@ -62,25 +62,25 @@ The default is undefined (so presses won't be captured)
 
 ### `Optional` children
 
-• **children**? : _React.ReactNode | function_
+• **children**? : _React.ReactNode &#124; function_
 
 ---
 
 ### `Optional` className
 
-• **className**? : _undefined | string_
+• **className**? : _undefined &#124; string_
 
 ---
 
 ### `Optional` disabled
 
-• **disabled**? : _undefined | false | true_
+• **disabled**? : _undefined &#124; false &#124; true_
 
 ---
 
 ### `Optional` disabledClassName
 
-• **disabledClassName**? : _undefined | string_
+• **disabledClassName**? : _undefined &#124; string_
 
 ---
 
@@ -92,7 +92,7 @@ The default is undefined (so presses won't be captured)
 
 ### `Optional` hoverClassName
 
-• **hoverClassName**? : _undefined | string_
+• **hoverClassName**? : _undefined &#124; string_
 
 ---
 
@@ -104,13 +104,13 @@ The default is undefined (so presses won't be captured)
 
 ### `Optional` id
 
-• **id**? : _undefined | string_
+• **id**? : _undefined &#124; string_
 
 ---
 
 ### `Optional` longTapThresholdMs
 
-• **longTapThresholdMs**? : _undefined | number_
+• **longTapThresholdMs**? : _undefined &#124; number_
 
 If a press is released after this threshold, it will be considered a long
 tap. The default is undefined if there is no `onLongTap` prop, or 500
@@ -120,37 +120,37 @@ milliseconds if there is.
 
 ### `Optional` onCapturePressCancelled
 
-• **onCapturePressCancelled**? : _undefined | function_
+• **onCapturePressCancelled**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onCapturePressEnd
 
-• **onCapturePressEnd**? : _undefined | function_
+• **onCapturePressEnd**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onCapturePressMove
 
-• **onCapturePressMove**? : _undefined | function_
+• **onCapturePressMove**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onCapturePressStart
 
-• **onCapturePressStart**? : _undefined | function_
+• **onCapturePressStart**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onLongTap
 
-• **onLongTap**? : _undefined | function_
+• **onLongTap**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onPressContextMenu
 
-• **onPressContextMenu**? : _undefined | function_
+• **onPressContextMenu**? : _undefined &#124; function_
 
 Called on a right click.
 
@@ -158,13 +158,13 @@ Called on a right click.
 
 ### `Optional` onTap
 
-• **onTap**? : _undefined | function_
+• **onTap**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` potentialLongTapClassName
 
-• **potentialLongTapClassName**? : _undefined | string_
+• **potentialLongTapClassName**? : _undefined &#124; string_
 
 ---
 
@@ -176,7 +176,7 @@ Called on a right click.
 
 ### `Optional` potentialTapClassName
 
-• **potentialTapClassName**? : _undefined | string_
+• **potentialTapClassName**? : _undefined &#124; string_
 
 ---
 

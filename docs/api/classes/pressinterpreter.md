@@ -44,6 +44,6 @@ the [ViewPort](viewport.md)'s constructors (as part of the `options` parameter).
 
 ### pressHandlers
 
-• **pressHandlers**: _Pick‹[ViewPortOptions](../interfaces/viewportoptions.md), "onPressStart" | "onPressMove" | "onPressEnd" | "onPressCancel"›_
+• **pressHandlers**: _Pick‹[ViewPortOptions](../interfaces/viewportoptions.md), "onPressStart" &#124; "onPressMove" &#124; "onPressEnd" &#124; "onPressCancel"›_
 
 Pass this to the [ViewPort](viewport.md) as part of its [ViewPortOptions](../interfaces/viewportoptions.md).

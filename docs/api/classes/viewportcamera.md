@@ -28,7 +28,7 @@
 
 ### constructor
 
-\+ **new ViewPortCamera**(`values`: [ViewPortCameraValues](../interfaces/viewportcameravalues.md), `onUpdated?`: undefined | function): _[ViewPortCamera](viewportcamera.md)_
+\+ **new ViewPortCamera**(`values`: [ViewPortCameraValues](../interfaces/viewportcameravalues.md), `onUpdated?`: undefined &#124; function): _[ViewPortCamera](viewportcamera.md)_
 
 This is only intended to be constructed by the [ViewPort](viewport.md).
 
@@ -131,7 +131,7 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 
 ### moveWithDeceleration
 
-▸ **moveWithDeceleration**(`vx`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `vy`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `friction`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `preventInterruption?`: undefined | false | true): _void_
+▸ **moveWithDeceleration**(`vx`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `vy`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `friction`: [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit), `preventInterruption?`: undefined &#124; false &#124; true): _void_
 
 **Parameters:**
 
@@ -148,7 +148,7 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 
 ### moveWithDecelerationInClientSpace
 
-▸ **moveWithDecelerationInClientSpace**(`vx`: [ClientPixelUnit](../API.md#clientpixelunit), `vy`: [ClientPixelUnit](../API.md#clientpixelunit), `friction`: [ClientPixelUnit](../API.md#clientpixelunit), `preventInterruption?`: undefined | false | true): _void_
+▸ **moveWithDecelerationInClientSpace**(`vx`: [ClientPixelUnit](../API.md#clientpixelunit), `vy`: [ClientPixelUnit](../API.md#clientpixelunit), `friction`: [ClientPixelUnit](../API.md#clientpixelunit), `preventInterruption?`: undefined &#124; false &#124; true): _void_
 
 **Parameters:**
 
