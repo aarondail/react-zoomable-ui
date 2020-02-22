@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { PressEventCoordinates, PressHandlingOptions, Space, ViewPort } from 'react-zoomable-ui';
 
+// This demonstrates how you can use the interaction events on the Space without
+// using the Pressable component.
+
 const initViewPort = (vp: ViewPort) => {
   vp.camera.recenter(100, 100, 2);
 };
@@ -11,7 +14,7 @@ const formatCoordsAsString = (p?: PressEventCoordinates) => {
     : `virtual: ${p.x.toFixed(1)}, ${p.y.toFixed(1)}, client: ${p.clientX.toFixed(1)}, ${p.clientY.toFixed(1)}`;
 };
 
-export const LowLevelEventsDemo = () => {
+export const SpaceEventsDemo = () => {
   const r = React.useRef<Space | null>(null);
   const [lastPress, setLastPress] = React.useState();
   const [lastHover, setLastHover] = React.useState();

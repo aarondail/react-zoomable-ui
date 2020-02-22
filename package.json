@@ -19,7 +19,7 @@
     "src"
   ],
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf dist && rimraf docs/example/",
     "build": "tsc --build",
     "build:w": "tsc --build --watch",
     "test": "jest",

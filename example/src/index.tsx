@@ -9,8 +9,8 @@ import { BoundsDemo } from './BoundsDemo';
 import { CameraControlDemo } from './CameraControlDemo';
 import { LargeAreaDemo } from './LargeAreaDemo';
 import { LongPageDemo } from './LongPageDemo';
-import { LowLevelEventsDemo } from './LowLevelEventsDemo';
 import { OverviewDemo } from './OverviewDemo';
+import { SpaceEventsDemo } from './SpaceEventsDemo';
 import { ZoomableImagesDemo } from './ZoomableImagesDemo';
 
 function App() {
@@ -42,8 +42,8 @@ function App() {
           <NavLink to="/bounds" activeClassName="active">
             Bounds
           </NavLink>{' '}
-          <NavLink to="/lowLevelEvents" activeClassName="active">
-            Low Level Events
+          <NavLink to="/spaceEvents" activeClassName="active">
+            Space Events
           </NavLink>{' '}
         </nav>
         {/* Note the position: 'relative' here */}
@@ -64,8 +64,8 @@ function App() {
             <Route path="/bounds">
               <BoundsDemo />
             </Route>
-            <Route path="/lowLevelEvents">
-              <LowLevelEventsDemo />
+            <Route path="/spaceEvents">
+              <SpaceEventsDemo />
             </Route>
             <Route>
               <OverviewDemo />
