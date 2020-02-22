@@ -72,7 +72,9 @@ function App() {
             </Route>
           </Switch>
         </div>
-        <div className="bottom" style={{ backgroundColor: '#0bf9', height: 30 }}></div>
+        <div className="bottom" style={{ backgroundColor: '#0bf9', height: 30, display: 'flex', alignItems: 'center' }}>
+          <a href="https://github.com/aarondail/react-zoomable-ui">https://github.com/aarondail/react-zoomable-ui</a>
+        </div>
       </HashRouter>
     </div>
   );

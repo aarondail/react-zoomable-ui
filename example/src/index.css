@@ -18,7 +18,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-nav a {
+nav a,
+.bottom a {
   font-size: small;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
@@ -27,6 +28,7 @@ nav a {
   margin-right: 4px;
 }
 
-nav a.active {
+nav a.active,
+.bottom a.active {
   color: purple;
 }
