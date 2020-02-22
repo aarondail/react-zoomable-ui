@@ -27,7 +27,7 @@
     "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
     "tslint": "tslint --project ./tsconfig.tslint.json --fix",
     "quasiapidocs": "rm -rf docs/api && typedoc --out docs/api --mode file  --external-aliases external,internalapi --excludeExternals --excludeNotExported --excludePrivate --excludeProtected --hideProjectTitle --hideBreadcrumbs --hideSources && rm docs/api/README.md",
-    "prerelease": "yarn clean && yarn build && yarn test && yarn tslint && yarn apidocs"
+    "prerelease": "yarn clean && yarn build && yarn test && yarn tslint && pushd example/ && yarn build && popd && cp -r example/build/ docs/example/"
   },
   "dependencies": {
     "hammerjs": "^2.0.8",

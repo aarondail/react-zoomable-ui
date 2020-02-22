@@ -1,0 +1,29 @@
+#root,
+body,
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
+}
+nav a {
+  font-size: small;
+  font-family: Courier New, Courier, monospace;
+  font-weight: 700;
+  color: #000;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+nav a.active {
+  color: purple;
+}
+/*# sourceMappingURL=main.3b53f133.chunk.css.map */
