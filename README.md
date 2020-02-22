@@ -102,8 +102,8 @@ function ZoomableImage() {
 
 ## Documentation
 
-- [Guide](https://aarondail.github.io/react-zoomable-ui/Guide)
-- [API](https://aarondail.github.io/react-zoomable-ui/api/API)
+- [Guide](docs/Guide.md)
+- [API](docs/api/API.md)
 
 ## License
 
