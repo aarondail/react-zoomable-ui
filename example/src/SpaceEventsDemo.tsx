@@ -16,17 +16,17 @@ const formatCoordsAsString = (p?: PressEventCoordinates) => {
 
 export const SpaceEventsDemo = () => {
   const r = React.useRef<Space | null>(null);
-  const [lastPress, setLastPress] = React.useState();
-  const [lastHover, setLastHover] = React.useState();
+  const [pressStart, setPressStart] = React.useState();
+  const [hover, setHover] = React.useState();
   const [pressContextMenu, setPressContextMenu] = React.useState();
-  const [capturePress, setCapturePress] = React.useState();
+  const [pressMoveIfCaptured, setPressMoveIfCaptured] = React.useState();
   return (
     <Space
       ref={r}
       style={{ backgroundColor: 'black' }}
       onCreate={initViewPort}
       onDecideHowToHandlePress={(element, coords): PressHandlingOptions | undefined => {
-        setLastPress(coords);
+        setPressStart(coords);
 
         // Get id of element or nearest ancestor with an id
         let id;
@@ -43,12 +43,12 @@ export const SpaceEventsDemo = () => {
         } else if (id === 'capture_press') {
           return {
             capturePressThresholdMs: 0,
-            onCapturePressMove: c => setCapturePress(c),
+            onCapturePressMove: c => setPressMoveIfCaptured(c),
           };
         }
         return undefined;
       }}
-      onHover={(e, c) => setLastHover(c)}
+      onHover={(e, c) => setHover(c)}
       onPressContextMenu={(e, c) => setPressContextMenu(c)}
     >
       <div
@@ -62,14 +62,14 @@ export const SpaceEventsDemo = () => {
         }}
       >
         <div>
-          Press:
+          Press Start:
           <br />
-          <small>{formatCoordsAsString(lastPress)}</small>
+          <small>{formatCoordsAsString(pressStart)}</small>
         </div>
         <br />
         <div>
           Hover:
-          <br /> <small>{formatCoordsAsString(lastHover)}</small>
+          <br /> <small>{formatCoordsAsString(hover)}</small>
         </div>
 
         <br />
@@ -79,8 +79,8 @@ export const SpaceEventsDemo = () => {
         </div>
         <br />
         <div>
-          Capture Press:
-          <br /> <small>{formatCoordsAsString(capturePress)}</small>
+          Press Move (if captured):
+          <br /> <small>{formatCoordsAsString(pressMoveIfCaptured)}</small>
         </div>
         <br />
         <div style={{ display: 'flex', justifyContent: 'center' }}>

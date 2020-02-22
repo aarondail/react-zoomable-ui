@@ -13,9 +13,10 @@ export const BoundsDemo = () => {
     <Space onCreate={initViewPort}>
       <div style={boundaryDivStyle}>
         <span>
-          This box is 200px by 200px wide, but the view port bounds are x: 0 to 400, and y 0 to 200. That means the view
-          port has to zoom in to fix the box within the bounds, and you can pan a bit left to right but not up to down,
-          unless you zoom in some more.
+          This box is 200px by 200px wide and the view port bounds {`{ x: [0,
+          400], y: [0, 200] }`}. That means the view port has to zoom in to
+          fix the box within the bounds, and you can probably pan a little
+          bit but not much, unless you zoom in some more.
         </span>
       </div>
     </Space>
@@ -30,12 +31,12 @@ const boundaryDivStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
   position: 'relative',
-  border: 'solid 2px red',
+  border: 'solid 2px black',
   boxSizing: 'border-box',
-  color: 'red',
+  color: 'black',
   backgroundColor: '#cef',
   backgroundPosition: '0 0, 15px 15px',
   backgroundSize: '30px 30px',
   backgroundImage:
-    'linear-gradient( 45deg, #CCC 25%, transparent 25%, transparent 75%, #CCC 75%, #CCC), linear-gradient( 45deg, #CCC 25%, transparent 25%, transparent 75%, #CCC 75%, #CCC)',
+    'linear-gradient( 45deg, #EEE 25%, transparent 25%, transparent 75%, #EEE 75%, #EEE), linear-gradient( 45deg, #EEE 25%, transparent 25%, transparent 75%, #EEE 75%, #EEE)',
 };
