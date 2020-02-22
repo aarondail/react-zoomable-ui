@@ -26,7 +26,7 @@
 
 ### `Optional` capturePressThresholdMs
 
-• **capturePressThresholdMs**? : _undefined | number_
+• **capturePressThresholdMs**? : _undefined &#124; number_
 
 This is more of an advanced option. If set, this will be the number of
 milliseconds until the press is captured. Once it is captured, it
@@ -39,13 +39,13 @@ The default is undefined (so presses won't be captured)
 
 ### `Optional` ignorePressEntirely
 
-• **ignorePressEntirely**? : _undefined | false | true_
+• **ignorePressEntirely**? : _undefined | false &#124; true_
 
 ---
 
 ### `Optional` longTapThresholdMs
 
-• **longTapThresholdMs**? : _undefined | number_
+• **longTapThresholdMs**? : _undefined &#124; number_
 
 If a press is released after this threshold, it will be considered a long
 tap. The default is undefined.
@@ -54,55 +54,55 @@ tap. The default is undefined.
 
 ### `Optional` onCapturePressCancelled
 
-• **onCapturePressCancelled**? : _undefined | function_
+• **onCapturePressCancelled**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onCapturePressEnd
 
-• **onCapturePressEnd**? : _undefined | function_
+• **onCapturePressEnd**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onCapturePressMove
 
-• **onCapturePressMove**? : _undefined | function_
+• **onCapturePressMove**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onCapturePressStart
 
-• **onCapturePressStart**? : _undefined | function_
+• **onCapturePressStart**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onLongTap
 
-• **onLongTap**? : _undefined | function_
+• **onLongTap**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onPotentialLongTap
 
-• **onPotentialLongTap**? : _undefined | function_
+• **onPotentialLongTap**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onPotentialTap
 
-• **onPotentialTap**? : _undefined | function_
+• **onPotentialTap**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onTap
 
-• **onTap**? : _undefined | function_
+• **onTap**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onTapAbandoned
 
-• **onTapAbandoned**? : _undefined | function_
+• **onTapAbandoned**? : _undefined &#124; function_
 
 ---
 

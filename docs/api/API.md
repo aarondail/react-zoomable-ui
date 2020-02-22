@@ -59,7 +59,7 @@ press.
 
 #### Type declaration:
 
-(`e`: MouseEvent | TouchEvent, `coordinates`: [PressEventCoordinates](interfaces/presseventcoordinates.md)): _[PressHandlingOptions](interfaces/presshandlingoptions.md) | undefined_
+(`e`: MouseEvent &#124; TouchEvent, `coordinates`: [PressEventCoordinates](interfaces/presseventcoordinates.md)): _[PressHandlingOptions](interfaces/presshandlingoptions.md) &#124; undefined_
 
 **Parameters:**
 

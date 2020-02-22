@@ -24,7 +24,7 @@
 
 ### `Optional` className
 
-• **className**? : _undefined | string_
+• **className**? : _undefined &#124; string_
 
 Optional CSS class to use on the outer `div` that the [Space](../classes/space.md) renders.
 
@@ -32,7 +32,7 @@ Optional CSS class to use on the outer `div` that the [Space](../classes/space.m
 
 ### `Optional` id
 
-• **id**? : _undefined | string_
+• **id**? : _undefined &#124; string_
 
 Optional id to use on the outer `div` that the [Space](../classes/space.md) renders.
 
@@ -40,7 +40,7 @@ Optional id to use on the outer `div` that the [Space](../classes/space.md) rend
 
 ### `Optional` innerDivClassName
 
-• **innerDivClassName**? : _undefined | string_
+• **innerDivClassName**? : _undefined &#124; string_
 
 Optional CSS class to use on the inner `div` that the [Space](../classes/space.md) scales and
 transforms.
@@ -58,7 +58,7 @@ and transforms.
 
 ### `Optional` onCreate
 
-• **onCreate**? : _undefined | function_
+• **onCreate**? : _undefined &#124; function_
 
 Called when the `Space` first creates the outer `div` and sets up the
 [ViewPort](../classes/viewport.md), but before the inner `div` and the `Space's children have
@@ -85,7 +85,7 @@ one of those).
 
 ### `Optional` onHover
 
-• **onHover**? : _undefined | function_
+• **onHover**? : _undefined &#124; function_
 
 Called when a mouse hover event happens anywhere in the [Space](../classes/space.md).
 
@@ -93,7 +93,7 @@ Called when a mouse hover event happens anywhere in the [Space](../classes/space
 
 ### `Optional` onPressContextMenu
 
-• **onPressContextMenu**? : _undefined | function_
+• **onPressContextMenu**? : _undefined &#124; function_
 
 Called when a right click event happens anywhere in the [Space](../classes/space.md).
 
@@ -104,7 +104,7 @@ this event (if it was also the target).
 
 ### `Optional` onUpdated
 
-• **onUpdated**? : _undefined | function_
+• **onUpdated**? : _undefined &#124; function_
 
 Called whenever the [ViewPort](../classes/viewport.md) is updated.
 
@@ -112,7 +112,7 @@ Called whenever the [ViewPort](../classes/viewport.md) is updated.
 
 ### `Optional` pollForElementResizing
 
-• **pollForElementResizing**? : _undefined | false | true_
+• **pollForElementResizing**? : _undefined | false &#124; true_
 
 If set, the `Space` will poll every 500ms for changes to its parent element's size. This only has to be used if the
 parent element can resize for reasons other than the window resizing, and if the [updateSize](../classes/space.md#updatesize) is not used.

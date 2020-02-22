@@ -21,7 +21,7 @@
 
 ### `Optional` preventInterruption
 
-• **preventInterruption**? : _undefined | false | true_
+• **preventInterruption**? : _undefined | false &#124; true_
 
 Note that if the container size changes or `setBounds` is called, it will
 still interrupt the animation. But instead of cancelling it, it will jump

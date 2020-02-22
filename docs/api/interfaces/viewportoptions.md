@@ -20,13 +20,13 @@
 
 ### `Optional` onHover
 
-• **onHover**? : _undefined | function_
+• **onHover**? : _undefined &#124; function_
 
 ---
 
 ### `Optional` onPressCancel
 
-• **onPressCancel**? : _undefined | function_
+• **onPressCancel**? : _undefined &#124; function_
 
 After a press starts there are some cases where it can be canceled rather
 than ended. For example when on finger starts touching the screen that
@@ -39,7 +39,7 @@ motion.
 
 ### `Optional` onPressContextMenu
 
-• **onPressContextMenu**? : _undefined | function_
+• **onPressContextMenu**? : _undefined &#124; function_
 
 Called when a right click happens inside the [ViewPort](../classes/viewport.md).
 
@@ -47,7 +47,7 @@ Called when a right click happens inside the [ViewPort](../classes/viewport.md).
 
 ### `Optional` onPressEnd
 
-• **onPressEnd**? : _undefined | function_
+• **onPressEnd**? : _undefined &#124; function_
 
 Called when a press ends normally by the user releasing the mouse button
 or lifting their finger.
@@ -56,7 +56,7 @@ or lifting their finger.
 
 ### `Optional` onPressMove
 
-• **onPressMove**? : _undefined | function_
+• **onPressMove**? : _undefined &#124; function_
 
 Called when a press moves, IF the press is currently captured (see
 [onPressStart](viewportoptions.md#optional-onpressstart)). The callback can release the captured press by
@@ -66,7 +66,7 @@ returning `'release'`.
 
 ### `Optional` onPressStart
 
-• **onPressStart**? : _undefined | function_
+• **onPressStart**? : _undefined &#124; function_
 
 Called when a press (press being a left mouse click or a single finger
 touch) starts in the [ViewPort](../classes/viewport.md). The callback can return whether the
@@ -79,6 +79,6 @@ the default behavior: panning the virtual space.
 
 ### `Optional` onUpdated
 
-• **onUpdated**? : _undefined | function_
+• **onUpdated**? : _undefined &#124; function_
 
 Called whenever the [ViewPort](../classes/viewport.md) updates any of its values.

@@ -16,16 +16,16 @@
 
 ### `Optional` x
 
-• **x**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
+• **x**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit &#124; undefined]_
 
 ---
 
 ### `Optional` y
 
-• **y**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
+• **y**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit &#124; undefined]_
 
 ---
 
 ### `Optional` zoom
 
-• **zoom**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit | undefined]_
+• **zoom**? : _[VirtualSpacePixelUnit | undefined, VirtualSpacePixelUnit &#124; undefined]_
