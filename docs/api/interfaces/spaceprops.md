@@ -19,6 +19,7 @@
 - [onUpdated](spaceprops.md#optional-onupdated)
 - [pollForElementResizing](spaceprops.md#optional-pollforelementresizing)
 - [style](spaceprops.md#optional-style)
+- [treatTwoFingerTrackPadGesturesLikeTouch](viewportoptions.md#optional-treattwofingertrackpadgesturesliketouch)
 
 ## Properties
 
@@ -124,3 +125,22 @@ parent element can resize for reasons other than the window resizing, and if the
 • **style**? : _React.CSSProperties_
 
 Optional styles to set on the outer `div` that the [Space](../classes/space.md) renders.
+
+---
+
+### `Optional` treatTwoFingerTrackPadGesturesLikeTouch
+
+• **treatTwoFingerTrackPadGesturesLikeTouch**? : _undefined &#124; boolean_
+
+By default two finger trackpad gestures are always handled as a zoom
+in/zoom out, like with Google Maps. If this is set to true, then
+only pinch/spread gestures will be handled like that, and pan style two
+finger gestures will be handled as a pan.
+
+However, this will cause mouse wheel interactions to behave like vertical
+panning rather than zoom in/zoom out. There is sadly no great way around
+this, but there are some techniques you can use to guess whether the user
+is using a mouse or a trackpad.
+
+Note that this prop is only read during initial mounting. Updates will
+be ignored.

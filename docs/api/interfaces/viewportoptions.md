@@ -15,6 +15,7 @@
 - [onPressMove](viewportoptions.md#optional-onpressmove)
 - [onPressStart](viewportoptions.md#optional-onpressstart)
 - [onUpdated](viewportoptions.md#optional-onupdated)
+- [treatTwoFingerTrackPadGesturesLikeTouch](viewportoptions.md#optional-treattwofingertrackpadgesturesliketouch)
 
 ## Properties
 
@@ -82,3 +83,19 @@ the default behavior: panning the virtual space.
 • **onUpdated**? : _undefined &#124; function_
 
 Called whenever the [ViewPort](../classes/viewport.md) updates any of its values.
+
+---
+
+### `Optional` treatTwoFingerTrackPadGesturesLikeTouch
+
+• **treatTwoFingerTrackPadGesturesLikeTouch**? : _undefined &#124; boolean_
+
+By default two finger trackpad gestures are always handled as a zoom
+in/zoom out, like with Google Maps. If this is set to true, then
+only pinch/spread gestures will be handled like that, and pan style two
+finger gestures will be handled as a pan.
+
+However, this will cause mouse wheel interactions to behave like vertical
+panning rather than zoom in/zoom out. There is sadly no great way around
+this, but there are some techniques you can use to guess whether the user
+is using a mouse or a trackpad.

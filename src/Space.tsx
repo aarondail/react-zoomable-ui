@@ -74,6 +74,22 @@ export interface SpaceProps {
    *
    */
   readonly onContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void | boolean | undefined;
+
+  /**
+   * By default two finger trackpad gestures are always handled as a zoom
+   * in/zoom out, like with Google Maps.  If this is set to true, then
+   * only pinch/spread gestures will be handled like that, and pan style two
+   * finger gestures will be handled as a pan.
+   *
+   * However, this will cause mouse wheel interactions to behave like vertical
+   * panning rather than zoom in/zoom out.  There is sadly no great way around
+   * this, but there are some techniques you can use to guess whether the user
+   * is using a mouse or a trackpad.
+   *
+   * Note that this prop is only read during initial mounting.  Updates will
+   * be ignored.
+   */
+  readonly treatTwoFingerTrackPadGesturesLikeTouch?: boolean;
 }
 
 interface SpaceState {
@@ -333,6 +349,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
         onContextMenu: this.handleContextMenu,
         onUpdated: this.handleViewPortUpdated,
         ...this.pressInterpreter.pressHandlers,
+        treatTwoFingerTrackPadGesturesLikeTouch: this.props.treatTwoFingerTrackPadGesturesLikeTouch,
       });
 
       this.props.onCreate?.(this.viewPort!);

@@ -58,6 +58,19 @@ export interface ViewPortOptions {
   readonly onUpdated?: () => void;
 
   /**
+   * By default two finger trackpad gestures are always handled as a zoom
+   * in/zoom out, like with Google Maps.  If this is set to true, then
+   * only pinch/spread gestures will be handled like that, and pan style two
+   * finger gestures will be handled as a pan.
+   *
+   * However, this will cause mouse wheel interactions to behave like vertical
+   * panning rather than zoom in/zoom out.  There is sadly no great way around
+   * this, but there are some techniques you can use to guess whether the user
+   * is using a mouse or a trackpad.
+   */
+  readonly treatTwoFingerTrackPadGesturesLikeTouch?: boolean;
+
+  /**
    * Called when a press (press being a left mouse click or a single finger
    * touch) starts in the `ViewPort`. The callback can return whether the
    * press should be captured, in which case the other `onPress*` methods
@@ -561,27 +574,39 @@ export class ViewPort {
   };
 
   private handleWheel = (e: WheelEvent) => {
-    if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleWheel`);
-    }
+    // if (this.options?.debugEvents) {
+    console.log(`ViewPort:handleWheel`, e);
+    // }
+    //
     e.preventDefault();
-    let scale = 1;
-    switch (e.deltaMode) {
-      case 1: // DOM_DELTA_LINE
-        scale = 7.15625; // Line height total guesstimate from `to-px` (looking up their const for 'ex')
-        break;
-      case 2: // DOM_DELTA_PAGE
-        scale = window.innerHeight;
-        break;
+
+    let isPrimarilyZoom = true;
+    if (this.options?.treatTwoFingerTrackPadGesturesLikeTouch) {
+      // For whatever reason, desktop browsers send pinch gestures with ctrlKey set to true.
+      isPrimarilyZoom = e.ctrlKey;
     }
-    const clientBoundingRect = this.containerDiv.getBoundingClientRect();
-    const pointerContainerX = e.clientX - clientBoundingRect.left;
-    const pointerContainerY = e.clientY - clientBoundingRect.top;
 
-    const dy = e.deltaY * scale;
-    const dZoom = ((-1 * dy) / this.containerHeight) * this.zoomFactor;
+    if (isPrimarilyZoom) {
+      let scale = e.ctrlKey ? 5 : 1; // This feels more right...
+      switch (e.deltaMode) {
+        case 1: // DOM_DELTA_LINE
+          scale = 7.15625; // Line height total guesstimate from `to-px` (looking up their const for 'ex')
+          break;
+        case 2: // DOM_DELTA_PAGE
+          scale = window.innerHeight;
+          break;
+      }
+      const clientBoundingRect = this.containerDiv.getBoundingClientRect();
+      const pointerContainerX = e.clientX - clientBoundingRect.left;
+      const pointerContainerY = e.clientY - clientBoundingRect.top;
 
-    // Vertical scroll is doing to be interpreted by us as changing z
-    this.camera.moveByInClientSpace(0, 0, dZoom, pointerContainerX, pointerContainerY);
+      const dy = e.deltaY * scale;
+      const dZoom = ((-1 * dy) / this.containerHeight) * this.zoomFactor;
+
+      // Vertical scroll is doing to be interpreted by us as changing z
+      this.camera.moveByInClientSpace(0, 0, dZoom, pointerContainerX, pointerContainerY);
+    } else {
+      this.camera.moveByInClientSpace(e.deltaX / 2, e.deltaY / 2, 0);
+    }
   };
 }
