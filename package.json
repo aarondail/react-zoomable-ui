@@ -1,7 +1,7 @@
 {
   "name": "react-zoomable-ui",
   "description": "React library for building zoomable UI.",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
