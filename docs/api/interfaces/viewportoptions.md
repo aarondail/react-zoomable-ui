@@ -15,6 +15,7 @@
 - [onPressMove](viewportoptions.md#optional-onpressmove)
 - [onPressStart](viewportoptions.md#optional-onpressstart)
 - [onUpdated](viewportoptions.md#optional-onupdated)
+- [treatRightClickAsPan](viewportoptions.md#optional-treatrightclickaspan)
 - [treatTwoFingerTrackPadGesturesLikeTouch](viewportoptions.md#optional-treattwofingertrackpadgesturesliketouch)
 
 ## Properties
@@ -83,6 +84,21 @@ the default behavior: panning the virtual space.
 • **onUpdated**? : _undefined &#124; function_
 
 Called whenever the [ViewPort](../classes/viewport.md) updates any of its values.
+
+---
+
+### `Optional` treatRightClickAsPan
+
+• **treatRightClickAsPan**? : _undefined &#124; boolean_
+
+By default right clicks with mice (and two finger taps with trackpads) are
+sent to `onContextMenu`. If this is set to true, then instead of that
+they will begin a pan gesture. The user can thus, right click and drag
+the mouse to pan (or use two fingers and tap and drag on a trackpad).
+
+Note that if this is true `onContextMenu` will not be called, and none of
+the other other "press" callbacks passed as part of this options object
+will be called for the pan gesture (e.g. `onPressStart`).
 
 ---
 

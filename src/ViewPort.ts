@@ -110,6 +110,18 @@ export interface ViewPortOptions {
    * is using a mouse or a trackpad.
    */
   readonly treatTwoFingerTrackPadGesturesLikeTouch?: boolean;
+
+  /**
+   * By default right clicks with mice (and two finger taps with trackpads) are
+   * sent to `onContextMenu`.  If this is set to true, then instead of that
+   * they will begin a pan gesture.  The user can thus, right click and drag
+   * the mouse to pan (or use two fingers and tap and drag on a trackpad).
+   *
+   * Note that if this is true `onContextMenu` will not be called, and none of
+   * the other other "press" callbacks passed as part of this options object
+   * will be called for the pan gesture (e.g. `onPressStart`).
+   */
+  readonly treatRightClickAsPan?: boolean;
 }
 
 /**
@@ -153,9 +165,17 @@ export class ViewPort {
     startingCenterY: ClientPixelUnit;
     scale: ZoomFactor;
   };
+  // This is only used if the treatRightClickAsPan option is set to true.
+  // Note this is also for two finger trackpad tap and drag panning
+  private rightClickPanState?: {
+    lastClientX: number;
+    lastClientY: number;
+    velocityX: number;
+    velocityY: number;
+  };
   private hammer: HammerManager;
   private options?: ViewPortOptions;
-  private inNonPanPressHandlingMode: undefined | 'capture' | 'ignore';
+  private pressHandlingMode: undefined | 'rightclickpan' | 'capture' | 'ignore';
 
   constructor(containerDiv: HTMLDivElement, options?: ViewPortOptions) {
     this.containerDiv = containerDiv;
@@ -171,7 +191,7 @@ export class ViewPort {
     this.zoomFactor = 1;
     this.containerWidth = 0;
     this.containerHeight = 0;
-    this.inNonPanPressHandlingMode = undefined;
+    this.pressHandlingMode = undefined;
 
     // Bind methods JIC
     // tslint:disable-next-line: unnecessary-bind
@@ -342,7 +362,11 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleContextMenu`);
     }
-    this.options?.onContextMenu?.(e, this.getPressCoordinatesFromEvent(e));
+    if (this.options?.treatRightClickAsPan) {
+      e.preventDefault();
+    } else {
+      this.options?.onContextMenu?.(e, this.getPressCoordinatesFromEvent(e));
+    }
   };
 
   private handleGestureStartForDesktopSafari = (e: any) => {
@@ -408,7 +432,7 @@ export class ViewPort {
     this.currentHammerGestureState.deltaX = e.deltaX;
     this.currentHammerGestureState.deltaY = e.deltaY;
 
-    if (this.inNonPanPressHandlingMode) {
+    if (this.pressHandlingMode) {
       return;
     }
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
@@ -421,7 +445,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPanEnd (` + e.velocityX + ',' + e.velocityY + ')');
     }
-    if (!this.inNonPanPressHandlingMode) {
+    if (!this.pressHandlingMode) {
       // Negative one because the direction of the pointer is the opposite of
       // the direction we are moving the viewport. Multiplying by 20 makes it
       // feel more normal.
@@ -476,7 +500,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleHammerPinchEnd`);
     }
-    if (!this.inNonPanPressHandlingMode) {
+    if (!this.pressHandlingMode) {
       // Negative one because the direction of the pointer is the opposite of
       // the direction we are moving the viewport. Multiplying by 20 makes it
       // feel more normal.
@@ -496,27 +520,64 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleMouseDown`);
     }
+
     // e.buttons === 1 means the left/primary button is pressed and ONLY that
-    if (e.buttons !== 1) {
+    // e.buttons === 2
+    const isLeftOnly = e.buttons === 1;
+    const isRightOnly = e.buttons === 2;
+    const shouldHandleAsPan = isLeftOnly || (this.options?.treatRightClickAsPan && isRightOnly);
+    if (!shouldHandleAsPan) {
       return;
     }
 
-    this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
-
-    if (this.inNonPanPressHandlingMode === 'capture') {
+    if (isLeftOnly) {
+      this.pressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
+      if (this.pressHandlingMode === 'capture') {
+        e.preventDefault();
+      }
+    } else if (isRightOnly) {
       e.preventDefault();
+      // Sadly hammer.js doesn't give us an option to treat right clicks as
+      // pans so we have to make this work ourselves.
+      this.pressHandlingMode = 'rightclickpan';
+      this.rightClickPanState = {
+        lastClientX: e.clientX,
+        lastClientY: e.clientY,
+        velocityX: 0,
+        velocityY: 0,
+      };
     }
   };
 
   private handleMouseMove = (e: MouseEvent) => {
     if (this.options?.debugEvents) {
-      console.log(`ViewPort:handleMouseMove (inNonPanPressHandlingMode: ${this.inNonPanPressHandlingMode})`);
+      console.log(`ViewPort:handleMouseMove (pressHandlingMode: ${this.pressHandlingMode})`);
     }
-    if (this.inNonPanPressHandlingMode === 'capture') {
-      if (this.options?.onPressMove) {
-        if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'release') {
-          this.inNonPanPressHandlingMode = undefined;
+    if (this.pressHandlingMode === 'capture') {
+      if (e.buttons !== 1) {
+        // Intentionally don't do anything... maybe cancel here?
+      } else {
+        if (this.options?.onPressMove) {
+          if (this.options.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'release') {
+            this.pressHandlingMode = undefined;
+          }
         }
+      }
+    } else if (this.pressHandlingMode === 'rightclickpan') {
+      if (e.buttons !== 2 || !this.rightClickPanState) {
+        // Intentionally don't do anything... maybe reset this.pressHandlingMode?
+      } else {
+        const dx = this.rightClickPanState.lastClientX - e.clientX;
+        const dy = this.rightClickPanState.lastClientY - e.clientY;
+        this.rightClickPanState.lastClientX = e.clientX;
+        this.rightClickPanState.lastClientY = e.clientY;
+        this.rightClickPanState.velocityX = dx;
+        this.rightClickPanState.velocityY = dy;
+
+        const clientBoundingRect = this.containerDiv.getBoundingClientRect();
+        const pointerContainerX = e.clientX - clientBoundingRect.left;
+        const pointerContainerY = e.clientY - clientBoundingRect.top;
+        this.camera.moveByInClientSpace(dx, dy, 0, pointerContainerX, pointerContainerY);
       }
     } else if (e.buttons === 0) {
       this.options?.onHover?.(e, this.getPressCoordinatesFromEvent(e));
@@ -527,24 +588,32 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleMouseUp`);
     }
-    if (this.inNonPanPressHandlingMode === 'capture' && this.options?.onPressEnd) {
+    if (this.pressHandlingMode === 'capture' && this.options?.onPressEnd) {
       this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
     }
-    this.inNonPanPressHandlingMode = undefined;
+    if (this.pressHandlingMode === 'rightclickpan' && this.rightClickPanState) {
+      const dx = this.rightClickPanState.velocityX;
+      const dy = this.rightClickPanState.velocityY;
+
+      this.camera.moveWithDecelerationInClientSpace(dx, dy);
+    }
+
+    this.pressHandlingMode = undefined;
+    this.rightClickPanState = undefined;
   };
 
   private handleTouchStart = (e: TouchEvent) => {
     if (e.touches.length !== 1) {
-      if (this.inNonPanPressHandlingMode) {
-        this.inNonPanPressHandlingMode = undefined;
+      if (this.pressHandlingMode) {
+        this.pressHandlingMode = undefined;
         this.options?.onPressCancel?.(e);
         return;
       }
     }
 
-    this.inNonPanPressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
+    this.pressHandlingMode = this.options?.onPressStart?.(e, this.getPressCoordinatesFromEvent(e));
 
-    if (this.inNonPanPressHandlingMode === 'capture') {
+    if (this.pressHandlingMode === 'capture') {
       e.preventDefault();
     }
   };
@@ -554,9 +623,9 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchMove`);
     }
     if (e.touches.length === 1) {
-      if (this.inNonPanPressHandlingMode === 'capture' && this.options?.onPressMove) {
+      if (this.pressHandlingMode === 'capture' && this.options?.onPressMove) {
         if (this.options?.onPressMove(e, this.getPressCoordinatesFromEvent(e)) === 'release') {
-          this.inNonPanPressHandlingMode = undefined;
+          this.pressHandlingMode = undefined;
         }
       }
     }
