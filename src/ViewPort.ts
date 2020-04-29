@@ -567,17 +567,17 @@ export class ViewPort {
       console.log(`ViewPort:handleTouchEnd`);
     }
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
-      if (this.inNonPanPressHandlingMode === 'capture' && this.options?.onPressEnd) {
+      if (this.pressHandlingMode === 'capture' && this.options?.onPressEnd) {
         this.options?.onPressEnd(e, this.getPressCoordinatesFromEvent(e));
       }
     }
   };
 
   private handleWheel = (e: WheelEvent) => {
-    // if (this.options?.debugEvents) {
-    console.log(`ViewPort:handleWheel`, e);
-    // }
-    //
+    if (this.options?.debugEvents) {
+      console.log(`ViewPort:handleWheel`, e);
+    }
+
     e.preventDefault();
 
     let isPrimarilyZoom = true;
