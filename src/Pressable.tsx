@@ -57,7 +57,7 @@ export interface PressableProps {
   /**
    * Called on a right click.
    */
-  readonly onPressContextMenu?: (coordinates: PressEventCoordinates) => void;
+  readonly onContextMenu?: (coordinates: PressEventCoordinates) => void;
 }
 
 export interface PressableState {

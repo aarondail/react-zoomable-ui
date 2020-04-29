@@ -18,7 +18,7 @@ export const SpaceEventsDemo = () => {
   const r = React.useRef<Space | null>(null);
   const [pressStart, setPressStart] = React.useState();
   const [hover, setHover] = React.useState();
-  const [pressContextMenu, setPressContextMenu] = React.useState();
+  const [contextMenu, setContextMenu] = React.useState();
   const [pressMoveIfCaptured, setPressMoveIfCaptured] = React.useState();
   return (
     <Space
@@ -49,7 +49,7 @@ export const SpaceEventsDemo = () => {
         return undefined;
       }}
       onHover={(e, c) => setHover(c)}
-      onPressContextMenu={(e, c) => setPressContextMenu(c)}
+      onContextMenu={(e, c) => setContextMenu(c)}
     >
       <div
         style={{
@@ -74,8 +74,8 @@ export const SpaceEventsDemo = () => {
 
         <br />
         <div>
-          Press Context Menu:
-          <br /> <small>{formatCoordsAsString(pressContextMenu)}</small>
+          Context Menu:
+          <br /> <small>{formatCoordsAsString(contextMenu)}</small>
         </div>
         <br />
         <div>

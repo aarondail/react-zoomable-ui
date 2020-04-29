@@ -96,7 +96,7 @@ export interface ViewPortOptions {
   /**
    * Called when a right click happens inside the `ViewPort`.
    */
-  readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
+  readonly onContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
 }
 
 /**
@@ -329,7 +329,7 @@ export class ViewPort {
     if (this.options?.debugEvents) {
       console.log(`ViewPort:handleContextMenu`);
     }
-    this.options?.onPressContextMenu?.(e, this.getPressCoordinatesFromEvent(e));
+    this.options?.onContextMenu?.(e, this.getPressCoordinatesFromEvent(e));
   };
 
   private handleGestureStartForDesktopSafari = (e: any) => {

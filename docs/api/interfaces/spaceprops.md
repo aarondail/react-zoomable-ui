@@ -15,7 +15,7 @@
 - [onCreate](spaceprops.md#optional-oncreate)
 - [onDecideHowToHandlePress](spaceprops.md#optional-ondecidehowtohandlepress)
 - [onHover](spaceprops.md#optional-onhover)
-- [onPressContextMenu](spaceprops.md#optional-onpresscontextmenu)
+- [onContextMenu](spaceprops.md#optional-oncontextmenu)
 - [onUpdated](spaceprops.md#optional-onupdated)
 - [pollForElementResizing](spaceprops.md#optional-pollforelementresizing)
 - [style](spaceprops.md#optional-style)
@@ -91,9 +91,9 @@ Called when a mouse hover event happens anywhere in the [Space](../classes/space
 
 ---
 
-### `Optional` onPressContextMenu
+### `Optional` onContextMenu
 
-• **onPressContextMenu**? : _undefined &#124; function_
+• **onContextMenu**? : _undefined &#124; function_
 
 Called when a right click event happens anywhere in the [Space](../classes/space.md).
 

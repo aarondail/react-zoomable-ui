@@ -73,7 +73,7 @@ export interface SpaceProps {
    * this event (if it was also the target).
    *
    */
-  readonly onPressContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void | boolean | undefined;
+  readonly onContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void | boolean | undefined;
 }
 
 interface SpaceState {
@@ -286,9 +286,9 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     }
   };
 
-  private handlePressContextMenu = (e: MouseEvent, coordinates: PressEventCoordinates) => {
-    if (this.props.onPressContextMenu) {
-      const result = this.props.onPressContextMenu(e, coordinates);
+  private handleContextMenu = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    if (this.props.onContextMenu) {
+      const result = this.props.onContextMenu(e, coordinates);
       e.preventDefault();
       if (result) {
         return;
@@ -298,8 +298,8 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
 
-    if (interactable && interactable instanceof Pressable && interactable.props.onPressContextMenu) {
-      interactable.props.onPressContextMenu(coordinates);
+    if (interactable && interactable instanceof Pressable && interactable.props.onContextMenu) {
+      interactable.props.onContextMenu(coordinates);
       e.preventDefault();
       return;
     }
@@ -330,7 +330,7 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     if (this.outerDivRef) {
       (this as Writeable<Space>).viewPort = new ViewPort(this.outerDivRef, {
         onHover: this.handleHover,
-        onPressContextMenu: this.handlePressContextMenu,
+        onContextMenu: this.handleContextMenu,
         onUpdated: this.handleViewPortUpdated,
         ...this.pressInterpreter.pressHandlers,
       });

@@ -179,7 +179,7 @@ The `Pressable` component in a way works like a button that will allow a press i
 
 `Pressable` doesn't have any built-in styling, so it will look like whatever children you pass it. It does have props to apply different styling or classes depending on how it is being interacted with.
 
-Other than dealing with presses, there are events (in the form of props) on both the `Space` and the `Pressable` for dealing with mouse hovering, `onHover`, and right-clicks, `onPressContextMenu`. That is it though; there are no events that let you change the way zooming interactions work.
+Other than dealing with presses, there are events (in the form of props) on both the `Space` and the `Pressable` for dealing with mouse hovering, `onHover`, and right-clicks, `onContextMenu`. That is it though; there are no events that let you change the way zooming interactions work.
 
 If you are using a `ViewPort` without a `Space`, it has its own lower-level set of interaction events you can use. You may also want to use the (also lower-level) `PressInterpreter` to make interpreting presses simpler (this is what the `Space` uses internally).
 

@@ -10,7 +10,7 @@
 
 - [onHover](viewportoptions.md#optional-onhover)
 - [onPressCancel](viewportoptions.md#optional-onpresscancel)
-- [onPressContextMenu](viewportoptions.md#optional-onpresscontextmenu)
+- [onContextMenu](viewportoptions.md#optional-oncontextmenu)
 - [onPressEnd](viewportoptions.md#optional-onpressend)
 - [onPressMove](viewportoptions.md#optional-onpressmove)
 - [onPressStart](viewportoptions.md#optional-onpressstart)
@@ -37,9 +37,9 @@ motion.
 
 ---
 
-### `Optional` onPressContextMenu
+### `Optional` onContextMenu
 
-• **onPressContextMenu**? : _undefined &#124; function_
+• **onContextMenu**? : _undefined &#124; function_
 
 Called when a right click happens inside the [ViewPort](../classes/viewport.md).
 

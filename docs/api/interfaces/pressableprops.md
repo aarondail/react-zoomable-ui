@@ -25,7 +25,7 @@
 - [onCapturePressMove](pressableprops.md#optional-oncapturepressmove)
 - [onCapturePressStart](pressableprops.md#optional-oncapturepressstart)
 - [onLongTap](pressableprops.md#optional-onlongtap)
-- [onPressContextMenu](pressableprops.md#optional-onpresscontextmenu)
+- [onContextMenu](pressableprops.md#optional-oncontextmenu)
 - [onTap](pressableprops.md#optional-ontap)
 - [potentialLongTapClassName](pressableprops.md#optional-potentiallongtapclassname)
 - [potentialLongTapStyle](pressableprops.md#optional-potentiallongtapstyle)
@@ -148,9 +148,9 @@ milliseconds if there is.
 
 ---
 
-### `Optional` onPressContextMenu
+### `Optional` onContextMenu
 
-• **onPressContextMenu**? : _undefined &#124; function_
+• **onContextMenu**? : _undefined &#124; function_
 
 Called on a right click.
 
