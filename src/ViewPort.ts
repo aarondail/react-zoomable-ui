@@ -58,19 +58,6 @@ export interface ViewPortOptions {
   readonly onUpdated?: () => void;
 
   /**
-   * By default two finger trackpad gestures are always handled as a zoom
-   * in/zoom out, like with Google Maps.  If this is set to true, then
-   * only pinch/spread gestures will be handled like that, and pan style two
-   * finger gestures will be handled as a pan.
-   *
-   * However, this will cause mouse wheel interactions to behave like vertical
-   * panning rather than zoom in/zoom out.  There is sadly no great way around
-   * this, but there are some techniques you can use to guess whether the user
-   * is using a mouse or a trackpad.
-   */
-  readonly treatTwoFingerTrackPadGesturesLikeTouch?: boolean;
-
-  /**
    * Called when a press (press being a left mouse click or a single finger
    * touch) starts in the `ViewPort`. The callback can return whether the
    * press should be captured, in which case the other `onPress*` methods
@@ -110,6 +97,19 @@ export interface ViewPortOptions {
    * Called when a right click happens inside the `ViewPort`.
    */
   readonly onContextMenu?: (e: MouseEvent, coordinates: PressEventCoordinates) => void;
+
+  /**
+   * By default two finger trackpad gestures are always handled as a zoom
+   * in/zoom out, like with Google Maps.  If this is set to true, then
+   * only pinch/spread gestures will be handled like that, and pan style two
+   * finger gestures will be handled as a pan.
+   *
+   * However, this will cause mouse wheel interactions to behave like vertical
+   * panning rather than zoom in/zoom out.  There is sadly no great way around
+   * this, but there are some techniques you can use to guess whether the user
+   * is using a mouse or a trackpad.
+   */
+  readonly treatTwoFingerTrackPadGesturesLikeTouch?: boolean;
 }
 
 /**
