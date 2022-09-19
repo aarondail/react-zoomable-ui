@@ -9,7 +9,7 @@ import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { browserIsAndroid, generateRandomId, Writeable } from './utils';
 import { PressEventCoordinates, ViewPort } from './ViewPort';
 
-export interface SpaceProps {
+export interface SpaceProps extends React.PropsWithChildren {
   /**
    * Optional id to use on the outer `div` that the `Space` renders.
    */

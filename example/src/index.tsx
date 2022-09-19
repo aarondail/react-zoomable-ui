@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { HashRouter, NavLink, Route, Switch } from 'react-router-dom';
-import { suppressBrowserZooming }  from 'react-zoomable-ui';
+import { createRoot } from 'react-dom/client';
+import { HashRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { suppressBrowserZooming } from 'react-zoomable-ui';
 
 import './index.css';
 
@@ -24,53 +24,40 @@ function App() {
             padding: '5px 10px',
           }}
         >
-          <NavLink to="/overview" activeClassName="active">
+          <NavLink to="/overview" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Overview
           </NavLink>{' '}
-          <NavLink to="/zoomableImages" activeClassName="active">
+          <NavLink to="/zoomableImages" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Zoomable Images
           </NavLink>{' '}
-          <NavLink to="/largeArea" activeClassName="active">
+          <NavLink to="/largeArea" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Large Area
           </NavLink>{' '}
-          <NavLink to="/longPage" activeClassName="active">
+          <NavLink to="/longPage" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Long Page
           </NavLink>{' '}
-          <NavLink to="/cameraControl" activeClassName="active">
+          <NavLink to="/cameraControl" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Camera Control
           </NavLink>{' '}
-          <NavLink to="/bounds" activeClassName="active">
+          <NavLink to="/bounds" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Bounds
           </NavLink>{' '}
-          <NavLink to="/spaceEvents" activeClassName="active">
+          <NavLink to="/spaceEvents" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Space Events
           </NavLink>{' '}
         </nav>
         {/* Note the position: 'relative' here */}
         <div style={{ flexGrow: 1, position: 'relative' }}>
-          <Switch>
-            <Route path="/zoomableImages">
-              <ZoomableImagesDemo />
-            </Route>
-            <Route path="/largeArea">
-              <LargeAreaDemo />
-            </Route>
-            <Route path="/longPage">
-              <LongPageDemo />
-            </Route>
-            <Route path="/cameraControl">
-              <CameraControlDemo />
-            </Route>
-            <Route path="/bounds">
-              <BoundsDemo />
-            </Route>
-            <Route path="/spaceEvents">
-              <SpaceEventsDemo />
-            </Route>
-            <Route>
-              <OverviewDemo />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/zoomableImages" element={<ZoomableImagesDemo />} />
+            <Route path="/largeArea" element={<LargeAreaDemo />} />
+            <Route path="/longPage" element={<LongPageDemo />} />
+            <Route path="/cameraControl" element={<CameraControlDemo />} />
+            <Route path="/bounds" element={<BoundsDemo />} />
+            <Route path="/spaceEvents" element={<SpaceEventsDemo />} />
+            <Route path="/overview" element={<OverviewDemo />} />
+            <Route index element={<OverviewDemo />} />
+          </Routes>
         </div>
         <div className="bottom" style={{ backgroundColor: '#0bf9', height: 30, display: 'flex', alignItems: 'center' }}>
           <a href="https://github.com/aarondail/react-zoomable-ui">https://github.com/aarondail/react-zoomable-ui</a>
@@ -80,4 +67,6 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(<App />);

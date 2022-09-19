@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { PressEventCoordinates, PressHandlingOptions, Space, ViewPort } from 'react-zoomable-ui';
+import {
+  PressEventCoordinates,
+  PressEventCoordinatesWithDeltas,
+  PressHandlingOptions,
+  Space,
+  ViewPort,
+} from 'react-zoomable-ui';
 
 // This demonstrates how you can use the interaction events on the Space without
 // using the Pressable component.
@@ -16,10 +22,10 @@ const formatCoordsAsString = (p?: PressEventCoordinates) => {
 
 export const SpaceEventsDemo = () => {
   const r = React.useRef<Space | null>(null);
-  const [pressStart, setPressStart] = React.useState();
-  const [hover, setHover] = React.useState();
-  const [contextMenu, setContextMenu] = React.useState();
-  const [pressMoveIfCaptured, setPressMoveIfCaptured] = React.useState();
+  const [pressStart, setPressStart] = React.useState<PressEventCoordinates>();
+  const [hover, setHover] = React.useState<PressEventCoordinates>();
+  const [contextMenu, setContextMenu] = React.useState<PressEventCoordinates>();
+  const [pressMoveIfCaptured, setPressMoveIfCaptured] = React.useState<PressEventCoordinatesWithDeltas>();
   return (
     <Space
       ref={r}
@@ -43,7 +49,7 @@ export const SpaceEventsDemo = () => {
         } else if (id === 'capture_press') {
           return {
             capturePressThresholdMs: 0,
-            onCapturePressMove: c => setPressMoveIfCaptured(c),
+            onCapturePressMove: (c) => setPressMoveIfCaptured(c),
           };
         }
         return undefined;

@@ -4,7 +4,7 @@ import { InteractableIdAttributeName } from './Interactable';
 import { SpaceContext, SpaceContextType } from './SpaceContext';
 import { generateRandomId } from './utils';
 
-export interface NoPanAreaProps {
+export interface NoPanAreaProps extends React.PropsWithChildren {
   readonly id?: string;
   readonly className?: string;
   readonly style?: React.CSSProperties;
