@@ -350,11 +350,11 @@ export class ViewPort {
       clientX = e.changedTouches[0].clientX;
       clientY = e.changedTouches[0].clientY;
     }
-    const x = clientX / this.zoomFactor + this.left;
-    const y = clientY / this.zoomFactor + this.top;
     const clientBoundingRect = this.containerDiv.getBoundingClientRect();
     const containerX = clientX - clientBoundingRect.left;
     const containerY = clientY - clientBoundingRect.top;
+    const x = containerX / this.zoomFactor + this.left;
+    const y = containerY / this.zoomFactor + this.top;
     return { x, y, clientX, clientY, containerX, containerY };
   };
 
