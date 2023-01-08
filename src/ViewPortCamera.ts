@@ -103,7 +103,7 @@ export class ViewPortCamera {
     ViewPortMath.centerFitArea(updateTarget, this.derivedBounds, area, additionalBounds);
 
     if (!animationOptions) {
-      this.scheduleHardUpdate();
+      this.doImmediateUpdate();
     } else {
       this.scheduleAnimation(updateTarget, animationOptions);
     }
@@ -123,7 +123,7 @@ export class ViewPortCamera {
     ViewPortMath.centerFitHorizontalArea(updateTarget, this.derivedBounds, left, width, additionalBounds);
 
     if (!animationOptions) {
-      this.scheduleHardUpdate();
+      this.doImmediateUpdate();
     } else {
       this.scheduleAnimation(updateTarget, animationOptions);
     }
@@ -152,7 +152,7 @@ export class ViewPortCamera {
     ViewPortMath.updateBy(updateTarget, this.derivedBounds, dx, dy, dZoom, anchorContainerX, anchorContainerY);
 
     if (!animationOptions) {
-      this.scheduleHardUpdate();
+      this.doImmediateUpdate();
     } else {
       this.scheduleAnimation(updateTarget, animationOptions);
     }
@@ -283,7 +283,7 @@ export class ViewPortCamera {
     );
 
     if (!animationOptions) {
-      this.scheduleHardUpdate();
+      this.doImmediateUpdate();
     } else {
       this.scheduleAnimation(updateTarget, animationOptions);
     }
@@ -332,7 +332,7 @@ export class ViewPortCamera {
     ViewPortMath.updateTopLeft(updateTarget, this.derivedBounds, x, y);
 
     if (!animationOptions) {
-      this.scheduleHardUpdate();
+      this.doImmediateUpdate();
     } else {
       this.scheduleAnimation(updateTarget, animationOptions);
     }
@@ -387,8 +387,24 @@ export class ViewPortCamera {
       ...ViewPortMath.deriveActualZoomBounds(this.workingValues, this.derivedBounds, DEFAULT_BOUNDS),
     };
     ViewPortMath.updateBounds(this.workingValues, this.derivedBounds);
-    this.scheduleHardUpdate();
+    this.doImmediateUpdate();
   };
+
+  private doImmediateUpdate() {
+    // If there was a pending animation it should have been committed before
+    // this was called (so that the working values could have been updated)
+    invariant(!this.animation, 'Cannot do immediate update while an animation is in progress.');
+
+    // This probably shouldn't happen but JIC there is a pending callback lets cancel it
+    if (this.animationFrameId !== undefined) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = undefined;
+    }
+
+    // Apply value updates and broadcast the event
+    this.copyValues(this.workingValues, this.values);
+    this.onUpdated?.();
+  }
 
   private handleAnimationFrame = (time: number) => {
     this.animationFrameId = undefined;
@@ -408,7 +424,6 @@ export class ViewPortCamera {
     }
 
     this.copyValues(this.workingValues, this.values);
-
     this.onUpdated?.();
   };
 
@@ -425,15 +440,6 @@ export class ViewPortCamera {
       startingTimeMilliseconds: undefined,
       ...animationOptions,
     };
-    if (!this.animationFrameId) {
-      this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
-    }
-  }
-
-  private scheduleHardUpdate() {
-    invariant(!this.animation, 'Cannot schedule update while an animation is still in progress.');
-    // If there was a pending animation it should have been committed before
-    // this was called (so that the working values could have been updated)
     if (!this.animationFrameId) {
       this.animationFrameId = requestAnimationFrame(this.handleAnimationFrame);
     }
