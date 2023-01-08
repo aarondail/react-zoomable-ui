@@ -62,8 +62,8 @@ and transforms.
 • **onCreate**? : _undefined &#124; function_
 
 Called when the `Space` first creates the outer `div` and sets up the
-[ViewPort](../classes/viewport.md), but before the inner `div` and the `Space's children have
-been first rendered. This can be used, for example, to make the
+[ViewPort](../classes/viewport.md), but before the inner `div` and the `Space`'s children have
+been rendered. This can be used, for example, to make the
 [ViewPort](../classes/viewport.md) focus on a certain portion of the virtual space.
 
 ---

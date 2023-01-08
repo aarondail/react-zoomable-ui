@@ -40,9 +40,9 @@ export interface SpaceProps extends React.PropsWithChildren {
 
   /**
    * Called when the `Space` first creates the outer `div` and sets up the
-   * `ViewPort`, but before the inner `div` and the `Space's children have
-   * been first rendered. This can be used, for example, to make the
-   * `ViewPort` focus on a certain portion of the virtual space.
+   * `ViewPort`, but before the inner `div` and the `Space`'s children have been
+   * rendered. This can be used, for example, to make the `ViewPort` focus on a
+   * certain portion of the virtual space.
    */
   readonly onCreate?: (viewPort: ViewPort) => void;
   /**
@@ -206,8 +206,9 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   private createTransformStyle = () => {
     if (this.viewPort) {
       return {
-        transform: `scale(${this.viewPort.zoomFactor}) translate(${-1 * this.viewPort.left}px,${-1 *
-          this.viewPort.top}px)`,
+        transform: `scale(${this.viewPort.zoomFactor}) translate(${-1 * this.viewPort.left}px,${
+          -1 * this.viewPort.top
+        }px)`,
       };
     }
     return undefined;
@@ -362,8 +363,8 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
 
       const contextValue: SpaceContextType = {
         rootDivUniqueClassName: this.rootDivUniqueClassName,
-        registerInteractable: i => this.interactableRegistry.set(i.id, i),
-        unregisterInteractable: i => this.interactableRegistry.delete(i.id),
+        registerInteractable: (i) => this.interactableRegistry.set(i.id, i),
+        unregisterInteractable: (i) => this.interactableRegistry.delete(i.id),
         viewPort: this.viewPort!,
       };
 
