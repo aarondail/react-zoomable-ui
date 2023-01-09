@@ -85,7 +85,7 @@ This might be what you want, but it might not.
 
 If you want the children to be laid out over a large fixed size area you have a couple options:
 
-- Pass a fixed `height` and `width` to the `Space`'s `innerDivStyle` prop, or wrap the children in a `div` with a fixed size.
+- Wrap the children in a `div` with a fixed size.
 - Position the children of the `Space` (the direct children only) using absolute positioning.
 
 # Resizing

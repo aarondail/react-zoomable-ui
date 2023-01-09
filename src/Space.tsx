@@ -25,11 +25,19 @@ export interface SpaceProps extends React.PropsWithChildren {
   /**
    * Optional CSS class to use on the inner `div` that the `Space` scales and
    * transforms.
+   *
+   * @deprecated This may be removed at some point, some styles may mess up the
+   * transforms so it is safer to avoid this and style your children a different
+   * way.
    */
   readonly innerDivClassName?: string;
   /**
    * Optional styles class to use on the inner `div` that the `Space` scales
    * and transforms.
+   *
+   * @deprecated This may be removed at some point, some styles may mess up the
+   * transforms so it is safer to avoid this and style your children a different
+   * way.
    */
   readonly innerDivStyle?: React.CSSProperties;
   /**
@@ -169,7 +177,11 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   public render() {
     let transformedDivStyle = this.state.transformStyle;
     if (this.props.innerDivStyle) {
-      transformedDivStyle = { ...transformedDivStyle, ...this.props.innerDivStyle };
+      // Margin doesn't play well with the scale transforms, so we have to set
+      // it to 0 to be safe. Not sure what other styles may mess up the scale
+      // transform so at some point we probably should remove innerDivStyle and
+      // innerDivClassName as that will be safer.
+      transformedDivStyle = { ...transformedDivStyle, ...this.props.innerDivStyle, margin: 0 };
     }
     return (
       <div

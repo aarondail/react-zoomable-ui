@@ -230,7 +230,6 @@ const innerDivStyle: React.CSSProperties = {
   justifyContent: 'space-around',
   alignItems: 'center',
   flexDirection: 'row',
-  marginTop: 40,
   width: 1000,
 };
 

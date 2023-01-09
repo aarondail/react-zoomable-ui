@@ -43,8 +43,12 @@ Optional id to use on the outer `div` that the [Space](../classes/space.md) rend
 
 • **innerDivClassName**? : _undefined &#124; string_
 
-Optional CSS class to use on the inner `div` that the [Space](../classes/space.md) scales and
+**DEPRECATED** Optional CSS class to use on the inner `div` that the [Space](../classes/space.md) scales and
 transforms.
+
+This is deprecated and may be removed at some point. Some styles may mess up the
+CSS transforms applied to the inner div so it is safer to avoid this and style
+your children a different way.
 
 ---
 
@@ -52,8 +56,12 @@ transforms.
 
 • **innerDivStyle**? : _React.CSSProperties_
 
-Optional styles class to use on the inner `div` that the [Space](../classes/space.md) scales
+**DEPRECATED** Optional styles class to use on the inner `div` that the [Space](../classes/space.md) scales
 and transforms.
+
+This is deprecated and may be removed at some point. Some styles may mess up the
+CSS transforms applied to the inner div so it is safer to avoid this and style
+your children a different way.
 
 ---
 
