@@ -159,7 +159,7 @@ export const ViewPortMath = {
       values.width = values.containerWidth / values.zoomFactor;
       values.height = values.containerHeight / values.zoomFactor;
       values.left = values.centerX - values.width / 2;
-      values.top = values.centerY - values.width / 2;
+      values.top = values.centerY - values.height / 2;
     }
   },
 };

@@ -1,6 +1,6 @@
 import { invariant } from 'ts-invariant';
 import { transitionNumber } from './utils';
-import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, ZoomFactor } from './ViewPort';
+import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, VirtualSpaceRect, ZoomFactor } from './ViewPort';
 import { ViewPortMath } from './ViewPortMath';
 
 const DEFAULT_BOUNDS: readonly [number, number] = [0.001, 100];
@@ -66,7 +66,15 @@ export class ViewPortCamera {
    * This is only intended to be constructed by the `ViewPort`. Get an instance
    * via the `viewPort` property.
    */
-  constructor(private readonly values: ViewPortCameraValues, private readonly onUpdated?: () => void) {
+  constructor(
+    private readonly values: ViewPortCameraValues,
+    // This is used solely for the `centerFitElementIntoView` method. The logic for the translation
+    // needs access to the `containerDiv` and so lives in the `ViewPort`, but for library uses it
+    // makes somewhat more sense to have `centerFitElementIntoView` on this class. Perhaps the two
+    // classes should be merged at some point (or translation logic should move to this class?).
+    private readonly getElementVirtualSpaceCoordinates: (element: HTMLElement) => VirtualSpaceRect,
+    private readonly onUpdated?: () => void,
+  ) {
     const { containerWidth, containerHeight, centerX, centerY, left, top, width, height, zoomFactor } = values;
 
     this.workingValues = {
@@ -99,6 +107,26 @@ export class ViewPortCamera {
       return;
     }
 
+    const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
+    ViewPortMath.centerFitArea(updateTarget, this.derivedBounds, area, additionalBounds);
+
+    if (!animationOptions) {
+      this.doImmediateUpdate();
+    } else {
+      this.scheduleAnimation(updateTarget, animationOptions);
+    }
+  }
+
+  public centerFitElementIntoView(
+    element: HTMLElement,
+    additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
+    animationOptions?: ViewPortCameraAnimationOptions,
+  ): void {
+    if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
+      return;
+    }
+
+    const area = this.getElementVirtualSpaceCoordinates(element);
     const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
     ViewPortMath.centerFitArea(updateTarget, this.derivedBounds, area, additionalBounds);
 

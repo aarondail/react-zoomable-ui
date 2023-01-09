@@ -28,7 +28,7 @@
 
 ### constructor
 
-\+ **new ViewPortCamera**(`values`: [ViewPortCameraValues](../interfaces/viewportcameravalues.md), `onUpdated?`: undefined &#124; function): _[ViewPortCamera](viewportcamera.md)_
+\+ **new ViewPortCamera**(`values`: [ViewPortCameraValues](../interfaces/viewportcameravalues.md), `getElementVirtualSpaceCoordinates`: function, `onUpdated?`: undefined &#124; function): _[ViewPortCamera](viewportcamera.md)_
 
 This is only intended to be constructed by the [ViewPort](viewport.md).
 
@@ -37,6 +37,7 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 | Name         | Type                                                          |
 | ------------ | ------------------------------------------------------------- |
 | `values`     | [ViewPortCameraValues](../interfaces/viewportcameravalues.md) |
+| `getElementVirtualSpaceCoordinates?` | function                              |
 | `onUpdated?` | undefined &#124; function                                     |
 
 **Returns:** _[ViewPortCamera](viewportcamera.md)_
@@ -57,6 +58,22 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 | `left`   | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
 | `top`    | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
 | `width`  | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit) |
+
+▪`Optional` **additionalBounds**: _Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›_
+
+▪`Optional` **animationOptions**: _[ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)_
+
+**Returns:** _void_
+
+---
+
+### centerFitElementIntoView
+
+▸ **centerFitElementIntoView**(`element`: HTMLElement, `additionalBounds?`: Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›, `animationOptions?`: [ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)): _void_
+
+**Parameters:**
+
+▪ **element**: HTMLElement
 
 ▪`Optional` **additionalBounds**: _Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›_
 

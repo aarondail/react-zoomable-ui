@@ -205,7 +205,11 @@ export class ViewPort {
     this.containerDiv.style.padding = '0';
 
     // Setup other stuff
-    this.camera = new ViewPortCamera(this as ViewPortCameraValues, this.options?.onUpdated);
+    this.camera = new ViewPortCamera(
+      this as ViewPortCameraValues,
+      this.translateClientRectToVirtualSpace,
+      this.options?.onUpdated,
+    );
     // Tell the camera about our div size this has to be after we change the style above...
     this.updateContainerSize();
 
