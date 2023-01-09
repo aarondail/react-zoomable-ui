@@ -298,25 +298,37 @@ export class ViewPort {
   }
 
   public translateClientXYCoordinatesToVirtualSpace(
-    x: ClientPixelUnit,
-    y: ClientPixelUnit,
+    clientX: ClientPixelUnit,
+    clientY: ClientPixelUnit,
   ): { readonly x: VirtualSpacePixelUnit; readonly y: VirtualSpacePixelUnit } {
-    return {
-      x: x / this.zoomFactor + this.left,
-      y: y / this.zoomFactor + this.top,
-    };
+    const clientBoundingRect = this.containerDiv.getBoundingClientRect();
+    const containerX = clientX - clientBoundingRect.left;
+    const containerY = clientY - clientBoundingRect.top;
+    const x = containerX / this.zoomFactor + this.left;
+    const y = containerY / this.zoomFactor + this.top;
+
+    return { x, y };
   }
 
   public translateClientRectToVirtualSpace(rectOrElement: ClientRect | HTMLElement): VirtualSpaceRect {
     if (!(rectOrElement as any).getBoundingClientRect) {
       const rect = rectOrElement as ClientRect;
+
+      const clientBoundingRect = this.containerDiv.getBoundingClientRect();
+      const containerX = rect.left - clientBoundingRect.left;
+      const containerY = rect.top - clientBoundingRect.top;
+      const left = containerX / this.zoomFactor + this.left;
+      const top = containerY / this.zoomFactor + this.top;
+      const height = rect.height / this.zoomFactor;
+      const width = rect.width / this.zoomFactor;
+
       return {
-        bottom: rect.bottom / this.zoomFactor + this.top,
-        height: rect.height / this.zoomFactor,
-        left: rect.left / this.zoomFactor + this.left,
-        right: rect.right / this.zoomFactor + this.left,
-        top: rect.top / this.zoomFactor + this.top,
-        width: rect.width / this.zoomFactor,
+        left,
+        top,
+        height,
+        width,
+        right: left + width,
+        bottom: top + height,
       };
     } else {
       const element = rectOrElement as HTMLElement;

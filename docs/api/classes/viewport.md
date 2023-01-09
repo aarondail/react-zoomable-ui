@@ -167,14 +167,14 @@ zoom factor.
 
 ### translateClientXYCoordinatesToVirtualSpace
 
-▸ **translateClientXYCoordinatesToVirtualSpace**(`x`: [ClientPixelUnit](../API.md#clientpixelunit), `y`: [ClientPixelUnit](../API.md#clientpixelunit)): _object_
+▸ **translateClientXYCoordinatesToVirtualSpace**(`clientX`: [ClientPixelUnit](../API.md#clientpixelunit), `clientY`: [ClientPixelUnit](../API.md#clientpixelunit)): _object_
 
 **Parameters:**
 
 | Name | Type                                         |
 | ---- | -------------------------------------------- |
-| `x`  | [ClientPixelUnit](../API.md#clientpixelunit) |
-| `y`  | [ClientPixelUnit](../API.md#clientpixelunit) |
+| `clientX`  | [ClientPixelUnit](../API.md#clientpixelunit) |
+| `clientY`  | [ClientPixelUnit](../API.md#clientpixelunit) |
 
 **Returns:** _object_
 
