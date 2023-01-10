@@ -5,12 +5,7 @@ let idSuffix = 0;
  * This id should be safe to use as a class name. So don't use any special
  * characters that CSS might get confused by.
  */
-export const generateRandomId = () =>
-  Math.random()
-    .toString(36)
-    .slice(2) +
-  '_' +
-  ++idSuffix;
+export const generateRandomId = () => Math.random().toString(36).slice(2) + '_' + ++idSuffix;
 
 export function clamp(value: number, bounds?: readonly [number | undefined, number | undefined]): number {
   if (bounds) {
@@ -27,6 +22,7 @@ export function clamp(value: number, bounds?: readonly [number | undefined, numb
 
 export function clampCenterOfLength(
   centerValue: number,
+  // Length of space that the center value is in.
   length: number,
   bounds?: readonly [number | undefined, number | undefined],
 ): number {
@@ -44,6 +40,17 @@ export function clampCenterOfLength(
     }
   }
   return centerValue;
+}
+
+export function easeOutQuartic(percent: number) {
+  const a = 1 - percent;
+  const b = 1 - a * a * a * a;
+  return b;
+}
+
+export function parametricBlend(percent: number) {
+  const a = percent * percent;
+  return a / (2.0 * (a - percent) + 1.0);
 }
 
 export function rectContainsPoint(clientRect: ClientRect, x: number, y: number) {

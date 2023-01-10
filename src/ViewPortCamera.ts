@@ -1,5 +1,5 @@
 import { invariant } from 'ts-invariant';
-import { transitionNumber } from './utils';
+import { easeOutQuartic, parametricBlend, transitionNumber } from './utils';
 import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, VirtualSpaceRect, ZoomFactor } from './ViewPort';
 import { ViewPortMath } from './ViewPortMath';
 
@@ -375,10 +375,6 @@ export class ViewPortCamera {
     if (percent >= 1) {
       this.copyValues(tv, this.workingValues);
     } else {
-      // Simple ease out quartic
-      const z = 1 - percent;
-      const p = 1 - z * z * z * z;
-
       // The reason we use `updateBy` with deltas is that when changing the zoom
       // factor, sometimes, like when it is already small, there is some weird
       // effect the math has where the animation appears to go down and to the
@@ -388,10 +384,19 @@ export class ViewPortCamera {
       // thus getting the wrong x and y positions.
       // Anyways, doing small updateBys like this is easier and is similar to
       // what happens when zooming in and out with the mouse wheel.
-      const dx = transitionNumber(sv.centerX, tv.centerX, p) - this.workingValues.centerX;
-      const dy = transitionNumber(sv.centerY, tv.centerY, p) - this.workingValues.centerY;
-      const dz = transitionNumber(sv.zoomFactor, tv.zoomFactor, p) - this.workingValues.zoomFactor;
-      ViewPortMath.updateBy(this.workingValues, this.derivedBounds, dx, dy, dz);
+
+      const xyModifiedPercent = easeOutQuartic(percent);
+      const dx = transitionNumber(sv.centerX, tv.centerX, xyModifiedPercent) - this.workingValues.centerX;
+      const dy = transitionNumber(sv.centerY, tv.centerY, xyModifiedPercent) - this.workingValues.centerY;
+
+      // If we are animating the x or y camera position AND the zoom, using this
+      // parametricBlend looks a lot better than doing the easeOutQuartic above.
+      // (If we are just animating zoom then easeOutQuartic is fine though.)
+      const zModifiedPercent1 = parametricBlend(percent * percent);
+      const zModifiedPercent2 = zModifiedPercent1 * zModifiedPercent1;
+      const dz = transitionNumber(sv.zoomFactor, tv.zoomFactor, zModifiedPercent2) - this.workingValues.zoomFactor;
+
+      ViewPortMath.updateBy2(this.workingValues, this.derivedBounds, dx, dy, dz);
     }
   }
 
