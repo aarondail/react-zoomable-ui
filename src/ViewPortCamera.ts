@@ -1,5 +1,5 @@
 import { invariant } from 'ts-invariant';
-import { easeOutQuartic, parametricBlend, transitionNumber } from './utils';
+import { easeOutQuartic, parametricBlend, transitionNumber, Writeable } from './utils';
 import { ClientPixelUnit, ViewPortBounds, VirtualSpacePixelUnit, VirtualSpaceRect, ZoomFactor } from './ViewPort';
 import { ViewPortMath } from './ViewPortMath';
 
@@ -119,16 +119,41 @@ export class ViewPortCamera {
 
   public centerFitElementIntoView(
     element: HTMLElement,
-    additionalBounds?: Pick<ViewPortBounds, 'zoom'>,
+    options?: {
+      elementExtraMarginForZoom?: VirtualSpacePixelUnit;
+      elementExtraMarginForZoomInClientSpace?: ClientPixelUnit;
+      additionalBounds?: Pick<ViewPortBounds, 'zoom'>;
+    },
     animationOptions?: ViewPortCameraAnimationOptions,
   ): void {
     if (!this.stopCurrentAnimation(StopAnimationKind.INTERRUPT)) {
       return;
     }
 
-    const area = this.getElementVirtualSpaceCoordinates(element);
+    const area = this.getElementVirtualSpaceCoordinates(element) as Writeable<VirtualSpaceRect>;
+    if (options?.elementExtraMarginForZoom) {
+      area.top -= options.elementExtraMarginForZoom;
+      area.left -= options.elementExtraMarginForZoom;
+      area.bottom += options.elementExtraMarginForZoom;
+      area.right += options.elementExtraMarginForZoom;
+      area.width += options.elementExtraMarginForZoom * 2;
+      area.height += options.elementExtraMarginForZoom * 2;
+    }
     const updateTarget = !animationOptions ? this.workingValues : { ...this.workingValues };
-    ViewPortMath.centerFitArea(updateTarget, this.derivedBounds, area, additionalBounds);
+    ViewPortMath.centerFitArea(updateTarget, this.derivedBounds, area, options?.additionalBounds);
+
+    // This has to be done after the centerFitArea so we know what the final zoomFactor is
+    if (options?.elementExtraMarginForZoomInClientSpace) {
+      const additionalMargin = options.elementExtraMarginForZoomInClientSpace / updateTarget.zoomFactor;
+      area.top -= additionalMargin;
+      area.left -= additionalMargin;
+      area.bottom += additionalMargin;
+      area.right += additionalMargin;
+      area.width += additionalMargin * 2;
+      area.height += additionalMargin * 2;
+
+      ViewPortMath.centerFitArea(updateTarget, this.derivedBounds, area, options?.additionalBounds);
+    }
 
     if (!animationOptions) {
       this.doImmediateUpdate();
@@ -392,11 +417,10 @@ export class ViewPortCamera {
       // If we are animating the x or y camera position AND the zoom, using this
       // parametricBlend looks a lot better than doing the easeOutQuartic above.
       // (If we are just animating zoom then easeOutQuartic is fine though.)
-      const zModifiedPercent1 = parametricBlend(percent * percent);
-      const zModifiedPercent2 = zModifiedPercent1 * zModifiedPercent1;
-      const dz = transitionNumber(sv.zoomFactor, tv.zoomFactor, zModifiedPercent2) - this.workingValues.zoomFactor;
+      const zModifiedPercent = parametricBlend(percent * percent * percent);
+      const dz = transitionNumber(sv.zoomFactor, tv.zoomFactor, zModifiedPercent) - this.workingValues.zoomFactor;
 
-      ViewPortMath.updateBy2(this.workingValues, this.derivedBounds, dx, dy, dz);
+      ViewPortMath.updateBy(this.workingValues, this.derivedBounds, dx, dy, dz);
     }
   }
 

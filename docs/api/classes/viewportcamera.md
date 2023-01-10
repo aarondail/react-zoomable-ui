@@ -75,7 +75,14 @@ This is only intended to be constructed by the [ViewPort](viewport.md).
 
 ▪ **element**: HTMLElement
 
-▪`Optional` **additionalBounds**: _Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›_
+▪`Optional` **options**: _object_
+
+| Name                                       | Type                                                              |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| `elementExtraMarginForZoom`                | [VirtualSpacePixelUnit](../API.md#virtualspacepixelunit)          |
+| `elementExtraMarginForZoomInClientSpace`   | [ClientPixelUnit](../API.md#clientpixelunit)                      |
+| `additionalBounds`                         | _Pick‹[ViewPortBounds](../interfaces/viewportbounds.md), "zoom"›_ |
+
 
 ▪`Optional` **animationOptions**: _[ViewPortCameraAnimationOptions](../interfaces/viewportcameraanimationoptions.md)_
 

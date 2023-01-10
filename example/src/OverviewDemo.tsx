@@ -1,6 +1,6 @@
 import * as lodash from 'lodash';
 import * as React from 'react';
-import { Pressable, Space, NoPanArea, SpaceContext, PressEventCoordinates } from 'react-zoomable-ui';
+import { Pressable, Space, NoPanArea, SpaceContext } from 'react-zoomable-ui';
 
 import mountain from './mountain.jpg';
 
@@ -163,9 +163,18 @@ export const OverviewDemo = () => {
               onClick={() => {
                 const element = document.getElementById('mountain-image');
                 if (element) {
-                  spaceRef.current?.viewPort?.camera.centerFitElementIntoView(element, undefined, {
-                    durationMilliseconds: 1000,
-                  });
+                  spaceRef.current?.viewPort?.camera.centerFitElementIntoView(
+                    element,
+                    {
+                      // Zoom in to the element but stop at 100 pixels (as in,
+                      // client pixels, ala what the browser thinks is a pixel in
+                      // most cases) around it
+                      elementExtraMarginForZoomInClientSpace: 100,
+                    },
+                    {
+                      durationMilliseconds: 1000,
+                    },
+                  );
                 }
               }}
             >
