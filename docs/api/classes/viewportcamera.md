@@ -13,6 +13,7 @@
 ### Methods
 
 - [centerFitAreaIntoView](viewportcamera.md#centerfitareaintoview)
+- [centerFitElementIntoView](viewportcamera.md#centerfitelementintoview)
 - [centerFitHorizontalAreaIntoView](viewportcamera.md#centerfithorizontalareaintoview)
 - [destroy](viewportcamera.md#destroy)
 - [moveBy](viewportcamera.md#moveby)
