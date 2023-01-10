@@ -1,6 +1,6 @@
 import * as lodash from 'lodash';
 import * as React from 'react';
-import { Pressable, Space, NoPanArea, SpaceContext } from 'react-zoomable-ui';
+import { Pressable, Space, NoPanArea, SpaceContext, PressEventCoordinates } from 'react-zoomable-ui';
 
 import mountain from './mountain.jpg';
 
@@ -65,19 +65,19 @@ const DraggableButton = (props: DraggableButtonProps) => {
   const baseStyle: React.CSSProperties = {
     fontSize: 'small',
     color: 'white',
-    background: 
-    props.capturePressOn === 'press' ?
-    'repeating-linear-gradient(darkgreen, darkgreen 2px, green 3px, green 4px)' 
-    : 'repeating-linear-gradient(darkgoldenrod, darkgoldenrod 2px, goldenrod 3px, goldenrod 4px)',
+    background:
+      props.capturePressOn === 'press'
+        ? 'repeating-linear-gradient(darkgreen, darkgreen 2px, green 3px, green 4px)'
+        : 'repeating-linear-gradient(darkgoldenrod, darkgoldenrod 2px, goldenrod 3px, goldenrod 4px)',
     borderRadius: 10,
     padding: 20,
     textAlign: 'center',
     width: 120,
   };
-  
+
   return (
     <Pressable
-      style={Object.assign( {}, baseStyle, { transform: `translate(${x}px, ${y}px)` },)}
+      style={Object.assign({}, baseStyle, { transform: `translate(${x}px, ${y}px)` })}
       capturePressThresholdMs={props.capturePressOn === 'press' ? 0 : 500}
       potentialTapStyle={props.capturePressOn === 'long-press' ? { background: 'orange' } : undefined}
       capturePressStyle={props.capturePressOn === 'press' ? { background: 'green' } : { background: 'darkorange' }}
@@ -101,9 +101,8 @@ const DraggableButton = (props: DraggableButtonProps) => {
         // and y values.  We also wouldn't need `onCapturePanStart`.
         const vp = context.viewPort;
         const dragContainerBounds = vp.translateClientRectToVirtualSpace(pressableUnderlyingElement.parentElement!);
-        const { width: childWidth, height: childHeight } = vp.translateClientRectToVirtualSpace(
-          pressableUnderlyingElement,
-        );
+        const { width: childWidth, height: childHeight } =
+          vp.translateClientRectToVirtualSpace(pressableUnderlyingElement);
 
         const logicalX = lodash.clamp(
           coords.x - panOffsetX,
@@ -142,19 +141,36 @@ const DraggableButton = (props: DraggableButtonProps) => {
 };
 
 export const OverviewDemo = () => {
+  const spaceRef = React.useRef<Space | null>(null);
   return (
-    <Space onCreate={vp => vp.camera.centerFitHorizontalAreaIntoView(0, 1000)} innerDivStyle={innerDivStyle}>
+    <Space
+      ref={spaceRef}
+      onCreate={(vp) => vp.camera.centerFitHorizontalAreaIntoView(0, 1000)}
+      innerDivStyle={innerDivStyle}
+    >
       <div style={innerContainerStyle}>
         <h3>(1) Click or touch anywhere and drag to pan</h3>
         <h3>(2) Use two fingers to zoom in and out, or the mouse wheel</h3>
         <h3>(3) Regular HTML elements behave mostly as expected</h3>
         <div style={rowStyle}>
           <div style={columnStyle}>
-            <img src={mountain} width={100} height={100} alt="logo" />
+            <img id="mountain-image" src={mountain} width={100} height={100} alt="logo" />
             <a href="https://reactjs.org/">https://reactjs.org/</a>
             <br />
             <button onClick={() => alert('CLICKED')}>CLICK ME FOR AN ALERT</button>
             <pre>SOME CODE in a PRE TAG</pre>
+            <button
+              onClick={() => {
+                const element = document.getElementById('mountain-image');
+                if (element) {
+                  spaceRef.current?.viewPort?.camera.centerFitElementIntoView(element, undefined, {
+                    durationMilliseconds: 1000,
+                  });
+                }
+              }}
+            >
+              Click to zoom into the mountain
+            </button>
           </div>
 
           <div style={columnStyle}>
@@ -178,14 +194,12 @@ export const OverviewDemo = () => {
             <div>
               <b>Pressable</b>
               <br />
-              Creates a clickable and tap-able space that doesn't conflict
-              with panning. It also can handle long clicks or
-              taps.
+              Creates a clickable and tap-able space that doesn't conflict with panning. It also can handle long clicks
+              or taps.
               <br />
               <br />
-              Try clicking or tapping on the button below and releasing. Then
-              try doing it again, but dragging before releasing to start a
-              pan.
+              Try clicking or tapping on the button below and releasing. Then try doing it again, but dragging before
+              releasing to start a pan.
             </div>
             <br />
             <SimpleTapCountingButton />
@@ -195,8 +209,7 @@ export const OverviewDemo = () => {
             <div>
               <b>Pressable (continued)</b>
               <br />
-              Has functionality that can be used to build custom
-              interactions, like dragging.
+              Has functionality that can be used to build custom interactions, like dragging.
             </div>
             <br />
             <DragContainer>
