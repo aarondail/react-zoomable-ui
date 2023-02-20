@@ -290,6 +290,13 @@ export class ViewPort {
     this.hammer.destroy();
   }
 
+  public removeWheelListner(): void {
+    this.containerDiv.removeEventListener('wheel', this.handleWheel);
+  }
+  public addWheelListner(): void {
+    this.containerDiv.addEventListener('wheel', this.handleWheel, { passive: false });
+  }
+
   /**
    * Constrain the virtual space so the user can not pan beyond, and the camera
    * cannot show anything beyond, the provided min/max values for x, y, and the

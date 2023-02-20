@@ -98,6 +98,9 @@ export interface SpaceProps extends React.PropsWithChildren {
    * be ignored.
    */
   readonly treatTwoFingerTrackPadGesturesLikeTouch?: boolean;
+
+  //if one of the pressable is seleted 
+  readonly isWheelDisabled?:boolean
 }
 
 interface SpaceState {
@@ -268,9 +271,11 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
     e: MouseEvent | TouchEvent,
     coordinates: PressEventCoordinates,
   ): PressHandlingOptions | undefined => {
+  
     if (this.props.onDecideHowToHandlePress) {
       const result = this.props.onDecideHowToHandlePress(e, coordinates);
       if (result) {
+        console.log("result", result)
         return result;
       }
     }
@@ -298,6 +303,12 @@ export class Space extends React.PureComponent<SpaceProps, SpaceState> {
   };
 
   private handleHover = (e: MouseEvent, coordinates: PressEventCoordinates) => {
+    if(this.props.isWheelDisabled){
+      this.viewPort?.removeWheelListner();
+    }
+    else {
+      this.viewPort?.addWheelListner();
+    }
     const interactableId = getInteractableIdMostApplicableToElement(e.target as any);
     const interactable = (interactableId && this.interactableRegistry.get(interactableId)) || undefined;
     if (interactable && interactable instanceof Pressable) {
