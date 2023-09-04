@@ -69,8 +69,10 @@ export function* walkElementHierarchyUp(leafElement: HTMLElement): Iterable<HTML
   }
 }
 
-export const browserIsAndroid = navigator.userAgent.match(/Android/);
-export const browserIsSafari = navigator.vendor.match(/Apple/);
+export const isServer = typeof window === 'undefined';
+
+export const browserIsAndroid = isServer ? false : navigator.userAgent.match(/Android/);
+export const browserIsSafari = isServer ? false : navigator.vendor.match(/Apple/);
 export const browserIsSafariDesktop = browserIsSafari && typeof Touch === 'undefined';
 
 export function isMouseEvent(e: MouseEvent | TouchEvent): e is MouseEvent {
